@@ -14,37 +14,109 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaDiscord,
+  FaThumbsUp,
 } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <footer className="footer-area">
+      <div className="container mx-auto px-4 mt-auto">
+        <div className="text-center mb-8">
+          <span className="inline-flex items-center justify-center bg-yellow-100 text-yellow-700 py-1 px-3 rounded-full text-sm font-bold">
+            <FaThumbsUp />
+            Tại sao chọn chúng tôi
+          </span>
+        </div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="text-center">
+              <div className="mb-4">
+                <img
+                  src="src/assets/icons/service6.png"
+                  alt="Service"
+                  className="w-16 h-16 mx-auto"
+                />
+              </div>
+              <h6 className="text-lg font-bold">
+                Giao hàng nhanh tróng &amp; an toàn
+              </h6>
+            </div>
+          </div>
+          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="text-center">
+              <div className="mb-4">
+                <img
+                  src="src/assets/icons/service7.png"
+                  alt="Service"
+                  className="w-16 h-16 mx-auto"
+                />
+              </div>
+              <h6 className="text-lg font-bold">Đảm bảo 100% về sản phẩm</h6>
+            </div>
+          </div>
+          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="text-center">
+              <div className="mb-4">
+                <img
+                  src="src/assets/icons/service8.png"
+                  alt="Service"
+                  className="w-16 h-16 mx-auto"
+                />
+              </div>
+              <h6 className="text-lg font-bold">Hàng ngàn mã ưu đãi hấp dẫn</h6>
+            </div>
+          </div>
+          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="text-center">
+              <div className="mb-4">
+                <img
+                  src="src/assets/icons/service9.png"
+                  alt="Service"
+                  className="w-16 h-16 mx-auto"
+                />
+              </div>
+              <h6 className="text-lg font-bold">Chính sách hoàn trả 24 giờ</h6>
+            </div>
+          </div>
+          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="text-center">
+              <div className="mb-4">
+                <img
+                  src="src/assets/icons/service10.png"
+                  alt="Service"
+                  className="w-16 h-16 mx-auto"
+                />
+              </div>
+              <h6 className="text-lg font-bold">Chất lượng chuyên nghiệp</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="footer-top py-8 text-gray-500 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="footer-widget">
-              <h5 className="widget-title mb-4 text-black font-medium">
-                Hỗ trợ
-              </h5>
+              <h5 className="widget-title mb-4 text-black font-bold">Hỗ trợ</h5>
               <div className="logo mb-4">
-                <a href="#">
+                <Link to="#">
                   <img className="light-logo h-12" src={logo} alt="logo" />
-                </a>
+                </Link>
               </div>
               <div className="inner">
-                <p className="text-black font-medium">Thông tin liên hệ:</p>
+                <p className="text-black font-bold">Thông tin liên hệ:</p>
                 <ul className="support-list-item mt-4">
                   <li>
-                    <a href="mailto:cuongpham17072002@gmail.com">
+                    <Link to="mailto:cuongpham17072002@gmail.com">
                       <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
                       cuongpham17072002@gmail.com
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="0368002731">
+                    <Link to="0368002731">
                       <FontAwesomeIcon icon={faPhone} className="mr-2 " />
                       0368002731
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <FaMapMarkerAlt className="inline-block mr-2" />
@@ -54,75 +126,75 @@ const Footer = () => {
               </div>
             </div>
             <div className="footer-widget">
-              <h5 className="widget-title mb-4 text-black font-medium">
+              <h5 className="widget-title mb-4 text-black font-bold">
                 Tài khoản
               </h5>
               <div className="inner">
                 <ul className="inner-ul">
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Tài khoản của bạn
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Đăng nhập / Đăng kí
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Giỏ hàng
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Yêu thích
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Danh mục sản phẩm
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
             </div>
             <div className="footer-widget">
-              <h5 className="widget-title mb-4 text-black font-medium">
+              <h5 className="widget-title mb-4 text-black font-bold">
                 Đường dẫn nhanh
               </h5>
               <div className="inner">
                 <ul className="inner-ul">
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Chính sách Bảo mật
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Điều khoản sử dụng
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       FAQ
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Giới thiệu
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-blue-600">
+                    <Link to="#" className="hover:text-blue-600">
                       Liên hệ
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
             </div>
             <div className="footer-widget">
-              <h5 className="widget-title mb-4 text-black font-medium">
+              <h5 className="widget-title mb-4 text-black font-bold">
                 Tải ứng dụng
               </h5>
               <div className="inner">
@@ -134,12 +206,12 @@ const Footer = () => {
                     <img src={qrcode} alt="QR Code" className="h-20" />
                   </div>
                   <div className="app-link">
-                    <a className="mb-4 d-block" href="#">
+                    <Link className="mb-4 d-block" to="#">
                       <img src={appstore} alt="App Store" className="mb-10" />
-                    </a>
-                    <a href="#">
+                    </Link>
+                    <Link to="#">
                       <img src={chplay} alt="Play Store" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -151,32 +223,32 @@ const Footer = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-row md:flex-row justify-between items-center">
             <div className="social-share flex space-x-4">
-              <a href="#" className="text-blue-600 hover:text-blue-800">
+              <Link to="#" className="text-blue-600 hover:text-blue-800">
                 <FaFacebookF size={24} />
-              </a>
-              <a href="#" className="text-pink-600 hover:text-pink-800">
+              </Link>
+              <Link to="#" className="text-pink-600 hover:text-pink-800">
                 <FaInstagram size={24} />
-              </a>
-              <a href="#" className="text-blue-400 hover:text-blue-600">
+              </Link>
+              <Link to="#" className="text-blue-400 hover:text-blue-600">
                 <FaTwitter size={24} />
-              </a>
-              <a href="#" className="text-blue-700 hover:text-blue-900">
+              </Link>
+              <Link to="#" className="text-blue-700 hover:text-blue-900">
                 <FaLinkedinIn size={24} />
-              </a>
-              <a href="#" className="text-purple-600 hover:text-purple-800">
+              </Link>
+              <Link to="#" className="text-purple-600 hover:text-purple-800">
                 <FaDiscord size={24} />
-              </a>
+              </Link>
             </div>
 
             <div className="text-center md:text-left mb-4 md:mb-0">
               © 2024. Bản quyền thuộc về{' '}
-              <a target="_blank" href="#" className="text-blue-400">
+              <Link target="_blank" to="#" className="text-blue-400">
                 PeQuyXe
-              </a>
+              </Link>
               .
             </div>
             <div className="payment-icons flex items-center">
-              <span className="card-text mr-4 text-gray-900 font-medium">
+              <span className="card-text mr-4 text-gray-900 font-bold">
                 Thanh Toán
               </span>
               <ul className="flex">

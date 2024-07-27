@@ -1,3 +1,17 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+.dark {
+  --bg-color: theme('colors.dark.primary');
+  --text-color: theme('colors.dark.secondary');
+}
+
+.light {
+  --bg-color: theme('colors.light.primary');
+  --text-color: theme('colors.light.secondary');
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

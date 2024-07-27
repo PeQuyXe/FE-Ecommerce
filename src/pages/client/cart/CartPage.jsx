@@ -21,7 +21,7 @@ const CartPage = () => {
   };
 
   const totalAmount = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity * 22000,
+    (total, item) => total + item.price * item.quantity,
     0
   );
 
@@ -46,7 +46,11 @@ const CartPage = () => {
             <tbody>
               {cartItems.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 text-gray-500">
+                  <td colSpan="6" className="text-center py-4 text-gray-500 ">
+                    <img
+                      src="src/assets/bg/bg-image-11.jpg"
+                      className="items-center w-50 h-50"
+                    />
                     Không có sản phẩm nào trong giỏ hàng
                   </td>
                 </tr>
@@ -65,7 +69,7 @@ const CartPage = () => {
                     </td>
                     <td className="px-4 py-2">
                       <p className="font-semibold">
-                        {(item.price * 22000).toLocaleString('vi-VN', {
+                        {item.price.toLocaleString('vi-VN', {
                           style: 'currency',
                           currency: 'VND',
                         })}
@@ -86,13 +90,10 @@ const CartPage = () => {
                       />
                     </td>
                     <td className="px-4 py-2">
-                      {(item.price * item.quantity * 22000).toLocaleString(
-                        'vi-VN',
-                        {
-                          style: 'currency',
-                          currency: 'VND',
-                        }
-                      )}
+                      {(item.price * item.quantity).toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                      })}
                     </td>
                     <td className="px-4 py-2">
                       <button

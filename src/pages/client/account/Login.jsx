@@ -1,18 +1,38 @@
-import { Link } from 'react-router-dom';
-import backgroundImage from '../../../assets/bg/bg-image-5.jpg';
-const SignUp = () => {
-  const registerUser = () => {};
+import { useState } from 'react';
+import { auth } from '../../../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import backgroundImage from '../../../assets/bg/bg-image-4.jpg';
+import { toast } from 'react-toastify';
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      toast.success('Đăng nhập thành công!', {
+        autoClose: 1000,
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to login:', error.message);
+      alert('Failed to login: ' + error.message);
+    }
+  };
 
   return (
     <section
-      style={{ backgroundImage }}
-      className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8"
     >
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link to="/" className="flex justify-center">
           <img
             className="h-12 w-auto"
-            src="src/assets/logo/logo.png"
+            src="/src/assets/logo/logo.png"
             alt="logo"
           />
         </Link>
@@ -21,72 +41,55 @@ const SignUp = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <h3 className="text-center text-2xl font-bold text-gray-900">
-            Đăng ký
+            Đăng nhập
           </h3>
           <p className="mt-2 text-center text-sm text-gray-600 mb-6">
             Nhập chi tiết thông tin của bạn bên dưới
           </p>
-          <form className="space-y-6" id="formRegister" onSubmit={registerUser}>
-            <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
-                Họ và tên
-              </label>
-              <input
-                type="text"
-                className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                name="fullname"
-                placeholder="Họ và tên"
-              />
-            </div>
-
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="block text-sm font-medium text-gray-700">
                 Email
               </label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                id="emailLogin"
-                name="email"
                 placeholder="Email"
               />
-              {/* <div className="invalid-feedback text-sm text-red-500 mt-2">
-                Email đã tồn tại.
-              </div> */}
             </div>
-
             <div className="form-group">
               <label className="block text-sm font-medium text-gray-700">
                 Mật khẩu
               </label>
               <input
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
                 className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                id="passwordLogin"
-                name="password"
                 placeholder="Mật khẩu"
               />
-              {/* <div className="invalid-feedback text-sm text-red-500 mt-2">
-                Độ dài tối thiểu là 8 ký tự, và phải bao gồm chữ hoa, chữ
-                thường, chữ số và ký tự đặc biệt.
-              </div> */}
             </div>
-            <div className=" mt-5 flex justify-center">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2">
-                Tạo tài khoản
+            <div className="mt-5 flex justify-center">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
+              >
+                Đăng nhập
               </button>
             </div>
           </form>
-
           <div className="mt-6 flex items-center justify-center">
             <p className="text-sm text-gray-600">
-              Bạn đã có tài khoản?{' '}
+              Bạn chưa có tài khoản?{' '}
               <Link
-                to="/login"
+                to="/register"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Đăng nhập
+                Đăng ký
               </Link>
             </p>
           </div>
@@ -96,4 +99,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
