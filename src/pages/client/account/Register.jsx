@@ -108,7 +108,7 @@ const Register = () => {
             <div className="mt-5 flex justify-center">
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
               >
                 Tạo tài khoản
               </button>
@@ -130,7 +130,7 @@ const Register = () => {
           <div className="mt-6 flex items-center justify-center">
             <button
               onClick={handleGoogleSignIn}
-              className="bg-white text-blue-600 px-4 py-2 rounded hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110"
+              className="bg-white text-blue-600 px-4 py-2 rounded hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110 shadow-md"
             >
               <span>
                 <FcGoogle />

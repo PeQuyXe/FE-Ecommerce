@@ -4,7 +4,7 @@ export const formatCurrency = (amount) => {
     currency: 'VND',
   }).format(amount);
 };
-// configformat.jsx
+
 export const renderStars = (rating) => {
   const normalizedRating = Number(rating) || 0;
   const fullStars = Math.floor(normalizedRating);

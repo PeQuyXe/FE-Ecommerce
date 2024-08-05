@@ -19,7 +19,7 @@ import {
 import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
-    <footer className="footer-area">
+    <footer className=" mt-10">
       <div className="container mx-auto px-4 mt-auto">
         <div className="text-center mb-8">
           <span className="inline-flex items-center justify-center bg-yellow-100 text-yellow-700 py-1 px-3 rounded-full text-sm font-bold">
@@ -27,7 +27,7 @@ const Footer = () => {
             Tại sao chọn chúng tôi
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-10">
           <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
             <div className="text-center">
               <div className="mb-4">

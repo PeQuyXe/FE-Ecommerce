@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { ADD_TO_CART } from '../../../actions/cartAction';
-import { FaEye, FaShoppingCart } from 'react-icons/fa';
+import { FaEye, FaHeart } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -10,6 +10,8 @@ import {
   renderStars,
   calculateOriginalPrice,
 } from '../../../utils/configformat';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const priceOptions = [
   { title: 'Dưới 2 triệu', value: '0 - 2000000' },
@@ -33,7 +35,7 @@ const ProductList2 = () => {
     search: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8;
+  const productsPerPage = 12;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -57,9 +59,6 @@ const ProductList2 = () => {
 
     fetchData();
   }, []);
-  console.log('SP', products);
-  console.log('danh mục ', categories);
-  console.log('brand', brands);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -82,8 +81,7 @@ const ProductList2 = () => {
     fetchProducts();
   }, [filters]);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+  const handleFilterChange = (name, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [name]: value,
@@ -106,7 +104,7 @@ const ProductList2 = () => {
         : true
     )
     .filter((product) =>
-      filters.category ? product.categoryId === filters.category : true
+      filters.category ? product.cateId === filters.category : true
     )
     .filter((product) =>
       filters.brand ? product.brandId === filters.brand : true
@@ -157,7 +155,7 @@ const ProductList2 = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <section className="py-8">
+    <section className="py-8 ">
       <div className="container mx-auto px-4">
         {/* Breadcrumbs */}
         <div className="mb-4">
@@ -170,10 +168,9 @@ const ProductList2 = () => {
           </nav>
         </div>
 
-        <div className="mb-4 flex justify-between">
-          <div>
+        <div className="mb-10 justify-between">
+          <div className="flex items-center justify-between px-5">
             <label className="relative block">
-              <span className="sr-only">Search</span>
               <input
                 className="placeholder-italic placeholder-gray-400 block bg-white border border-gray-300 rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm"
                 placeholder="Tìm tên sản phẩm ..."
@@ -182,86 +179,174 @@ const ProductList2 = () => {
                 onChange={handleSearchChange}
               />
             </label>
-          </div>
-        </div>
 
-        <div className="mb-4">
-          <form method="post">
-            <div className="flex flex-wrap justify-between">
-              <div className="w-full lg:w-3/4 flex flex-wrap space-x-2">
-                <select
-                  className="p-2 border rounded-md"
-                  name="category"
-                  value={filters.category}
-                  onChange={handleFilterChange}
+            <div className="flex-1">
+              <div className="flex items-center justify-end space-x-4 lg:space-x-6">
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left w-full lg:w-auto"
                 >
-                  <option value="">Danh mục</option>
-                  {categories.map((cateItem) => (
-                    <option key={cateItem.id} value={cateItem.id}>
-                      {cateItem.name}
-                    </option>
-                  ))}
-                </select>
+                  <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    {filters.category
+                      ? categories.find((cate) => cate.id === filters.category)
+                          ?.name
+                      : 'Danh mục'}
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="w-5 h-5 text-gray-400"
+                    />
+                  </MenuButton>
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                    {categories.map((cateItem) => (
+                      <MenuItem
+                        key={cateItem.id}
+                        as="button"
+                        onClick={() =>
+                          handleFilterChange('category', cateItem.id)
+                        }
+                      >
+                        <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          {cateItem.name}
+                        </span>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
 
-                <select
-                  className="p-2 border rounded-md"
-                  name="brand"
-                  value={filters.brand}
-                  onChange={handleFilterChange}
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left w-full lg:w-auto"
                 >
-                  <option value="">Thương hiệu</option>
-                  {brands.map((brandItem) => (
-                    <option key={brandItem.id} value={brandItem.id}>
-                      {brandItem.name}
-                    </option>
-                  ))}
-                </select>
+                  <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    {filters.brand
+                      ? brands.find((brand) => brand.id === filters.brand)?.name
+                      : 'Thương hiệu'}
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="w-5 h-5 text-gray-400"
+                    />
+                  </MenuButton>
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                    {brands.map((brandItem) => (
+                      <MenuItem
+                        key={brandItem.id}
+                        as="button"
+                        onClick={() =>
+                          handleFilterChange('brand', brandItem.id)
+                        }
+                      >
+                        <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          {brandItem.name}
+                        </span>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
 
-                <select
-                  className="p-2 border rounded-md"
-                  name="price"
-                  value={filters.price}
-                  onChange={handleFilterChange}
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left w-full lg:w-auto"
                 >
-                  <option value="">Khoảng giá</option>
-                  {priceOptions.map((priceOption) => (
-                    <option key={priceOption.value} value={priceOption.value}>
-                      {priceOption.title}
-                    </option>
-                  ))}
-                </select>
+                  <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    {filters.price
+                      ? priceOptions.find(
+                          (option) => option.value === filters.price
+                        )?.title
+                      : 'Khoảng giá'}
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="w-5 h-5 text-gray-400"
+                    />
+                  </MenuButton>
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                    {priceOptions.map((priceOption) => (
+                      <MenuItem
+                        key={priceOption.value}
+                        as="button"
+                        onClick={() =>
+                          handleFilterChange('price', priceOption.value)
+                        }
+                      >
+                        <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          {priceOption.title}
+                        </span>
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
 
-                <select
-                  className="p-2 border rounded-md"
-                  name="sort"
-                  value={filters.sort}
-                  onChange={handleFilterChange}
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left w-full lg:w-auto"
                 >
-                  <option value="-create_at">Mới nhất</option>
-                  <option value="-sold">Bán chạy nhất</option>
-                  <option value="price">Giá: Thấp đến cao</option>
-                  <option value="-price">Giá: Cao đến thấp</option>
-                </select>
-              </div>
-              <div className="w-full lg:w-1/4 text-right">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFilters({
-                      category: '',
-                      brand: '',
-                      price: '',
-                      sort: '-create_at',
-                      search: '',
-                    })
-                  }
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                  Làm mới
-                </button>
+                  <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    {filters.sort === '-create_at'
+                      ? 'Mới nhất'
+                      : filters.sort === '-sold'
+                      ? 'Bán chạy nhất'
+                      : filters.sort === 'price'
+                      ? 'Giá từ thấp đến cao'
+                      : 'Giá từ cao đến thấp'}
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="w-5 h-5 text-gray-400"
+                    />
+                  </MenuButton>
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                    <MenuItem
+                      as="button"
+                      onClick={() => handleFilterChange('sort', '-create_at')}
+                    >
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Mới nhất
+                      </span>
+                    </MenuItem>
+                    <MenuItem
+                      as="button"
+                      onClick={() => handleFilterChange('sort', '-sold')}
+                    >
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Bán chạy nhất
+                      </span>
+                    </MenuItem>
+                    <MenuItem
+                      as="button"
+                      onClick={() => handleFilterChange('sort', 'price')}
+                    >
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Giá từ thấp đến cao
+                      </span>
+                    </MenuItem>
+                    <MenuItem
+                      as="button"
+                      onClick={() => handleFilterChange('sort', '-price')}
+                    >
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Giá từ cao đến thấp
+                      </span>
+                    </MenuItem>
+                  </MenuItems>
+                </Menu>
+                <div className="flex justify-end space-x-6">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFilters({
+                        category: '',
+                        brand: '',
+                        price: '',
+                        sort: '-create_at',
+                        search: '',
+                      })
+                    }
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Làm mới
+                  </button>
+                </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-center">
@@ -275,7 +360,7 @@ const ProductList2 = () => {
                   <img
                     src={item.thumb}
                     alt={item.title}
-                    className="w-full h-40 object-contain hover:scale-105 transition-transform"
+                    className="w-full h-40 object-contain p-2 transform-gpu transition-transform duration-500 hover:scale-100"
                   />
                   {item.discount !== 0 && (
                     <div className="absolute top-2 right-2 bg-red-500 text-white py-1 px-2 rounded">
@@ -284,12 +369,12 @@ const ProductList2 = () => {
                   )}
                 </Link>
 
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end justify-center opacity-0 hover:opacity-75 transition-opacity">
+                <div className="absolute inset-0 bg-white bg-opacity-10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                   <ul className="flex space-x-2">
                     <li>
                       <button
                         onClick={() => goToProductDetail(item.id)}
-                        className="text-white p-2 bg-black rounded-full hover:bg-gray-800"
+                        className="text-white  bg-white p-3  rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500"
                       >
                         <FaEye />
                       </button>
@@ -298,14 +383,19 @@ const ProductList2 = () => {
                     <li>
                       <button
                         onClick={() => addToCart(item)}
-                        className={`text-white p-2 bg-black rounded-full hover:bg-gray-800 ${
+                        className={`text-white p-2 rounded-lg bg-white  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${
                           item.quantity === 0
                             ? 'cursor-not-allowed'
                             : 'cursor-pointer'
                         }`}
                         disabled={item.quantity === 0}
                       >
-                        <FaShoppingCart />
+                        Mua sản phẩm
+                      </button>
+                    </li>
+                    <li>
+                      <button className="text-white p-3 rounded-lg bg-white  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
+                        <FaHeart />
                       </button>
                     </li>
                   </ul>
@@ -313,11 +403,11 @@ const ProductList2 = () => {
 
                 <div className="pt-4">
                   <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-gray-500 ">
+                  <div className="text-gray-500 ">
                     {renderStars(item.totalRating)}
-                  </p>
+                  </div>
 
-                  <p className="text-xl font-bold ">
+                  <div className="text-xl font-bold ">
                     {formatCurrency(item.price)}
                     {item.discount !== 0 && (
                       <span className="text-sm line-through text-gray-500 ml-2">
@@ -326,7 +416,7 @@ const ProductList2 = () => {
                         )}
                       </span>
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))

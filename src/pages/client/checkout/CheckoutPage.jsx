@@ -1,18 +1,7 @@
-import { Link } from 'react-router-dom';
-const CheckoutPage = ({
-  dataCart,
-  dataCoupon,
-  dataAddress,
-  dataPaymentMethod,
-}) => {
-  const formatCurrency = (value) => {
-    // Implement currency formatting function here
-    return value;
-  };
-
+const CheckoutPage = () => {
   return (
     <>
-      <section className="header-top-campaign">
+      {/* <section className="header-top-campaign">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <div className="w-full xl:w-5/12 lg:w-3/5 md:w-10/12">
@@ -45,7 +34,7 @@ const CheckoutPage = ({
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="checkout-area">
         <div className="container mx-auto px-4">
@@ -66,7 +55,7 @@ const CheckoutPage = ({
                     <input
                       name="fullname"
                       type="text"
-                      defaultValue={dataAddress?.fullname || ''}
+                      defaultValue={''}
                       className="mt-1 p-2 border rounded-md w-full"
                       placeholder="Họ và tên"
                     />
@@ -79,7 +68,7 @@ const CheckoutPage = ({
                     <input
                       name="phone"
                       type="tel"
-                      defaultValue={dataAddress?.phone || ''}
+                      defaultValue={''}
                       className="mt-1 p-2 border rounded-md w-full"
                       placeholder="Số điện thoại"
                     />
@@ -92,7 +81,7 @@ const CheckoutPage = ({
                     <textarea
                       name="address"
                       rows="2"
-                      defaultValue={dataAddress?.address || ''}
+                      defaultValue={''}
                       className="mt-1 p-2 border rounded-md w-full"
                       placeholder="Ghi chú về đơn đặt hàng của bạn, ví dụ: ghi chú đặc biệt để giao hàng."
                     />
@@ -145,7 +134,7 @@ const CheckoutPage = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {dataCart.map((cartItem) => (
+                        {/* {dataCart.map((cartItem) => (
                           <tr key={cartItem.id} className="order-product">
                             <td className="border border-gray-300 px-4 py-2">
                               <div className="flex items-center">
@@ -181,16 +170,16 @@ const CheckoutPage = ({
                               )}
                             </td>
                           </tr>
-                        ))}
+                        ))} */}
 
-                        <tr className="order-subtotal">
+                        {/* <tr className="order-subtotal">
                           <td className="border border-gray-300 px-4 py-2">
                             Tạm tính
                           </td>
                           <td className="border border-gray-300 px-4 py-2">
                             {formatCurrency(dataCart[0].totalPrice)}
                           </td>
-                        </tr>
+                        </tr> */}
 
                         <tr className="order-coupon">
                           <td className="border border-gray-300 px-4 py-2">
@@ -205,14 +194,14 @@ const CheckoutPage = ({
                           <td className="border border-gray-300 px-4 py-2">
                             Tổng
                           </td>
-                          <td className="border border-gray-300 px-4 py-2">
+                          {/* <td className="border border-gray-300 px-4 py-2">
                             {formatCurrency(dataCart[0].totalPrice)}
-                          </td>
+                          </td> */}
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <div className="order-payment-method mt-6">
+                  {/* <div className="order-payment-method mt-6">
                     {dataPaymentMethod.map((paymentMethod) => (
                       <div
                         key={paymentMethod.id}
@@ -238,7 +227,7 @@ const CheckoutPage = ({
                         </p>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                   <button
                     type="submit"
                     className="btn bg-green-500 text-white p-2 rounded-md"

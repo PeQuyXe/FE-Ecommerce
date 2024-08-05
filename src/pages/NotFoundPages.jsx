@@ -16,7 +16,7 @@ const NotFoundPages = () => {
           <div className="bg-cover bg-center h-64  bg-[url('src/assets/bg/bg-image-13.jpg')]"></div>
         </div>
         <div className="lg:w-2/3 p-4">
-          <div className="comming-soon-content">
+          <div>
             <h2 className="text-2xl font-bold mt-4 mb-2">
               Trang web của chúng tôi đang trong quá trình phát triển!
             </h2>
