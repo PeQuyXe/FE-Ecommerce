@@ -9,8 +9,8 @@ import { useDispatch } from 'react-redux';
 import { ADD_TO_CART } from '../../../actions/cartAction';
 import { formatCurrency, renderStars } from '../../../utils/configformat';
 
-const ProductDetail2 = () => {
-  const { cateId } = useParams(); // Assuming cateId is the category ID parameter
+const ProductCategory = () => {
+  const { cateId } = useParams();
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const ProductDetail2 = () => {
               Trang chủ
             </Link>{' '}
             <span className="mx-2">/</span>
-            <Link to="/product" className="text-blue-500 hover:underline">
+            <Link to="/product" className="hover:underline">
               {' '}
               Sản phẩm Theo Danh Mục
             </Link>{' '}
@@ -65,7 +65,7 @@ const ProductDetail2 = () => {
         <div className="container mx-auto flex flex-wrap">
           {products.map((product) => (
             <div className="w-full lg:w-1/3 px-4 mb-4" key={product.id}>
-              <div className="bg-white shadow-md rounded p-4 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+              <div className="bg-white shadow-md rounded p-4 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg h-full flex flex-col">
                 <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
                 <img
                   src={product.thumb}
@@ -83,14 +83,14 @@ const ProductDetail2 = () => {
                   )}
                 </div>
                 <div>{renderStars(product.totalRating)}</div>
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-between mt-auto">
                   <button
                     onClick={() => handleAddToCart(product)}
                     className={`rounded-lg ${
                       product.quantity !== 0
                         ? 'bg-orange-500 text-white'
                         : 'bg-gray-500 text-gray-300'
-                    } py-2 px-4 rounded`}
+                    } py-2 px-4`}
                     disabled={product.quantity === 0}
                   >
                     {product.quantity !== 0
@@ -108,9 +108,17 @@ const ProductDetail2 = () => {
             </div>
           ))}
         </div>
+        <div className="text-center mt-8">
+          <Link
+            to="/product"
+            className="text-blue-500 hover:text-blue-700 font-semibold"
+          >
+            Xem tất cả sản phẩm
+          </Link>
+        </div>
       </section>
     </div>
   );
 };
 
-export default ProductDetail2;
+export default ProductCategory;

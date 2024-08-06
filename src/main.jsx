@@ -22,7 +22,8 @@ import ContactPage from './pages/client/contact/ContactPage';
 import CouponArea from './pages/client/coupons/CouponArea';
 import NewsPage from './pages/client/news/NewsPage';
 import NewDetail from './pages/client/news/NewDetail';
-import ProductCategory from './pages/client/category/ProductCategory';
+// import ProductCategory from './pages/client/category/ProductCategory';
+import CategoryProduct from './pages/client/category/CategoryProduct';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
@@ -45,12 +46,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/coupon" element={<CouponArea />} />
               <Route path="/profile" element={<MyAccount />} />
               <Route path="*" element={<NotFoundPages />} />
-              <Route path="news/:newsId/*" element={<NewDetail />} />
+              <Route path="news/news/:id" element={<NewDetail />} />
               <Route
                 path="home/category/:cateId/*"
-                element={<ProductCategory />}
+                element={<CategoryProduct />}
               />
-              <Route path="category/:cateId/*" element={<ProductCategory />} />
+              {/* <Route path="category/:cateId/*" element={<ProductCategory />} /> */}
+              <Route path="category/:cateId/*" element={<CategoryProduct />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

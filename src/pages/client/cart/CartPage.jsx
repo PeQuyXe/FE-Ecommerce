@@ -27,6 +27,21 @@ const CartPage = () => {
 
   return (
     <section className="py-8">
+      {/* Breadcrumb Section */}
+      <section className="py-4 mb-2">
+        <div className="container mx-auto">
+          <nav className="text-blue-500">
+            <Link to="/" className="hover:underline">
+              Trang chủ
+            </Link>{' '}
+            <span className="mx-2">/</span>
+            <Link to="/product" className="text-gray-500">
+              {' '}
+              Giỏ Hàng
+            </Link>{' '}
+          </nav>
+        </div>
+      </section>
       <div className="container mx-auto px-4">
         <div className="mb-4">
           <h4 className="text-2xl font-serif text-start">Giỏ hàng của bạn</h4>

@@ -33,7 +33,7 @@ const NewsPage = () => {
               Trang chủ
             </Link>{' '}
             <span className="mx-2">/</span>
-            <span className="text-gray-400">Tin Tức</span>
+            <span className="text-gray-400">Tin tức</span>
           </nav>
         </div>
 
@@ -45,7 +45,7 @@ const NewsPage = () => {
                 <div className="w-full md:w-1/2 px-4 mb-4" key={newsItem.id}>
                   <div className="bg-white shadow-md rounded overflow-hidden">
                     <div className="relative">
-                      <Link to={`news/${newsItem.slug}-${newsItem.id}`}>
+                      <Link to={`news/${newsItem.id}`}>
                         <img
                           src={newsItem.thumb}
                           alt={newsItem.title}
@@ -56,7 +56,7 @@ const NewsPage = () => {
                     <div className="p-4">
                       <h5 className="text-xl font-semibold mb-2">
                         <Link
-                          to={`news/${newsItem.slug}-${newsItem.id}`}
+                          to={`news/${newsItem.id}`}
                           className="text-gray-600 hover:underline"
                         >
                           {newsItem.title}
@@ -64,7 +64,7 @@ const NewsPage = () => {
                       </h5>
                       <div className="text-right mt-4">
                         <Link
-                          to={`news/${newsItem.slug}-${newsItem.id}`}
+                          to={`news/${newsItem.id}`}
                           className="text-blue-600 hover:underline flex items-center justify-end"
                         >
                           Đọc thêm{' '}
@@ -89,7 +89,7 @@ const NewsPage = () => {
                 {dataNews.map((newsItem) => (
                   <div className="flex mb-4" key={newsItem.id}>
                     <div className="flex-shrink-0 w-24 h-24 mr-4">
-                      <Link to={`news/${newsItem.slug}-${newsItem.id}`}>
+                      <Link to={`news/${newsItem.id}`}>
                         <img
                           src={newsItem.thumb}
                           alt={newsItem.title}
@@ -100,7 +100,7 @@ const NewsPage = () => {
                     <div className="flex-1">
                       <h6 className="text-md font-semibold mb-2">
                         <Link
-                          to={`news/${newsItem.slug}-${newsItem.id}`}
+                          to={`news/${newsItem.id}`}
                           className="text-gay-600 hover:underline"
                         >
                           {newsItem.title}
@@ -109,7 +109,7 @@ const NewsPage = () => {
                       <div className="text-gray-600 text-sm">
                         <ul className="list-disc pl-4">
                           <li>
-                            {new Date(newsItem.create_at).toLocaleDateString(
+                            {new Date(newsItem.createAt).toLocaleDateString(
                               'vi-VN',
                               {
                                 day: '2-digit',
@@ -135,7 +135,7 @@ const NewsPage = () => {
                   {dataProdRecent.slice(0, 4).map((item) => (
                     <li className="flex mb-4" key={item.id}>
                       <div className="flex-shrink-0 w-24 h-24 mr-4">
-                        <Link to={`product/${item.slug}-${item.id}`}>
+                        <Link to={`product/${item.id}`}>
                           <img
                             src={item.thumb}
                             alt={item.title}
@@ -146,7 +146,7 @@ const NewsPage = () => {
                       <div className="flex-1">
                         <h6 className="text-md font-semibold mb-2">
                           <Link
-                            to={`product/${item.slug}-${item.id}`}
+                            to={`product/${item.id}`}
                             className="text-blue-600 hover:underline"
                           >
                             {item.title}

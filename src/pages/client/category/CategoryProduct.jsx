@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ADD_TO_CART } from '../../../actions/cartAction';
-import { FaEye, FaHeart } from 'react-icons/fa';
-import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
 import {
   formatCurrency,
   renderStars,
@@ -12,8 +12,10 @@ import {
 } from '../../../utils/configformat';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Slide } from 'react-slideshow-image';
+import { FaEye, FaHeart } from 'react-icons/fa';
 import 'react-slideshow-image/dist/styles.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 const priceOptions = [
   { title: 'Dưới 2 triệu', value: '0 - 2000000' },
   { title: 'Từ 2 - 4 triệu', value: '2000000 - 4000000' },
@@ -23,14 +25,12 @@ const priceOptions = [
   { title: 'Từ 20 - 32 triệu', value: '20000000 - 32000000' },
   { title: 'Trên 32 triệu', value: '32000000 - 8000000000' },
 ];
-const dataBanners = [
-  'src/assets/banner/banner1.jpg',
-  'src/assets/banner/banner2.jpg',
-  'src/assets/banner/banner3.jpg',
-];
-const ProductList2 = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+
+const CategoryProduct = () => {
+  const { cateId } = useParams();
+  const [productByCategory, setProductByCategory] = useState([]);
+  const [, setProducts] = useState([]);
+  const [, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [filters, setFilters] = useState({
     category: '',
@@ -41,7 +41,6 @@ const ProductList2 = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -58,7 +57,9 @@ const ProductList2 = () => {
         setCategories(categoriesResponse.data);
         setBrands(brandsResponse.data);
       } catch (error) {
-        console.error('Lỗi nhận list product data:', error);
+        console.error('Error fetching data:', error);
+
+        toast.error('Lỗi khi tải dữ liệu sản phẩm');
       }
     };
 
@@ -66,7 +67,24 @@ const ProductList2 = () => {
   }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductsByCategory = async () => {
+      try {
+        const productsRes = await axios.get(
+          `http://localhost:8080/api/category/${cateId}`
+        );
+        setProductByCategory(productsRes.data);
+      } catch (error) {
+        console.error('Error fetching products by category:', error);
+
+        toast.error('Lỗi khi tải sản phẩm theo danh mục');
+      }
+    };
+
+    fetchProductsByCategory();
+  }, [cateId]);
+
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/products', {
           params: {
@@ -79,11 +97,13 @@ const ProductList2 = () => {
         });
         setProducts(response.data);
       } catch (error) {
-        console.error('Lỗi nhận filter products:', error);
+        console.error('Error fetching filtered products:', error);
+
+        toast.error('Lỗi khi lọc sản phẩm');
       }
     };
 
-    fetchProducts();
+    fetchFilteredProducts();
   }, [filters]);
 
   const handleFilterChange = (name, value) => {
@@ -102,7 +122,9 @@ const ProductList2 = () => {
     setCurrentPage(1);
   };
 
-  const filteredProducts = products
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const filteredProducts = productByCategory
     .filter((product) =>
       filters.search
         ? product.title.toLowerCase().includes(filters.search.toLowerCase())
@@ -137,13 +159,11 @@ const ProductList2 = () => {
       return 0;
     });
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   const goToProductDetail = (productId) => {
     navigate(`/product/${productId}`);
@@ -160,20 +180,25 @@ const ProductList2 = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <section className="py-8 ">
+    <section className="py-8">
       <div className="container mx-auto px-4">
         {/* Breadcrumbs */}
-        <div className="mb-4">
-          <nav className="text-gray-700">
-            <Link to="/" className="text-blue-500 hover:underline">
+        <div className="container mx-auto mb-6">
+          <nav className="text-blue-500">
+            <Link to="/" className="hover:underline">
               Trang chủ
-            </Link>
+            </Link>{' '}
             <span className="mx-2">/</span>
-            <span className="text-gray-600">Danh sách sản phẩm</span>
+            <span className="text-gray-400"> Danh Mục</span>{' '}
+            <span className="mx-2">/</span>
+            <span className="text-gray-400">
+              {productByCategory.length > 0
+                ? productByCategory[0].productcol
+                : ''}
+            </span>
           </nav>
         </div>
-
-        <div className="mb-2 justify-between">
+        <div className="mb-10 justify-between">
           <div className="flex items-center justify-between px-5">
             <label className="relative block">
               <input
@@ -187,37 +212,6 @@ const ProductList2 = () => {
 
             <div className="flex-1">
               <div className="flex items-center justify-end space-x-4 lg:space-x-6">
-                <Menu
-                  as="div"
-                  className="relative inline-block text-left w-full lg:w-auto"
-                >
-                  <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                    {filters.category
-                      ? categories.find((cate) => cate.id === filters.category)
-                          ?.name
-                      : 'Danh mục'}
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="w-5 h-5 text-gray-400"
-                    />
-                  </MenuButton>
-                  <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-                    {categories.map((cateItem) => (
-                      <MenuItem
-                        key={cateItem.id}
-                        as="button"
-                        onClick={() =>
-                          handleFilterChange('category', cateItem.id)
-                        }
-                      >
-                        <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                          {cateItem.name}
-                        </span>
-                      </MenuItem>
-                    ))}
-                  </MenuItems>
-                </Menu>
-
                 <Menu
                   as="div"
                   className="relative inline-block text-left w-full lg:w-auto"
@@ -353,32 +347,9 @@ const ProductList2 = () => {
             </div>
           </div>
         </div>
-        <section className="relative py-6">
-          <div className="container mx-auto ">
-            <Slide>
-              <div className="flex flex-row overflow-x-auto">
-                {dataBanners.map((banner, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-auto md:w-3/4 lg:w-2/3 xl:w-1/2 px-3"
-                  >
-                    <div className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
-                      <div className="p-2 transform transition-transform duration-500 hover:scale-105">
-                        <img
-                          className=" w-full h-auto rounded-md object-contain "
-                          src={banner}
-                          alt={`Banner ${index + 1}`}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Slide>
-          </div>
-        </section>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-center">
+          {/* Product Listing */}
           {currentProducts.length > 0 ? (
             currentProducts.map((item) => (
               <div
@@ -455,27 +426,83 @@ const ProductList2 = () => {
             </div>
           )}
         </div>
-
-        <div className="mt-6 flex justify-center">
-          <nav className="flex space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => paginate(index + 1)}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-blue-500'
-                } hover:bg-blue-100`}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </nav>
+        <div className="text-center mt-8">
+          <Link
+            to="/product"
+            className="text-blue-500 hover:text-blue-700 font-semibold"
+          >
+            Xem tất cả sản phẩm
+          </Link>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-10">
+            <nav
+              className="relative z-0 inline-flex shadow-sm -space-x-px"
+              aria-label="Pagination"
+            >
+              <button
+                onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <span className="sr-only">Previous</span>
+                <svg
+                  className="h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M13.707 5.293a1 1 0 010 1.414L9.414 10l4.293 4.293a1 1 0 11-1.414 1.414l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => paginate(i + 1)}
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
+                    currentPage === i + 1
+                      ? 'text-blue-500 bg-blue-50'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() =>
+                  paginate(
+                    currentPage < totalPages ? currentPage + 1 : totalPages
+                  )
+                }
+                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <span className="sr-only">Next</span>
+                <svg
+                  className="h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.293 14.707a1 1 0 010-1.414L10.586 10 6.293 5.707a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
-export default ProductList2;
+export default CategoryProduct;

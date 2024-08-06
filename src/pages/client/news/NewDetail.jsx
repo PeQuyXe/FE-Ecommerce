@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom'; // Import useParams
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const NewDetail = () => {
-  const { id } = useParams(); // Use useParams to get the id from route params
+  const { id } = useParams();
   const [dataNew, setDataNew] = useState({});
   const [dataNews, setDataNews] = useState([]);
   const [dataProdRecent, setDataProdRecent] = useState([]);
@@ -22,12 +22,11 @@ const NewDetail = () => {
         setDataProdRecent(prodRecentRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
-        // Handle specific errors or show a generic error message to the user
       }
     };
 
     fetchData();
-  }, [id]); // Include id in the dependency array
+  }, [id]);
 
   return (
     <section className="py-6">
@@ -39,7 +38,7 @@ const NewDetail = () => {
               Trang chủ
             </Link>{' '}
             <span className="mx-2">/</span>
-            <span className="text-gray-400">Tin Tức</span>
+            <span className="text-gray-500">Tin tức</span>
           </nav>
         </div>
 
@@ -59,7 +58,7 @@ const NewDetail = () => {
                 <div className="text-gray-600 text-sm mb-4">
                   <ul className="list-disc pl-4">
                     <li>
-                      {new Date(dataNew.create_at).toLocaleDateString('vi-VN', {
+                      {new Date(dataNew.createAt).toLocaleDateString('vi-VN', {
                         day: '2-digit',
                         month: 'short',
                         year: 'numeric',
@@ -87,7 +86,7 @@ const NewDetail = () => {
                 {dataNews.map((newsItem) => (
                   <div className="flex mb-4" key={newsItem.id}>
                     <div className="flex-shrink-0 w-24 h-24 mr-4">
-                      <Link to={`news/${newsItem.slug}-${newsItem.id}`}>
+                      <Link to={`news/${newsItem.id}`}>
                         <img
                           src={newsItem.thumb}
                           alt={newsItem.title}
@@ -98,7 +97,7 @@ const NewDetail = () => {
                     <div className="flex-1">
                       <h6 className="text-md font-semibold mb-2">
                         <Link
-                          to={`news/${newsItem.slug}-${newsItem.id}`}
+                          to={`news/${newsItem.id}`}
                           className="text-gray-600 hover:underline"
                         >
                           {newsItem.title}
@@ -107,7 +106,7 @@ const NewDetail = () => {
                       <div className="text-gray-600 text-sm">
                         <ul className="list-disc pl-4">
                           <li>
-                            {new Date(newsItem.create_at).toLocaleDateString(
+                            {new Date(newsItem.createAt).toLocaleDateString(
                               'vi-VN',
                               {
                                 day: '2-digit',

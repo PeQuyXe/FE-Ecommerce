@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { auth } from '../../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import { provider } from '../../../firebase';
+import { signInWithPopup } from 'firebase/auth';
 import backgroundImage from '../../../assets/bg/bg-image-4.jpg';
 import { toast } from 'react-toastify';
 const Login = () => {
@@ -9,6 +12,20 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log('User Info:', user);
+      toast.success('Đăng nhập thành công!', {
+        autoClose: 1000,
+      });
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -92,6 +109,17 @@ const Login = () => {
                 Đăng ký
               </Link>
             </p>
+          </div>
+          <div className="mt-6 flex items-center justify-center">
+            <button
+              onClick={handleGoogleSignIn}
+              className="bg-white text-blue-600 px-4 py-2 rounded hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110 shadow-md"
+            >
+              <span>
+                <FcGoogle />
+              </span>
+              <span className="ml-2">Đăng nhập tài khoản Google</span>
+            </button>
           </div>
         </div>
       </div>

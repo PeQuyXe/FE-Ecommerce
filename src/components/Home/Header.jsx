@@ -119,7 +119,7 @@ const Header = () => {
 
           {/* Navigation Menu */}
           <nav className="flex-1">
-            <ul className="flex items-center justify-center space-x-7 text-xl font-serif">
+            <ul className="flex items-center justify-center space-x-7 text-l font-serif">
               {menu.map((item) => (
                 <li key={item.path}>
                   <NavLink

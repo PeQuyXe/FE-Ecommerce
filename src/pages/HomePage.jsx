@@ -32,8 +32,7 @@ const HomePage = () => {
   const dataBanners = [
     'src/assets/banner/banner1.jpg',
     'src/assets/banner/banner2.jpg',
-    'src/assets/banner/banner3.jpg',
-    'src/assets/banner/banner4.jpg',
+    // 'src/assets/banner/banner3.jpg',
   ];
 
   useEffect(() => {
@@ -98,16 +97,19 @@ const HomePage = () => {
   return (
     <div>
       {/* Banner*/}
-      <section className="relative py-8">
+      <section className="relative py-10">
         <div className="container mx-auto ">
           <Slide>
             <div className="flex flex-row overflow-x-auto">
               {dataBanners.map((banner, index) => (
-                <div key={index} className="px-2">
+                <div
+                  key={index}
+                  className="w-full h-auto md:w-3/4 lg:w-2/3 xl:w-1/2 px-3"
+                >
                   <div className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
                     <div className="p-2 transform transition-transform duration-500 hover:scale-105">
                       <img
-                        className="w-full mx-auto rounded-md object-contain "
+                        className=" w-full h-auto rounded-md object-contain "
                         src={banner}
                         alt={`Banner ${index + 1}`}
                       />
@@ -119,8 +121,40 @@ const HomePage = () => {
           </Slide>
         </div>
       </section>
+      <section className="py-4">
+        <div className="container mx-auto grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
+          {[
+            { src: 'src/assets/intro/intro1.jpg', text: 'Miễn phí ship' },
+            { src: 'src/assets/intro/intro2.jpg', text: 'Hàng ngàn ưu đãi' },
+            {
+              src: 'src/assets/intro/intro3.jpg',
+              text: 'Hàng chính hãng 100%',
+            },
+            { src: 'src/assets/intro/intro4.jpg', text: 'Trả hàng miễn phí' },
+            { src: 'src/assets/icons/service10.png', text: 'Hỗ trợ 24/7' },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              <div className="text-center">
+                <div className="mb-4">
+                  <img
+                    src={item.src}
+                    alt={`Service ${index + 1}`}
+                    className="w-14 h-14 mx-auto object-contain"
+                  />
+                </div>
+                <h6 className="text-base font-semibold text-gray-700">
+                  {item.text}
+                </h6>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <section className=" py-6 font-bold ">
+      <section className=" py-2 font-bold ">
         <div className="container mx-auto mt-2">
           <div className="mb-6">
             <div className="justify-between text-xl font-semibold text-red-500 flex items-center">
@@ -147,7 +181,7 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-400">
+            <h2 className="text-2xl font-bold text-gray-400">
               Tìm kiếm theo danh mục
             </h2>
           </div>
@@ -218,6 +252,9 @@ const HomePage = () => {
                     src="src/assets/others/poster-02.png"
                     alt="eTrade promotion poster"
                     className="w-full h-auto object-cover rounded-lg transition-opacity duration-300 hover:opacity-75"
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent p-4 flex flex-col justify-end opacity-0 hover:opacity-100 transition-opacity duration-300">
                     <div className="text-white">
@@ -233,51 +270,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      {/* Poster  */}
-      <section className="py-6 shadow-md">
-        <div className="container mx-auto">
-          <div className="poster-wrap ">
-            <div className="flex flex-row items-center ml-10">
-              <div className="lg:w-7/12 md:w-full">
-                <div className="p-4 md:p-0">
-                  <div className="mb-6">
-                    <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
-                      <FaHeadphones className="mr-2" /> Không nên bỏ lỡ
-                    </div>
-                    <h2 className="text-3xl font-bold text-gray-400">
-                      Nâng cao trải nghiệm âm nhạc của bạn
-                    </h2>
-                  </div>
-                  <Link
-                    to="category/4"
-                    className=" font-sans bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center text-xl transition-transform transform motion-safe:hover:scale-105 w-max"
-                  >
-                    Kiểm tra !
-                  </Link>
-                </div>
-              </div>
-              <div className="lg:w-4/12 md:w-full">
-                <div className="relative">
-                  <img
-                    src="src/assets/others/poster-03.png"
-                    alt="Poster Product"
-                    className="w-full h-auto object-contain rounded-lg transition-opacity duration-400 hover:ease-in-out hover:scale-[1.2]"
-                  />
-                  <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center pointer-events-none">
-                    <div className="music-signal flex items-end gap-1">
-                      <div className="bg-blue-500 w-1 h-10 rounded animate-wave1"></div>
-                      <div className="bg-green-500 w-1 h-8 rounded animate-wave2"></div>
-                      <div className="bg-red-500 w-1 h-6 rounded animate-wave3"></div>
-                      <div className="bg-orange-500 w-1 h-8 rounded animate-wave2"></div>
-                      <div className="bg-gray-500 w-1 h-10 rounded animate-wave1"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Product Area Section */}
       <section className="py-6">
@@ -287,7 +279,7 @@ const HomePage = () => {
               <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
                 <FaShoppingBag className="mr-2" /> Sản Phẩm
               </div>
-              <h2 className="text-3xl font-bold text-gray-400">
+              <h2 className="text-2xl font-bold text-gray-400">
                 Các sản phẩm bán chạy
               </h2>
             </div>
@@ -304,6 +296,9 @@ const HomePage = () => {
                       src={item.thumb}
                       alt={item.title}
                       className="w-full h-40 object-contain p-2 transform-gpu transition-transform duration-500 hover:scale-100"
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                      }}
                     />
                     {item.discount !== 0 && (
                       <div className="absolute top-2 right-2 bg-red-500 text-white py-1 px-2 rounded">
@@ -316,7 +311,9 @@ const HomePage = () => {
                     <ul className="flex space-x-2">
                       <li>
                         <button
-                          onClick={() => goToProductDetail(item.id)}
+                          onClick={() =>
+                            goToProductDetail(item.id) & window.scrollTo(0, 0)
+                          }
                           className="text-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 p-3 rounded-lg"
                         >
                           <FaEye />
@@ -325,7 +322,9 @@ const HomePage = () => {
 
                       <li>
                         <button
-                          onClick={() => addToCart(item)}
+                          onClick={() =>
+                            addToCart(item) & window.scrollTo(0, 0)
+                          }
                           className={`text-white p-2 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${
                             item.quantity === 0
                               ? 'cursor-not-allowed'
@@ -384,6 +383,51 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      {/* Poster  */}
+      <section className="py-6 shadow-md">
+        <div className="container mx-auto">
+          <div className="poster-wrap ">
+            <div className="flex flex-row items-center ml-10">
+              <div className="lg:w-7/12 md:w-full">
+                <div className="p-4 md:p-0">
+                  <div className="mb-6">
+                    <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
+                      <FaHeadphones className="mr-2" /> Không nên bỏ lỡ
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-400">
+                      Nâng cao trải nghiệm âm nhạc của bạn
+                    </h2>
+                  </div>
+                  <Link
+                    to="category/4"
+                    className=" font-sans bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center text-xl transition-transform transform motion-safe:hover:scale-105 w-max"
+                  >
+                    Kiểm tra !
+                  </Link>
+                </div>
+              </div>
+              <div className="lg:w-4/12 md:w-full">
+                <div className="relative">
+                  <img
+                    src="src/assets/others/poster-03(1).png"
+                    alt="Poster Product"
+                    className="w-full h-auto object-contain rounded-lg transition-opacity duration-400 hover:ease-in-out hover:scale-[1.2]"
+                  />
+                  <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center pointer-events-none">
+                    <div className="music-signal flex items-end gap-1">
+                      <div className="bg-blue-500 w-1 h-10 rounded animate-wave1"></div>
+                      <div className="bg-green-500 w-1 h-8 rounded animate-wave2"></div>
+                      <div className="bg-red-500 w-1 h-6 rounded animate-wave3"></div>
+                      <div className="bg-orange-500 w-1 h-8 rounded animate-wave2"></div>
+                      <div className="bg-gray-500 w-1 h-10 rounded animate-wave1"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* New Arrivals Section */}
       <section className="py-6">
@@ -393,7 +437,7 @@ const HomePage = () => {
               <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
                 <FaShoppingBag className="mr-2" /> Tuần Này
               </div>
-              <h2 className="text-3xl font-bold text-gray-400">
+              <h2 className="text-2xl font-bold text-gray-400">
                 Sản phẩm mới trong cửa hàng
               </h2>
             </div>
