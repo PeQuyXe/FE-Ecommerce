@@ -1,6 +1,17 @@
-// import avatarPlaceholder from './path/to/avatar-placeholder.png';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { logout } from '../../actions/authActions';
+import { formatCurrency } from '../../../utils/configformat';
 
 function DashboardAccount() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const orders = useSelector((state) => state.orders); // Giả sử bạn có một slice orders trong Redux store
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <section className="dashboard-account-area">
       <div className="container">
@@ -9,20 +20,17 @@ function DashboardAccount() {
             <div className="flex items-center">
               <div className="thumbnail">
                 <img
-                  src="https://res.cloudinary.com/dfgkkkcoc/image/upload/v1700472991/uploads_WEB2041_Ecommerce/phpADF_qwzk6l.jpg"
-                  alt={'name'}
+                  src={user?.photoURL || 'https://via.placeholder.com/150'}
+                  alt={user?.fullname || 'User'}
                   className="rounded-full w-20 h-20 object-cover"
                 />
               </div>
               <div className="ml-4">
                 <h5 className="title mb-0">Xin chào,</h5>
-                {/* <span className="joining-date">
+                <span className="joining-date">
                   Thành viên kể từ{' '}
-                  {new Date(dataUserCurrent.create_At).toLocaleDateString(
-                    'en-GB'
-                  )}
-                  .
-                </span> */}
+                  {new Date(user?.create_At).toLocaleDateString('en-GB')}.
+                </span>
               </div>
             </div>
           </div>
@@ -30,21 +38,24 @@ function DashboardAccount() {
             <aside className="dashboard-aside md:col-span-1">
               <nav className="dashboard-nav">
                 <div className="space-y-2">
-                  <a href="#nav-dashboard" className="nav-item nav-link active">
+                  <div className="nav-item nav-link active cursor-pointer">
                     <i className="fas fa-th-large"></i>Bảng điều khiển
-                  </a>
-                  <a href="#nav-orders" className="nav-item nav-link">
+                  </div>
+                  <div className="nav-item nav-link cursor-pointer">
                     <i className="fas fa-shopping-basket"></i>Đơn hàng
-                  </a>
-                  <a href="#nav-address" className="nav-item nav-link">
+                  </div>
+                  <div className="nav-item nav-link cursor-pointer">
                     <i className="fas fa-location-circle"></i>Địa chỉ
-                  </a>
-                  <a href="#nav-account" className="nav-item nav-link">
+                  </div>
+                  <div className="nav-item nav-link cursor-pointer">
                     <i className="fas fa-user"></i>Tài khoản
-                  </a>
-                  <a href="logout" className="nav-item nav-link">
+                  </div>
+                  <div
+                    className="nav-item nav-link cursor-pointer"
+                    onClick={handleLogout}
+                  >
                     <i className="fas fa-sign-out"></i>Đăng xuất
-                  </a>
+                  </div>
                 </div>
               </nav>
             </aside>
@@ -53,11 +64,15 @@ function DashboardAccount() {
                 <div id="nav-dashboard" className="tab-pane fade show active">
                   <div className="dashboard-overview">
                     <div className="welcome-text">
-                      Xin chào, (không phải{' '}
-                      <span className="fw-bold">
-                        {/* {dataUserCurrent.fullname} */}
+                      Xin chào, {user?.fullname} (không phải{' '}
+                      <span className="fw-bold">{user?.fullname}</span>?{' '}
+                      <span
+                        className="text-blue-500 cursor-pointer"
+                        onClick={handleLogout}
+                      >
+                        Đăng xuất
                       </span>
-                      ? <a href="logout">Đăng xuất</a>)
+                      )
                     </div>
                     <p>
                       Từ bảng điều khiển tài khoản của mình, bạn có thể xem các
@@ -77,33 +92,31 @@ function DashboardAccount() {
                               <th>Tổng</th>
                             </tr>
                           </thead>
-                          {/* <tbody>
-                            {dataOrder.map((dataOrderItem, index) => (
+                          <tbody>
+                            {orders.map((order, index) => (
                               <tr key={index}>
-                                <td>{'#' + dataOrderItem.order_code}</td>
-                                <td>{dataOrderItem.order_date}</td>
+                                <td>{'#' + order.order_code}</td>
+                                <td>{order.order_date}</td>
                                 <td className="fw-bold">
-                                  {dataOrderItem.payment_method_name}
+                                  {order.payment_method_name}
                                 </td>
                                 <td
                                   className={
-                                    dataOrderItem.order_status_id === 5
+                                    order.order_status_id === 5
                                       ? 'status-danger'
                                       : 'status-success'
                                   }
                                 >
                                   <span className="fw-medium">
-                                    {dataOrderItem.order_status_name}
+                                    {order.order_status_name}
                                   </span>
                                 </td>
                                 <td className="fw-bold">
-                                  {Format.formatCurrency(
-                                    dataOrderItem.total_money
-                                  )}
+                                  {formatCurrency(order.total_money)}
                                 </td>
                               </tr>
                             ))}
-                          </tbody> */}
+                          </tbody>
                         </table>
                       </div>
                     </div>

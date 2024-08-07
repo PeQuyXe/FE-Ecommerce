@@ -1,7 +1,44 @@
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { formatCurrency } from '../../../utils/configformat';
+
+const dataCoupon = [
+  { id: 1, title: 'Giảm 10%', value: '10%' },
+  { id: 2, title: 'Giảm 20%', value: '20%' },
+];
+
+const dataPaymentMethod = [
+  {
+    id: 1,
+    name: 'cod',
+    display_name: 'Thanh toán khi nhận hàng',
+    thumb: 'https://phuhungthinh.com/wp-content/uploads/2022/08/thanh-toan.png',
+    description: 'Thanh toán bằng tiền mặt khi nhận hàng',
+  },
+  {
+    id: 2,
+    name: 'vnpay',
+    display_name: 'VNPAY',
+    thumb:
+      'https://vnpay.vn/s1/statics.vnpay.vn/2023/6/0oxhzjmxbksr1686814746087.png',
+    description: 'Thanh toán qua VNPAY',
+  },
+  {
+    id: 3,
+    name: 'momo',
+    display_name: 'MOMO',
+    thumb:
+      'https://developers.momo.vn/v3/assets/images/icon-52bd5808cecdb1970e1aeec3c31a3ee1.png',
+    description: 'Thanh toán qua MOMO',
+  },
+];
+
 const CheckoutPage = () => {
+  const dataCart = useSelector((state) => state.cart.cartItems);
+
   return (
-    <>
-      {/* <section className="header-top-campaign">
+    <div>
+      <section className="header-top-campaign">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <div className="w-full xl:w-5/12 lg:w-3/5 md:w-10/12">
@@ -19,7 +56,7 @@ const CheckoutPage = () => {
                       <p className="text-uppercase">
                         {`${dataCouponItem.title} ${couponValue}`} :{' '}
                         <Link
-                          to="coupon"
+                          to="/coupon"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500"
@@ -34,7 +71,7 @@ const CheckoutPage = () => {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       <section className="checkout-area">
         <div className="container mx-auto px-4">
@@ -134,7 +171,7 @@ const CheckoutPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {dataCart.map((cartItem) => (
+                        {dataCart.map((cartItem) => (
                           <tr key={cartItem.id} className="order-product">
                             <td className="border border-gray-300 px-4 py-2">
                               <div className="flex items-center">
@@ -156,10 +193,10 @@ const CheckoutPage = () => {
                                         x{cartItem.quantity}
                                       </span>
                                     </p>
-                                    <span className="text-gray-500">
+                                    {/* <span className="text-gray-500">
                                       Phân loại:{' '}
                                       <font>{cartItem.attribute_values}</font>
-                                    </span>
+                                    </span> */}
                                   </Link>
                                 </div>
                               </div>
@@ -170,17 +207,20 @@ const CheckoutPage = () => {
                               )}
                             </td>
                           </tr>
-                        ))} */}
-
-                        {/* <tr className="order-subtotal">
+                        ))}
+                        <tr className="order-subtotal">
                           <td className="border border-gray-300 px-4 py-2">
                             Tạm tính
                           </td>
                           <td className="border border-gray-300 px-4 py-2">
-                            {formatCurrency(dataCart[0].totalPrice)}
+                            {formatCurrency(
+                              dataCart.reduce(
+                                (acc, item) => acc + item.price * item.quantity,
+                                0
+                              )
+                            )}
                           </td>
-                        </tr> */}
-
+                        </tr>
                         <tr className="order-coupon">
                           <td className="border border-gray-300 px-4 py-2">
                             Ưu đãi
@@ -189,19 +229,23 @@ const CheckoutPage = () => {
                             0
                           </td>
                         </tr>
-
                         <tr className="order-total">
                           <td className="border border-gray-300 px-4 py-2">
                             Tổng
                           </td>
-                          {/* <td className="border border-gray-300 px-4 py-2">
-                            {formatCurrency(dataCart[0].totalPrice)}
-                          </td> */}
+                          <td className="border border-gray-300 px-4 py-2">
+                            {formatCurrency(
+                              dataCart.reduce(
+                                (acc, item) => acc + item.price * item.quantity,
+                                0
+                              )
+                            )}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  {/* <div className="order-payment-method mt-6">
+                  <div className="order-payment-method mt-6">
                     {dataPaymentMethod.map((paymentMethod) => (
                       <div
                         key={paymentMethod.id}
@@ -227,7 +271,7 @@ const CheckoutPage = () => {
                         </p>
                       </div>
                     ))}
-                  </div> */}
+                  </div>
                   <button
                     type="submit"
                     className="btn bg-green-500 text-white p-2 rounded-md"
@@ -240,7 +284,7 @@ const CheckoutPage = () => {
           </form>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

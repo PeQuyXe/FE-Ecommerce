@@ -19,7 +19,7 @@ import {
 import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
-    <footer className=" mt-10">
+    <footer className="mt-10">
       <div className="container mx-auto px-4 mt-auto">
         <div className="text-center mb-8">
           <span className="inline-flex items-center justify-center bg-yellow-100 text-yellow-700 py-1 px-3 rounded-full text-sm font-bold">
@@ -93,7 +93,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="footer-top py-8 text-gray-500 bg-white">
+      <div className="footer-top py-8 text-gray-500 ">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="footer-widget">
@@ -242,7 +242,7 @@ const Footer = () => {
 
             <div className="text-center md:text-left mb-4 md:mb-0">
               © 2024. Bản quyền thuộc về{' '}
-              <Link target="_blank" to="#" className="text-blue-400">
+              <Link target="_blank" to="/" className="text-blue-400">
                 PeQuyXe
               </Link>
               .

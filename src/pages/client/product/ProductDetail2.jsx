@@ -26,7 +26,7 @@ const ProductDetail2 = () => {
     color: '',
     size: '',
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,7 +61,12 @@ const ProductDetail2 = () => {
   }, [productId]);
 
   const handleAddToCart = () => {
-    dispatch(ADD_TO_CART({ ...product, quantity }));
+    const productWithQuantity = {
+      ...product,
+      quantity,
+      attributes,
+    };
+    dispatch(ADD_TO_CART(productWithQuantity));
     toast.success('Đã thêm vào giỏ hàng', {
       autoClose: 1000,
     });
@@ -84,8 +89,8 @@ const ProductDetail2 = () => {
     });
   };
 
-  const handleAttributeChange = (e) => {
-    setAttributes({ ...attributes, [e.target.name]: e.target.value });
+  const handleAttributeChange = (attribute, value) => {
+    setAttributes({ ...attributes, [attribute]: value });
   };
 
   const settings = {
@@ -98,18 +103,12 @@ const ProductDetail2 = () => {
   };
 
   const imageSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 100,
+    autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-  };
-  // const openModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
@@ -221,25 +220,10 @@ const ProductDetail2 = () => {
                   Kiểm tra mã giảm giá của bạn
                 </li>
               </ul>
-              <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Product Description"
-                className="Modal"
-                overlayClassName="Overlay"
-              >
-                <h2 className="text-2xl font-semibold mb-4">Mô tả sản phẩm</h2>
-                <div className="mb-4">{product.description}</div>
-                <button
-                  onClick={closeModal}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-                >
-                  Đóng
-                </button>
-              </Modal>
+
               <div className="mb-4">
                 <h3 className="text-xl font-semibold mb-2">Phân Loại</h3>
-                <div className="mb-2">
+                <div className="flex items-center mb-2">
                   <label className="mr-4">Màu sắc:</label>
                   <div className="flex space-x-2">
                     <button
@@ -274,7 +258,7 @@ const ProductDetail2 = () => {
                     </button>
                   </div>
                 </div>
-                <div>
+                <div className="flex items-center">
                   <label className="mr-4">Dung lượng:</label>
                   <div className="flex space-x-2">
                     <button
@@ -312,47 +296,31 @@ const ProductDetail2 = () => {
               </div>
 
               <form onSubmit={(e) => e.preventDefault()} className="mb-4">
-                <div className="flex items-center mb-4">
-                  <label
-                    htmlFor="quantity"
-                    className="text-lg text-gray-700 mr-4"
-                  >
-                    Số lượng:
-                  </label>
-                  <div className="relative flex items-center">
+                <div className="flex flex-row items-center gap-12">
+                  <div className="flex flex-row items-center">
                     <button
-                      type="button"
-                      onClick={() =>
-                        setQuantity((prev) => Math.max(prev - 1, 1))
-                      }
-                      className="text-xl font-bold bg-gray-200 px-4 py-1 border border-gray-300 rounded-l cursor-pointer focus:outline-none"
+                      className="bg-gray-200 py-2 px-5 rounded-lg text-violet-800 text-3xl"
+                      onClick={() => setQuantity((prev) => prev - 1)}
                     >
                       -
                     </button>
-                    <input
-                      type="number"
-                      id="quantity"
-                      name="quantity"
-                      value={quantity}
-                      readOnly
-                      className="text-xl font-bold text-center w-12 bg-gray-200 border-t border-b border-gray-300"
-                    />
+                    <span className="py-4 px-6 rounded-lg" readOnly>
+                      {quantity}
+                    </span>
                     <button
-                      type="button"
+                      className="bg-gray-200 py-2 px-4 rounded-lg text-violet-800 text-3xl"
                       onClick={() => setQuantity((prev) => prev + 1)}
-                      className="text-xl font-bold bg-gray-200 px-4 py-1 border border-gray-300 rounded-r cursor-pointer focus:outline-none"
                     >
                       +
                     </button>
                   </div>
+                  <button
+                    onClick={handleAddToCart}
+                    className="bg-violet-800 hover:bg-violoet-600 flex items-center space-x-2 transform motion-safe:hover:scale-110 text-white font-semibold py-3 px-16 rounded-xl h-full"
+                  >
+                    Thêm vào giỏ hàng
+                  </button>
                 </div>
-                <button
-                  onClick={handleAddToCart}
-                  type="submit"
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md transition duration-300"
-                >
-                  Thêm vào giỏ hàng
-                </button>
               </form>
             </div>
           </div>

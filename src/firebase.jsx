@@ -8,6 +8,8 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 
+import 'firebase/auth';
+
 const firebaseConfig = {
   apiKey: 'AIzaSyCCCtuVd3any3AvjQ8wfO1mWIRyoGjVJSs',
   authDomain: 'ecm-app-35a85.firebaseapp.com',

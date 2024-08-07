@@ -61,10 +61,13 @@ const CartPage = () => {
             <tbody>
               {cartItems.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 text-gray-500 ">
+                  <td
+                    colSpan="6"
+                    className="text-center items-center py-4 text-gray-500 "
+                  >
                     <img
-                      src="src/assets/bg/bg-image-11.jpg"
-                      className="items-center w-50 h-50"
+                      src="src/assets/bg/bg-image-14.jpg"
+                      className="flex justify-center items-center mx-auto"
                     />
                     Không có sản phẩm nào trong giỏ hàng
                   </td>

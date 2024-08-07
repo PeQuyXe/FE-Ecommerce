@@ -122,7 +122,7 @@ const HomePage = () => {
         </div>
       </section>
       <section className="py-4">
-        <div className="container mx-auto grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
+        <div className="container mx-auto  grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
           {[
             { src: 'src/assets/intro/intro1.jpg', text: 'Miễn phí ship' },
             { src: 'src/assets/intro/intro2.jpg', text: 'Hàng ngàn ưu đãi' },
@@ -186,7 +186,7 @@ const HomePage = () => {
             </h2>
           </div>
 
-          <div className="category flex flex-wrap -mx-[15px] relative">
+          <div className="category flex flex-wrap -mx-auto relative">
             {visibleItems.map((cateItem) => (
               <Link
                 key={cateItem.id}
