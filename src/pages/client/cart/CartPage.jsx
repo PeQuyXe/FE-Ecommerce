@@ -24,7 +24,7 @@ const CartPage = () => {
     (total, item) => total + item.price * item.quantity,
     0
   );
-
+  console.log(cartItems);
   return (
     <section className="py-8">
       {/* Breadcrumb Section */}
@@ -50,8 +50,9 @@ const CartPage = () => {
           <table className="min-w-full bg-white shadow-md rounded-lg">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-2 text-left">Sản phẩm</th>
                 <th className="px-4 py-2 text-left"></th>
+                <th className="px-4 py-2 text-left">Sản phẩm</th>
+                <th className="px-4 py-2 text-left">Phân loại</th>
                 <th className="px-4 py-2 text-left">Giá</th>
                 <th className="px-4 py-2 text-left">Số lượng</th>
                 <th className="px-4 py-2 text-left">Tạm tính</th>
@@ -84,6 +85,11 @@ const CartPage = () => {
                     </td>
                     <td className="px-4 py-2">
                       <h3 className="text-lg font-semibold">{item.title}</h3>
+                    </td>
+                    <td className="px-4 py-2">
+                      <h3 className="text-xm text-gray-400 font-bold">
+                        {item.variant}
+                      </h3>
                     </td>
                     <td className="px-4 py-2">
                       <p className="font-semibold">
@@ -156,7 +162,7 @@ const CartPage = () => {
                 </table>
                 <Link
                   to="/checkout"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 block text-center hover:bg-blue-600"
+                  className="bg-green-500 text-white px-4 py-2 rounded-md mt-4 block text-center hover:bg-green-600"
                 >
                   Thanh toán
                 </Link>

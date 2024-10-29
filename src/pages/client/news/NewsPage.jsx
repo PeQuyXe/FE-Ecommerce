@@ -156,11 +156,13 @@ const NewsPage = () => {
                           <span className="block">
                             {item.discount ? (
                               <del className="text-red-500 mr-2">
-                                {item.price -
-                                  (item.price * item.discount) / 100}
+                                {item.discount}%
                               </del>
                             ) : null}
-                            {item.price}
+                            {item.price.toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })}
                           </span>
                         </div>
                       </div>

@@ -53,7 +53,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 path="home/category/:cateId/*"
                 element={<CategoryProduct />}
               />
-              {/* <Route path="category/:cateId/*" element={<ProductCategory />} /> */}
               <Route path="category/:cateId/*" element={<CategoryProduct />} />
             </Route>
             <Route path="/login" element={<Login />} />

@@ -28,7 +28,7 @@ const Footer = () => {
           </span>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-10">
-          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <div className="text-center">
               <div className="mb-4">
                 <img
@@ -42,7 +42,7 @@ const Footer = () => {
               </h6>
             </div>
           </div>
-          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <div className="text-center">
               <div className="mb-4">
                 <img
@@ -54,7 +54,7 @@ const Footer = () => {
               <h6 className="text-lg font-bold">Đảm bảo 100% về sản phẩm</h6>
             </div>
           </div>
-          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <div className="text-center">
               <div className="mb-4">
                 <img
@@ -66,7 +66,7 @@ const Footer = () => {
               <h6 className="text-lg font-bold">Hàng ngàn mã ưu đãi hấp dẫn</h6>
             </div>
           </div>
-          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <div className="text-center">
               <div className="mb-4">
                 <img
@@ -78,7 +78,7 @@ const Footer = () => {
               <h6 className="text-lg font-bold">Chính sách hoàn trả 24 giờ</h6>
             </div>
           </div>
-          <div className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             <div className="text-center">
               <div className="mb-4">
                 <img
@@ -219,7 +219,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="copyright-area py-4 bg-white text-black-400">
+      <div className="copyright-area py-4 text-black-400">
         <div className="container mx-auto px-4">
           <div className="flex flex-row md:flex-row justify-between items-center">
             <div className="social-share flex space-x-4">

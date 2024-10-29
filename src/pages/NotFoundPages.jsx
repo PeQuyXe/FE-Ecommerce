@@ -27,6 +27,7 @@ const NotFoundPages = () => {
             </p>
             <form onSubmit={handleSubmit}>
               <div className="flex items-center">
+                <FaRegEnvelope className="mr-2" />
                 <input
                   type="email"
                   placeholder="example@gmail.com"

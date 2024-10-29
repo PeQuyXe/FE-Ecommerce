@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types';
 
 const QuantityButton = ({ initialQuantity = 1, onQuantityChange }) => {
   const [quantity, setQuantity] = useState(initialQuantity);

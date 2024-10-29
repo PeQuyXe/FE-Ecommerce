@@ -70,11 +70,11 @@ const CategoryProduct = () => {
     const fetchProductsByCategory = async () => {
       try {
         const productsRes = await axios.get(
-          `http://localhost:8080/api/category/${cateId}`
+          `http://localhost:8080/api/products/category/${cateId}`
         );
         setProductByCategory(productsRes.data);
       } catch (error) {
-        console.error('Error fetching products by category:', error);
+        console.error('Lỗi nhận sản phẩm theo danh mục:', error);
 
         toast.error('Lỗi khi tải sản phẩm theo danh mục');
       }
@@ -97,9 +97,9 @@ const CategoryProduct = () => {
         });
         setProducts(response.data);
       } catch (error) {
-        console.error('Error fetching filtered products:', error);
+        console.error('Lỗi nhận thông tin tất cả các sản phẩm:', error);
 
-        toast.error('Lỗi khi lọc sản phẩm');
+        toast.error('Lỗi khi lọc sản phẩm theo category');
       }
     };
 
@@ -170,7 +170,12 @@ const CategoryProduct = () => {
   };
 
   const addToCart = (item) => {
-    dispatch(ADD_TO_CART(item));
+    const productWithQuantity = {
+      ...item,
+      quantity: 1,
+    };
+
+    dispatch(ADD_TO_CART(productWithQuantity));
     toast.success('Đã thêm vào giỏ hàng', {
       autoClose: 1000,
     });

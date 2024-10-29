@@ -16,7 +16,7 @@ const Login = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log('User Info:', user);
+      console.log('Thông tin người dùng:', user);
       toast.success('Đăng nhập thành công!', {
         autoClose: 1000,
       });

@@ -46,9 +46,9 @@ const HomePage = () => {
           products,
         ] = await Promise.all([
           axios.get('http://localhost:8080/api/category'),
-          axios.get('http://localhost:8080/api/view_product'),
-          axios.get('http://localhost:8080/api/new_product'),
-          axios.get('http://localhost:8080/api/product_sold'),
+          axios.get('http://localhost:8080/api/products/top-viewed'),
+          axios.get('http://localhost:8080/api/products/new'),
+          axios.get('http://localhost:8080/api/products/top-sold'),
           axios.get('http://localhost:8080/api/products'),
         ]);
 
@@ -58,7 +58,7 @@ const HomePage = () => {
         setDataProdMostSold(mostSoldProducts.data);
         setDataProduct(products.data);
       } catch (error) {
-        console.error('Lỗi nhận data trang Home:', error);
+        error('Lỗi nhận data trang Home:', error);
       }
     };
 
@@ -70,12 +70,18 @@ const HomePage = () => {
   };
 
   const addToCart = (item) => {
-    dispatch(ADD_TO_CART(item));
+    const productWithQuantity = {
+      ...item,
+      quantity: 1,
+    };
+
+    dispatch(ADD_TO_CART(productWithQuantity));
     toast.success('Đã thêm vào giỏ hàng', {
       autoClose: 1000,
     });
     navigate('/cart');
   };
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 6;
 
@@ -122,7 +128,7 @@ const HomePage = () => {
         </div>
       </section>
       <section className="py-4">
-        <div className="container mx-auto  grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
+        <div className="container mx-auto  grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 mb-8">
           {[
             { src: 'src/assets/intro/intro1.jpg', text: 'Miễn phí ship' },
             { src: 'src/assets/intro/intro2.jpg', text: 'Hàng ngàn ưu đãi' },
@@ -132,6 +138,8 @@ const HomePage = () => {
             },
             { src: 'src/assets/intro/intro4.jpg', text: 'Trả hàng miễn phí' },
             { src: 'src/assets/icons/service10.png', text: 'Hỗ trợ 24/7' },
+            { src: 'src/assets/intro/intro6.jpg', text: 'Giá rẻ nhất' },
+            { src: 'src/assets/intro/intro7.jpg', text: 'Bảo hành 12 tháng' },
           ].map((item, index) => (
             <div
               key={index}
@@ -247,14 +255,15 @@ const HomePage = () => {
             </div>
             <div className="w-full lg:w-1/2 px-4 mb-8">
               <div className="relative hover:scale-105 transform transition-transform duration-300">
-                <Link to="category/9" className="block relative">
+                <Link
+                  to="category/9"
+                  className="block relative"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   <img
                     src="src/assets/others/poster-02.png"
                     alt="eTrade promotion poster"
                     className="w-full h-auto object-cover rounded-lg transition-opacity duration-300 hover:opacity-75"
-                    onClick={() => {
-                      window.scrollTo(0, 0);
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent p-4 flex flex-col justify-end opacity-0 hover:opacity-100 transition-opacity duration-300">
                     <div className="text-white">
@@ -400,7 +409,8 @@ const HomePage = () => {
                   </div>
                   <Link
                     to="category/4"
-                    className=" font-sans bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center text-xl transition-transform transform motion-safe:hover:scale-105 w-max"
+                    className=" font-medium bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center text-xl transition-transform transform motion-safe:hover:scale-105 w-max"
+                    onClick={() => window.scrollTo(0, 0)}
                   >
                     Kiểm tra !
                   </Link>
@@ -454,13 +464,14 @@ const HomePage = () => {
                   className="w-full h-32 object-contain mb-2 rounded"
                 />
                 <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                <div className="text-gray-600 mb-2">
+                <div className="text-lg font-bold mb-2">
+                  <div>{renderStars(item.totalRating)}</div>
                   {formatCurrency(item.price)}
                 </div>
-                <div>{renderStars(item.totalRating)}</div>
+
                 <Link
                   to={`/product/${item.id}`}
-                  className="text-blue-500 hover:text-blue-700 "
+                  className="text-blue-500 hover:text-orange-700 "
                   onClick={() => {
                     window.scrollTo(0, 0);
                   }}

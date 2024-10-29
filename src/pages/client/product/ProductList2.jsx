@@ -169,9 +169,9 @@ const ProductList2 = () => {
 
   return (
     <section className="py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-5">
         {/* Breadcrumbs */}
-        <div className="mb-4">
+        <div className="mb-5">
           <nav className="text-gray-700">
             <Link to="/" className="text-blue-500 hover:underline">
               Trang chủ
@@ -463,7 +463,10 @@ const ProductList2 = () => {
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index}
-                onClick={() => paginate(index + 1)}
+                onClick={() => {
+                  paginate(index + 1);
+                  window.scrollTo(0, 0);
+                }}
                 className={`px-4 py-2 border rounded-md ${
                   currentPage === index + 1
                     ? 'bg-blue-500 text-white'

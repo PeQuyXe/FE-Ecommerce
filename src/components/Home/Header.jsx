@@ -12,11 +12,11 @@ import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/bg/bg-image-4.jpg';
 import { useAuth } from '../../AuthContext';
 const menu = [
-  { name: 'Trang chủ', path: 'home' },
-  { name: 'Sản phẩm', path: 'product' },
-  { name: 'Tin tức', path: 'news' },
-  { name: 'Liên hệ', path: 'contact' },
-  { name: 'Ưu đãi', path: 'coupon' },
+  { name: 'TRANG CHỦ', path: 'home' },
+  { name: 'SẢN PHẨM', path: 'product' },
+  { name: 'TIN TỨC', path: 'news' },
+  { name: 'LIÊN HỆ', path: 'contact' },
+  { name: 'ƯU ĐÃI ', path: 'coupon' },
 ];
 
 const Header = () => {
@@ -52,9 +52,9 @@ const Header = () => {
   };
 
   return (
-    <header className="shadow-lg font-roboto">
+    <header className="shadow-sm">
       {/* Top bar */}
-      <div className="bg-gray-700 text-white py-2">
+      <div className="bg-gray-800 text-white py-2">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4 ">
             <MdLanguage
@@ -116,28 +116,33 @@ const Header = () => {
         style={{ backgroundImage: `url(${backgroundImage})` }}
         className="py-4"
       >
-        <div className="container mx-auto flex flex-wrap items-center justify-between">
+        <div className="container mx-auto flex flex-wrap items-center justify-between ">
           {/* Logo */}
           <NavLink to="/">
             <img src={logo} alt="logo" className="h-12" />
           </NavLink>
 
-          {/* Navigation Menu */}
+          {/* Menu */}
           <nav className="flex-2 hidden md:flex">
-            <ul className="flex items-center justify-center space-x-7 text-xl font-serif">
+            <ul className="flex items-center justify-center space-x-10 font-[Poppins] text-lg">
               {menu.map((item) => (
-                <li key={item.path}>
+                <li key={item.path} className="relative group">
                   <NavLink
                     to={`/${item.path}`}
                     className={({ isActive }) =>
-                      `text-black hover:underline font-extralight ${
-                        isActive ? 'text-red-600 underline' : ''
+                      `transition-all duration-500 ease-in-out relative ${
+                        isActive
+                          ? 'text-pink-400 font-bold'
+                          : 'text-gray-600 hover:text-pink-400'
                       }`
                     }
                     end
                   >
                     {t(item.name)}
                   </NavLink>
+
+                  {/* Hiệu ứng hover động */}
+                  <div className="absolute left-0 bottom-0 w-0 h-[2px] bg-pink-500 transition-all duration-500 ease-in-out group-hover:w-full"></div>
                 </li>
               ))}
             </ul>

@@ -38,7 +38,7 @@ const CheckoutPage = () => {
 
   return (
     <div>
-      <section className="header-top-campaign">
+      <section className="header-top-campaign py-4 bg-gray-100">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <div className="w-full xl:w-5/12 lg:w-3/5 md:w-10/12">
@@ -51,10 +51,10 @@ const CheckoutPage = () => {
                   return (
                     <div
                       key={dataCouponItem.id}
-                      className="campaign-content bg-gray-200 p-4 rounded-lg mb-4"
+                      className="campaign-content bg-white p-4 rounded-lg mb-4 border border-gray-300"
                     >
-                      <p className="text-uppercase">
-                        {`${dataCouponItem.title} ${couponValue}`} :{' '}
+                      <p className="uppercase">
+                        {`${dataCouponItem.title} ${couponValue}`}:{' '}
                         <Link
                           to="/coupon"
                           target="_blank"
@@ -73,13 +73,13 @@ const CheckoutPage = () => {
         </div>
       </section>
 
-      <section className="checkout-area">
+      <section className="checkout-area py-8 bg-white">
         <div className="container mx-auto px-4">
           <form action="checkout-final" method="POST">
             <div className="flex flex-wrap">
               <div className="w-full lg:w-1/2 lg:pr-5">
                 <div className="checkout-billing">
-                  <h4 className="title mb-8 text-2xl font-semibold">
+                  <h4 className="title mb-8 text-2xl font-semibold text-gray-800">
                     Thanh toán
                   </h4>
                   <p className="text-red-500 mb-4">
@@ -155,11 +155,11 @@ const CheckoutPage = () => {
               </div>
               <div className="w-full lg:w-1/2">
                 <div className="order-checkout-summary">
-                  <h5 className="title mb-4 text-xl font-semibold">
+                  <h5 className="title mb-4 text-xl font-semibold text-gray-800">
                     Đơn hàng của bạn
                   </h5>
-                  <div className="summery-table-wrap">
-                    <table className="table w-full border-collapse border border-gray-200">
+                  <div className="summery-table-wrap mb-4">
+                    <table className="table w-full border-collapse border border-gray-300">
                       <thead>
                         <tr>
                           <th className="border border-gray-300 px-4 py-2">
@@ -178,7 +178,7 @@ const CheckoutPage = () => {
                                 <img
                                   src={cartItem.thumb}
                                   alt={cartItem.title}
-                                  className="w-12 h-12 object-cover mr-2"
+                                  className="w-12 h-12 object-cover mr-2 rounded"
                                 />
                                 <div>
                                   <Link
@@ -193,10 +193,6 @@ const CheckoutPage = () => {
                                         x{cartItem.quantity}
                                       </span>
                                     </p>
-                                    {/* <span className="text-gray-500">
-                                      Phân loại:{' '}
-                                      <font>{cartItem.attribute_values}</font>
-                                    </span> */}
                                   </Link>
                                 </div>
                               </div>
@@ -249,7 +245,7 @@ const CheckoutPage = () => {
                     {dataPaymentMethod.map((paymentMethod) => (
                       <div
                         key={paymentMethod.id}
-                        className="single-payment flex items-center mb-4"
+                        className="single-payment flex items-center mb-4 p-2 border rounded-lg"
                       >
                         <input
                           type="radio"
@@ -264,7 +260,7 @@ const CheckoutPage = () => {
                         <img
                           src={paymentMethod.thumb}
                           alt={paymentMethod.display_name}
-                          className="w-12 h-12 object-cover"
+                          className="w-12 h-12 object-cover rounded"
                         />
                         <p className="desc ml-4 text-gray-500">
                           {paymentMethod.description}
@@ -272,12 +268,13 @@ const CheckoutPage = () => {
                       </div>
                     ))}
                   </div>
-                  <button
+                  <Link
+                    to="/#"
                     type="submit"
                     className="btn bg-green-500 text-white p-2 rounded-md"
                   >
                     Thanh toán
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
