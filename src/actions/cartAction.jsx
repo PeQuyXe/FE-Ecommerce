@@ -3,9 +3,9 @@ export const ADD_TO_CART = (product) => ({
   payload: product,
 });
 
-export const UPDATE_CART_ITEM_QUANTITY = (productId, quantity) => ({
+export const UPDATE_CART_ITEM_QUANTITY = (productId, variant, quantity) => ({
   type: 'UPDATE_CART_ITEM_QUANTITY',
-  payload: { productId, quantity },
+  payload: { productId, variant, quantity },
 });
 
 export const REMOVE_FROM_CART = (productId) => ({

@@ -6,7 +6,7 @@ import { formatCurrency } from '../../../utils/configformat';
 function DashboardAccount() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const orders = useSelector((state) => state.orders); // Giả sử bạn có một slice orders trong Redux store
+  const orders = useSelector((state) => state.orders);
 
   const handleLogout = () => {
     dispatch(logout());

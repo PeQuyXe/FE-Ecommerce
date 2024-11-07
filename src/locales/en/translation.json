@@ -1,10 +1,14 @@
 {
-  "Trang chủ": "Home ",
-  "Sản phẩm": "Product",
-  "Tìm kiếm": "Search",
-  "Tin tức": "New",
-  "Liên hệ": "Contact",
-  "Đăng nhập": "Login",
+  "TRANG CHỦ": "HOME ",
+  "SẢN PHẨM": "PRODUCT",
+  "TÌM KIẾM": "SEARCH",
+  "TIN TỨC": "NEWS",
+  "LIÊN HỆ": "CONTACT",
+  "ĐĂNG NHẬP": "LOGIN",
+  "TRỢ GIÚP": "HELP",
+  "ƯU ĐÃI": "COUPONS",
+  "Tìm": "Search",
   "Trợ giúp": "Help",
-  "Ưu đãi": "Coupon"
+  "Liên hệ": "Contact",
+  "Đăng nhập": "Login"
 }

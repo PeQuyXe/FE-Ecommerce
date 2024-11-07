@@ -11,21 +11,31 @@ import { IoCartOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/bg/bg-image-4.jpg';
 import { useAuth } from '../../AuthContext';
+
 const menu = [
   { name: 'TRANG CHỦ', path: 'home' },
   { name: 'SẢN PHẨM', path: 'product' },
   { name: 'TIN TỨC', path: 'news' },
   { name: 'LIÊN HỆ', path: 'contact' },
-  { name: 'ƯU ĐÃI ', path: 'coupon' },
+  { name: 'ƯU ĐÃI', path: 'coupon' },
 ];
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { t, i18n } = useTranslation();
   const [darkMode, setDarkMode] = useState(false);
+  const [userData, setUserData] = useState(null);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalItems = cartItems.length;
-  console.log(user);
+
+  useEffect(() => {
+    // Lấy dữ liệu từ localStorage
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
+  }, []);
+
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -45,7 +55,9 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem('userData');
       toast.success('Đăng xuất thành công');
+      setUserData(null);
     } catch (error) {
       toast.error('Đăng xuất thất bại');
     }
@@ -79,20 +91,22 @@ const Header = () => {
             <NavLink to="/contact" className="hover:text-gray-400">
               {t('Liên hệ')}
             </NavLink>
-            {user ? (
+            {userData ? (
               <div className="flex items-center space-x-4">
                 <NavLink
                   to="/account"
                   className="flex items-center space-x-2 hover:text-gray-400"
                 >
-                  {user.photoURL && (
+                  {userData.avatar ? (
                     <img
-                      src={user.photoURL}
-                      alt={user.displayName}
+                      src={userData.avatar}
+                      alt={userData.fullname}
                       className="h-8 w-8 rounded-full"
                     />
+                  ) : (
+                    <CiUser className="h-8 w-8 text-gray-300" />
                   )}
-                  <span>{user?.displayName || 'User'}</span>
+                  <span>{userData.fullname || 'User'}</span>
                 </NavLink>
                 <button
                   onClick={handleLogout}
@@ -141,7 +155,7 @@ const Header = () => {
                     {t(item.name)}
                   </NavLink>
 
-                  {/* Hiệu ứng hover động */}
+                  {/* Hover effect */}
                   <div className="absolute left-0 bottom-0 w-0 h-[2px] bg-pink-500 transition-all duration-500 ease-in-out group-hover:w-full"></div>
                 </li>
               ))}

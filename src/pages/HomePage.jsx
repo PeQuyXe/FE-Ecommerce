@@ -379,7 +379,7 @@ const HomePage = () => {
           </div>
 
           {/* Thay đổi vị trí của nút "Xem tất cả" */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-10 mb-4">
             <Link
               to="/product"
               className="bg-gray-200 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors duration-200 "
@@ -387,23 +387,23 @@ const HomePage = () => {
                 window.scrollTo(0, 0);
               }}
             >
-              Xem Tất Cả
+              Xem Thêm
             </Link>
           </div>
         </div>
       </section>
       {/* Poster  */}
-      <section className="py-6 shadow-md">
+      <section className="py-6">
         <div className="container mx-auto">
           <div className="poster-wrap ">
             <div className="flex flex-row items-center ml-10">
               <div className="lg:w-7/12 md:w-full">
                 <div className="p-4 md:p-0">
                   <div className="mb-6">
-                    <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
+                    <div className="text-4xl font-semibold text-red-500 flex items-center mb-2">
                       <FaHeadphones className="mr-2" /> Không nên bỏ lỡ
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-400">
+                    <h2 className="text-3xl font-bold text-gray-400">
                       Nâng cao trải nghiệm âm nhạc của bạn
                     </h2>
                   </div>

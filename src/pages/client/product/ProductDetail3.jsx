@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { FaRegCheckCircle } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import { MdClose } from 'react-icons/md';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ADD_TO_CART } from '../../../actions/cartAction';
 import { formatCurrency, renderStars } from '../../../utils/configformat';
@@ -12,66 +13,63 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import backgroundImage from '../../../assets/others/campaign-bg3.png';
 import Modal from 'react-modal';
-// import { useAuth } from '../../../AuthContext';
 
 Modal.setAppElement('#root');
 
 const ProductDetail2 = () => {
   const { productId } = useParams();
-  const user = JSON.parse(localStorage.getItem('userData'));
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const [product, setProduct] = useState({});
   const [coupons, setCoupons] = useState([]);
   const [images, setImages] = useState([]);
   const [variants, setVariants] = useState([]);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [comments, setComments] = useState([]);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedVariantId, setSelectedVariantId] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  const [selectedRating, setSelectedRating] = useState(0);
-
+  const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('reviews');
   const [showDescriptionPopup, setShowDescriptionPopup] = useState(false);
   const [infor, setInfor] = useState([]);
 
-  const fetchProductData = useCallback(async () => {
-    try {
-      const [
-        productRes,
-        imagesRes,
-        couponsRes,
-        variantRes,
-        relatedRes,
-        ratingRes,
-      ] = await Promise.all([
-        axios.get(`http://localhost:8080/api/products/${productId}`),
-        axios.get(
-          `http://localhost:8080/api/image-products/product/${productId}`
-        ),
-        axios.get('http://localhost:8080/api/coupons'),
-        axios.get(`http://localhost:8080/api/product-variants/${productId}`),
-        axios.get('http://localhost:8080/api/products/new'),
-        axios.get(`http://localhost:8080/api/ratings/${productId}`),
-      ]);
-
-      setProduct(productRes.data);
-      setImages(imagesRes.data);
-      setCoupons(couponsRes.data);
-      setVariants(variantRes.data);
-
-      setRelatedProducts(relatedRes.data);
-      setComments(ratingRes.data);
-    } catch (error) {
-      console.error('Lỗi nhận data:', error);
-    }
-  }, [productId]);
-
   useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const [
+          productRes,
+          imagesRes,
+          couponsRes,
+          variantRes,
+          relatedRes,
+          ratingRes,
+        ] = await Promise.all([
+          axios.get(`http://localhost:8080/api/products/${productId}`),
+          axios.get(
+            `http://localhost:8080/api/image-products/product/${productId}`
+          ),
+          axios.get('http://localhost:8080/api/coupons'),
+          axios.get(`http://localhost:8080/api/product-variants/${productId}`),
+          axios.get('http://localhost:8080/api/products/new'),
+          axios.get(`http://localhost:8080/api/ratings/${productId}`),
+        ]);
+
+        setProduct(productRes.data);
+        setImages(imagesRes.data);
+        setCoupons(couponsRes.data);
+        setVariants(variantRes.data);
+
+        setRelatedProducts(relatedRes.data);
+        setComments(ratingRes.data);
+      } catch (error) {
+        console.error(
+          'Lỗi nhận data trang thông tin chi tiết sản phẩm:',
+          error
+        );
+      }
+    };
     fetchProductData();
-  }, [fetchProductData]);
+  }, [productId]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -86,9 +84,9 @@ const ProductDetail2 = () => {
     const variant = variants.find((v) => v.productVariant.id === variantId);
     if (variant) {
       setSelectedVariantId(variantId);
-      console.log('variantid:', variantId);
       setSelectedVariant(variant.productVariant);
       setInfor(variant);
+      console.log('Thông tin sản phẩm được chọn', variant);
     } else {
       console.error('Không tìm thấy biến thể!');
     }
@@ -96,22 +94,26 @@ const ProductDetail2 = () => {
 
   const handleAddToCart = () => {
     const price = infor?.productVariant?.price || product.price;
-    const variantName =
-      infor?.variantValues
-        ?.map(
-          (v) => `${v.attribute.displayName}: ${v.attributeValue.valueName}`
-        )
-        .join(', ') || '';
+    const name = infor?.variantValues
+      ? infor.variantValues
+          .map(
+            (v) => `${v.attribute.displayName}: ${v.attributeValue.valueName}`
+          )
+          .join(', ')
+      : '';
+
+    const totalPrice = price * quantity;
 
     const productWithQuantity = {
       ...product,
+
       quantity,
       price,
-      variantId: selectedVariantId,
-      variant: variantName,
-      totalPrice: price * quantity,
+      variant: name,
+
+      totalPrice,
     };
-    console.log('Thông tin sản phẩm được thêm :', productWithQuantity);
+
     dispatch(ADD_TO_CART(productWithQuantity));
     toast.success('Đã thêm vào giỏ hàng', { autoClose: 1000 });
 
@@ -120,36 +122,40 @@ const ProductDetail2 = () => {
   };
 
   const handleCommentSubmit = (e) => {
+    console.log(
+      'Thông tin đánh giá:',
+      e.target.comment.value,
+      e.target.rating.value
+    );
     e.preventDefault();
-
-    const ratingValue = parseInt(e.target.rating.value);
-
-    const commentContent = e.target.comment.value.trim();
-
-    if (!ratingValue || !commentContent) {
-      toast.error('Vui lòng nhập đánh giá và cho điểm', { autoClose: 1500 });
-      return;
-    }
-
     const newComment = {
       id: comments.length + 1,
-      user: user.fullname || 'Người dùng ẩn danh',
-      comment: commentContent,
-      star: ratingValue,
-      createAt: new Date().toISOString().slice(0, 19),
+      user: 'Nguyễn Văn A',
+      content: e.target.comment.value,
+      rating: e.target.rating.value,
+      date: new Date().toISOString(),
     };
-
-    setComments((prevComments) => [...prevComments, newComment]);
-
+    setComments([...comments, newComment]);
     e.target.reset();
-    toast.success('Đã gửi đánh giá của bạn', { autoClose: 1000 });
+    toast.success('Đã gửi đánh giá của bạn', {
+      autoClose: 1000,
+    });
   };
 
-  const sliderSettings = {
+  const settings = {
     dots: false,
     infinite: true,
     autoplay: true,
-    speed: 500,
+    speed: 10,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  const imageSettings = {
+    dots: false,
+    infinite: true,
+    speed: 10,
+    autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
@@ -162,41 +168,48 @@ const ProductDetail2 = () => {
           <nav className="text-blue-500">
             <Link to="/" className="hover:underline">
               Trang chủ
-            </Link>
+            </Link>{' '}
             <span className="mx-2">/</span>
-            <Link to="/product" className="hover:underline">
+            <Link to="/product" className="text-blue-500 hover:underline">
+              {' '}
               Sản phẩm
-            </Link>
+            </Link>{' '}
             <span className="mx-2">/</span>
             <span className="text-gray-400">{product.title}</span>
           </nav>
         </div>
       </section>
+
       {/* Coupons Section */}
       <section
         style={{ backgroundImage: `url(${backgroundImage})` }}
-        className="py-4 text-center"
+        className="py-4"
       >
-        <Slider {...sliderSettings}>
-          {coupons.map((coupon) => (
-            <div key={coupon.id} className="p-4 rounded-lg">
-              <div className="uppercase text-black">
-                {coupon.title}:{' '}
-                <Link to="/coupon" className="text-white">
-                  NHẬN GIẢM GIÁ
-                </Link>
+        <div className="container mx-auto text-center items-center">
+          <Slider {...settings}>
+            {coupons.map((coupon) => (
+              <div key={coupon.id}>
+                <div className="p-4 rounded-lg mb-4">
+                  <div className="uppercase text-black">
+                    {coupon.title}:{' '}
+                    <Link to="/coupon" className="text-white">
+                      NHẬN GIẢM GIÁ
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </section>
+
       {/* Product Details Section */}
-      <section className="container mx-auto py-10 p-6 rounded-lg shadow-lg">
+      <section className="py-8">
         <div className="container mx-auto flex flex-wrap lg:flex-nowrap gap-8">
           {/* Product Images Carousel */}
-          <div className="w-auto lg:w-1/2 flex items-stretch px-4">
+          <div className="w-full lg:w-1/2 flex items-stretch px-4">
             <div className="w-full h-auto">
-              <Slider {...sliderSettings}>
+              <Slider {...imageSettings}>
                 {images.map((image) => (
                   <div key={image.id} className="center h-full">
                     <img
@@ -342,8 +355,9 @@ const ProductDetail2 = () => {
           </div>
         </div>
       </section>
+
       {/* User Reviews Section */}
-      <section className="py-8">
+      <section className="py-8 bg-gray-100">
         <div className="container mx-auto">
           {/* Tabs */}
           <div className="flex space-x-4 mb-6">
@@ -370,10 +384,9 @@ const ProductDetail2 = () => {
           </div>
           {/* Content */}
           {activeTab === 'reviews' && (
-            <section className="py-8 bg-gray-100 p-6 rounded-lg shadow-lg">
-              <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Comments Section */}
-                <div>
+            <section className="py-8 bg-gray-100">
+              <div className="container mx-auto">
+                <div className="mb-4">
                   {comments.map((comment) => (
                     <div
                       key={comment.id}
@@ -388,104 +401,85 @@ const ProductDetail2 = () => {
                         </span>
                       </div>
                       <div className="mb-2">{renderStars(comment.star)}</div>
-                      <p>{comment.comment}</p>
+                      <p>{comment.content}</p>
                     </div>
                   ))}
                 </div>
 
-                {/* Comment Form */}
-                <div>
-                  <form
-                    onSubmit={handleCommentSubmit}
-                    className="bg-gray-100 p-6 rounded-lg shadow-lg"
-                  >
-                    <div className="mb-6">
-                      <label
-                        className="block text-lg font-semibold text-gray-800 mb-2"
-                        htmlFor="comment"
-                      >
-                        Bình luận:
-                      </label>
-                      <textarea
-                        id="comment"
-                        name="comment"
-                        rows="4"
-                        className="w-full p-4 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
-                        placeholder="Nhập bình luận của bạn"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <div className="mb-6">
-                      <label className="block text-lg font-semibold text-gray-800 mb-2">
-                        Đánh giá:
-                      </label>
-                      <div className="flex space-x-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <button
-                            key={star}
-                            type="button"
-                            className={`text-3xl ${
-                              star <= selectedRating
-                                ? 'text-yellow-500'
-                                : 'text-gray-300'
-                            }`}
-                            onClick={() => setSelectedRating(star)}
-                          >
-                            ★
-                          </button>
-                        ))}
-                      </div>
-
-                      <input
-                        type="hidden"
-                        name="rating"
-                        value={selectedRating}
-                        required
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg transition duration-300 shadow-md"
+                <form
+                  onSubmit={handleCommentSubmit}
+                  className="bg-white p-4 rounded shadow-md"
+                >
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="comment"
                     >
-                      Gửi đánh giá
-                    </button>
-                  </form>
-                </div>
+                      Bình luận:
+                    </label>
+                    <textarea
+                      id="comment"
+                      name="comment"
+                      rows="4"
+                      className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                      required
+                    ></textarea>
+                  </div>
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-bold mb-2"
+                      htmlFor="rating"
+                    >
+                      Đánh giá:
+                    </label>
+                    <select
+                      id="rating"
+                      name="rating"
+                      className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                      required
+                    >
+                      <option value="">Chọn đánh giá</option>
+                      <option value="1">1 Sao</option>
+                      <option value="2">2 Sao</option>
+                      <option value="3">3 Sao</option>
+                      <option value="4">4 Sao</option>
+                      <option value="5">5 Sao</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg shadow-md transition duration-300"
+                  >
+                    Gửi đánh giá
+                  </button>
+                </form>
               </div>
             </section>
           )}
           {/* Popup for Product Description */}
           {activeTab === 'description' && showDescriptionPopup && (
-            <div
-              className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-              onClick={closePopup} // Add click event to the overlay
-            >
-              <div
-                className="bg-white p-4 rounded shadow w-1/3 max-h-[85vh] overflow-hidden mx-4 relative"
-                onClick={(e) => e.stopPropagation()} // Prevent clicks from propagating to the overlay
-              >
-                {/* Close button positioned absolutely in the modal */}
-                <button
-                  onClick={closePopup}
-                  className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  <MdClose />
-                </button>
-                {/* Scrollable content area */}
-                <div className="overflow-auto max-h-[75vh] mt-10">
-                  <h3 className="text-xl font-semibold mb-2">Mô tả sản phẩm</h3>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                  ></div>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-4 rounded shadow w-1/3 max-h-[85vh] overflow-auto mx-4">
+                {' '}
+                <h3 className="text-xl font-semibold mb-2">Mô tả sản phẩm</h3>
+                <div
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                ></div>{' '}
+                <div className="flex justify-end mt-4">
+                  <button
+                    onClick={closePopup}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    <MdClose />
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
-      </section>{' '}
-      {/*Sản phẩm liên quan Section */}
+      </section>
+
+      {/* Related Products Section */}
       <section className="py-8 bg-gray-100">
         <div className="container mx-auto">
           <h2 className="text-2xl font-semibold mb-4">Sản phẩm liên quan</h2>

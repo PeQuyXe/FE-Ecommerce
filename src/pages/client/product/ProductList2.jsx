@@ -162,6 +162,8 @@ const ProductList2 = () => {
     toast.success('Đã thêm vào giỏ hàng', {
       autoClose: 1000,
     });
+
+    window.scrollTo(0, 0);
     navigate('/cart');
   };
 
@@ -346,7 +348,7 @@ const ProductList2 = () => {
                     search: '',
                   })
                 }
-                className="w-full lg:w-auto bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                className="w-full lg:w-auto bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600"
               >
                 Làm mới
               </button>

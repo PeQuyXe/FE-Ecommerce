@@ -13,9 +13,22 @@ import store from './store/index';
 import Login from './pages/client/account/Login';
 import Register from './pages/client/account/Register';
 // import MyAccount from './pages/client/account/MyAccount';
+
+import Brand from './pages/admin/brand/brandpage';
+import CategoryList from './pages/admin/category/categoryList';
+import CategoryForm from './pages/admin/category/categoryForm';
+
+import CouponAdmin from './pages/admin/coupon/CouponAdmin';
+import DashboardAdmin from './pages/admin/DashboardAdmin';
+import NewsList from './pages/admin/news/NewsList';
+import NewsForm from './pages/admin/news/NewsForm';
+import AddAttributeValue from './pages/admin/attribute/AddAttributeValue';
+import AttributePage from './pages/admin/attribute/attributePage';
+
 import CheckoutPage from './pages/client/checkout/CheckoutPage';
 import ProductList2 from './pages/client/product/ProductList2';
 import ProductDetail2 from './pages/client/product/ProductDetail2';
+// import ProductDetail3 from './pages/client/product/ProductDetail3';
 import NotFoundPages from './pages/NotFoundPages';
 import { ToastContainer } from 'react-toastify';
 import ContactPage from './pages/client/contact/ContactPage';
@@ -41,6 +54,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 path="/product/:productId/*"
                 element={<ProductDetail2 />}
               />
+              {/* <Route
+                path="/product/:productId/*"
+                element={<ProductDetail3 />}
+              /> */}
+
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/contact" element={<ContactPage />} />
@@ -49,11 +67,31 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/account" element={<Profile />} />
               <Route path="*" element={<NotFoundPages />} />
               <Route path="news/news/:id" element={<NewDetail />} />
+              <Route path="/admin/brand" element={<Brand />} />
+              <Route path="/admin/category" element={<CategoryList />} />
+              <Route path="/admin/add-category" element={<CategoryForm />} />
               <Route
-                path="home/category/:cateId/*"
+                path="/admin/update-category/:id"
+                element={<CategoryForm />}
+              />
+              <Route path="/admin/news" element={<NewsList />} />
+              <Route path="/admin/add-news" element={<NewsForm />} />
+              <Route path="/admin/edit-news/:id" element={<NewsForm />} />
+              <Route path="/admin/coupon" element={<CouponAdmin />} />
+              <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+              <Route path="category/:cateId/*" element={<CategoryProduct />} />
+              <Route
+                path="/home/category/:cateId/*"
                 element={<CategoryProduct />}
               />
-              <Route path="category/:cateId/*" element={<CategoryProduct />} />
+              <Route
+                path="/admin/page/attributes"
+                element={<AttributePage />}
+              />
+              <Route
+                path="/admin/page/attributes/value/add/:attributeId"
+                element={<AddAttributeValue />}
+              />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

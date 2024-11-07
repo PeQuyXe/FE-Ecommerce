@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { auth, provider } from '../../../firebase';
-import { signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import backgroundImage from '../../../assets/bg/bg-image-4.jpg';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Register = () => {
   const [fullname, setFullname] = useState('');
@@ -15,30 +16,39 @@ const Register = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      console.log('User Info:', user);
-      toast.success('Đăng nhập thành công!', {
-        autoClose: 1000,
-      });
+      const token = await result.user.accessToken;
+      // Gửi idToken đến backend
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/google',
+        { token },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
+      localStorage.setItem('userData', JSON.stringify(response.data));
+      toast.success('Đăng nhập thành công!');
       navigate('/');
     } catch (error) {
-      console.error(error);
-      alert(error.message);
+      toast.error(`Đăng nhập thất bại: ${error.message}`);
     }
   };
 
+  // Đăng ký với email và mật khẩu
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-
-      toast.success('Đăng kí thành công!', {
-        autoClose: 1000,
+      await axios.post('http://localhost:8080/api/auth/register', {
+        fullname,
+        email,
+        password,
       });
-      navigate('/');
+      toast.success('Đăng ký thành công!');
+      navigate('/login');
     } catch (error) {
-      console.error(error);
-      alert(error.message);
+      toast.error(`Đăng ký thất bại: ${error.message}`);
     }
   };
 
@@ -74,6 +84,7 @@ const Register = () => {
                 type="text"
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
+                required
                 className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Họ và tên"
               />
@@ -101,6 +112,7 @@ const Register = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
                 className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Mật khẩu"
               />
