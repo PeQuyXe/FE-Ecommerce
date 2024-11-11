@@ -1,34 +1,58 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import các biểu tượng từ react-icons
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const Brand = () => {
   const [brands, setBrands] = useState([]);
   const [brandName, setBrandName] = useState('');
   const [editingBrand, setEditingBrand] = useState(null);
-  const [modalType, setModalType] = useState('add');
+  const [modalType, setModalType] = useState(null); // For Add/Edit
+  const [deleteBrandId, setDeleteBrandId] = useState(null); // To store the brand id for deletion
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(''); // Error handling
 
   useEffect(() => {
     fetchBrands();
   }, []);
 
   const fetchBrands = async () => {
-    const response = await axios.get('http://localhost:8080/api/brand');
-    setBrands(response.data);
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:8080/api/brand');
+      setBrands(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError('Error loading brands');
+      setLoading(false);
+    }
   };
 
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
-    if (modalType === 'add') {
-      await axios.post('http://localhost:8080/api/brand', { name: brandName });
-    } else {
-      await axios.put(`http://localhost:8080/api/brand/${editingBrand.id}`, {
-        name: brandName,
-      });
+    if (!brandName.trim()) {
+      setError('Brand name cannot be empty');
+      return;
     }
-    setBrandName('');
-    setEditingBrand(null);
-    fetchBrands();
+    setLoading(true);
+    try {
+      const brandData = { name: brandName };
+      if (modalType === 'edit') {
+        await axios.put(
+          `http://localhost:8080/api/brand/${editingBrand.id}`,
+          brandData
+        );
+      } else {
+        await axios.post('http://localhost:8080/api/brand', brandData);
+      }
+      setBrandName('');
+      setModalType(null);
+      setEditingBrand(null);
+      fetchBrands();
+    } catch (err) {
+      setError('Error saving brand');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEdit = (brand) => {
@@ -38,8 +62,16 @@ const Brand = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/api/brand/${id}`);
-    fetchBrands();
+    setLoading(true);
+    try {
+      await axios.delete(`http://localhost:8080/api/brand/${id}`);
+      fetchBrands();
+      setDeleteBrandId(null);
+    } catch (err) {
+      setError('Error deleting brand');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,16 +81,19 @@ const Brand = () => {
           <h5 className="text-2xl font-semibold text-gray-700">
             Danh sách thương hiệu
           </h5>
+          <button
+            onClick={() => {
+              setModalType('add');
+              setBrandName('');
+            }}
+            className="px-4 py-2 bg-green-500 text-white font-medium rounded hover:bg-green-600 transition duration-300"
+          >
+            Thêm thương hiệu
+          </button>
         </div>
-        <button
-          onClick={() => {
-            setModalType('add');
-            setBrandName('');
-          }}
-          className="px-4 py-2 bg-green-500 text-white font-medium rounded hover:bg-green-600 transition duration-300 mb-5"
-        >
-          Thêm thương hiệu
-        </button>
+
+        {loading && <div className="text-center py-4">Đang tải dữ liệu...</div>}
+        {error && <div className="text-red-500 text-center py-4">{error}</div>}
 
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
@@ -80,13 +115,13 @@ const Brand = () => {
                       onClick={() => handleEdit(brand)}
                       className="text-blue-500 hover:text-blue-700 mr-4"
                     >
-                      <FaEdit /> {/* Biểu tượng Sửa */}
+                      <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleDelete(brand.id)}
+                      onClick={() => setDeleteBrandId(brand.id)}
                       className="text-red-500 hover:text-red-700"
                     >
-                      <FaTrashAlt /> {/* Biểu tượng Xóa */}
+                      <FaTrashAlt />
                     </button>
                   </td>
                 </tr>
@@ -95,8 +130,8 @@ const Brand = () => {
           </table>
         </div>
 
-        {/* Modal */}
-        {modalType === 'add' || modalType === 'edit' ? (
+        {/* Modal for Add/Edit Brand */}
+        {modalType && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
               <h5 className="text-xl font-semibold text-gray-700 mb-4">
@@ -117,21 +152,53 @@ const Brand = () => {
                   <button
                     type="button"
                     className="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded hover:bg-gray-400 transition duration-300"
-                    onClick={() => setModalType('')}
+                    onClick={() => setModalType(null)}
                   >
                     Huỷ bỏ
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 transition duration-300"
+                    disabled={loading}
                   >
-                    {modalType === 'add' ? 'Thêm mới' : 'Cập nhật'}
+                    {loading
+                      ? 'Đang lưu...'
+                      : modalType === 'add'
+                      ? 'Thêm mới'
+                      : 'Cập nhật'}
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        ) : null}
+        )}
+
+        {/* Confirmation Modal for Deletion */}
+        {deleteBrandId && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+              <h5 className="text-xl font-semibold text-gray-700 mb-4">
+                Bạn có chắc chắn muốn xóa thương hiệu này không?
+              </h5>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded hover:bg-gray-400 transition duration-300"
+                  onClick={() => setDeleteBrandId(null)}
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white font-medium rounded hover:bg-red-600 transition duration-300"
+                  onClick={() => handleDelete(deleteBrandId)}
+                >
+                  Xóa
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const NewDetail = () => {
   const { id } = useParams();
   const [dataNew, setDataNew] = useState({});
   const [dataNews, setDataNews] = useState([]);
   const [dataProdRecent, setDataProdRecent] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,23 +86,30 @@ const NewDetail = () => {
                 </h6>
                 {dataNews.map((newsItem) => (
                   <div className="flex mb-4" key={newsItem.id}>
-                    <div className="flex-shrink-0 w-24 h-24 mr-4">
-                      <Link to={`news/${newsItem.id}`}>
-                        <img
-                          src={newsItem.thumb}
-                          alt={newsItem.title}
-                          className="w-full h-full object-cover rounded"
-                        />
-                      </Link>
+                    <div
+                      className="flex-shrink-0 w-24 h-24 mr-4 cursor-pointer"
+                      onClick={() =>
+                        navigate(`/news/news/${newsItem.id}`) &&
+                        window.scrollTo(0, 0)
+                      }
+                    >
+                      <img
+                        src={newsItem.thumb}
+                        alt={newsItem.title}
+                        className="w-full h-full object-cover rounded"
+                      />
                     </div>
                     <div className="flex-1">
                       <h6 className="text-md font-semibold mb-2">
-                        <Link
-                          to={`news/${newsItem.id}`}
-                          className="text-gray-600 hover:underline"
+                        <div
+                          onClick={() =>
+                            navigate(`/news/news/${newsItem.id}`) &&
+                            window.scrollTo(0, 0)
+                          }
+                          className="text-gray-600 hover:underline cursor-pointer"
                         >
                           {newsItem.title}
-                        </Link>
+                        </div>
                       </h6>
                       <div className="text-gray-600 text-sm">
                         <ul className="list-disc pl-4">
@@ -132,7 +140,7 @@ const NewDetail = () => {
                   {dataProdRecent.slice(0, 4).map((item) => (
                     <li className="flex mb-4" key={item.id}>
                       <div className="flex-shrink-0 w-24 h-24 mr-4">
-                        <Link to={`product/${item.slug}-${item.id}`}>
+                        <Link to={`/product/${item.slug}-${item.id}`}>
                           <img
                             src={item.thumb}
                             alt={item.title}
@@ -143,7 +151,7 @@ const NewDetail = () => {
                       <div className="flex-1">
                         <h6 className="text-md font-semibold mb-2">
                           <Link
-                            to={`product/${item.slug}-${item.id}`}
+                            to={`/product/${item.slug}-${item.id}`}
                             className="text-blue-600 hover:underline"
                           >
                             {item.title}

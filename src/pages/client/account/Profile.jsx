@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Profile = () => {
   const navigate = useNavigate();
 
   // Parse user data from localStorage
   const user = JSON.parse(localStorage.getItem('userData'));
+
+  // State to manage menu visibility
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Redirect to login if no user data is found
   useEffect(() => {
@@ -21,6 +24,11 @@ const Profile = () => {
   const handleLogout = () => {
     localStorage.removeItem('userData'); // Clear user data from localStorage
     navigate('/login'); // Redirect to login page
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    setIsMenuOpen(false); // Close menu after selection
   };
 
   if (!user) return null; // Return null to avoid rendering if user data is missing
@@ -51,9 +59,39 @@ const Profile = () => {
             </p>
           </div>
         </div>
+
+        {/* Button to toggle menu */}
+        <div className="text-center mb-4">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
+          >
+            Quản lý tài khoản
+          </button>
+        </div>
+
+        {/* Menu */}
+        {isMenuOpen && (
+          <div className="space-y-2">
+            <button
+              onClick={() => handleNavigate('/profile/edit')}
+              className="w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300"
+            >
+              Cập nhật thông tin
+            </button>
+            <button
+              onClick={() => handleNavigate('/orders')}
+              className="w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300"
+            >
+              Quản lý đơn hàng
+            </button>
+            {/* Additional menu items can be added here */}
+          </div>
+        )}
+
         <button
           onClick={handleLogout}
-          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
+          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 mt-4"
         >
           Thoát
         </button>

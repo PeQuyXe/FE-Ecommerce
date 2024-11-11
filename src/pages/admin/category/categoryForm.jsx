@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaUpload, FaImage } from 'react-icons/fa'; // Import React Icons
+import { FaUpload, FaImage } from 'react-icons/fa';
 
 function CategoryForm() {
   const [name, setName] = useState('');
-  const [file, setFile] = useState(null); // Lưu file thay vì tên file
-  const [currentImage, setCurrentImage] = useState(''); // Ảnh hiện tại
-  const [previewImage, setPreviewImage] = useState(null); // Ảnh xem trước
+  const [file, setFile] = useState(null);
+  const [currentImage, setCurrentImage] = useState('');
+  const [previewImage, setPreviewImage] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,6 +15,7 @@ function CategoryForm() {
     if (id) {
       fetchCategory();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchCategory = async () => {

@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.jsuseContext
 import { createContext, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import { auth } from '../firebase';

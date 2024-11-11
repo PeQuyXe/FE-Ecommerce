@@ -1,18 +1,31 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 
-const CouponList = ({ onEdit, onAdd }) => {
+const CouponList = () => {
+  const navigate = useNavigate();
   const [coupons, setCoupons] = useState([]);
 
+  // Fetch coupons from the API when the component mounts
   useEffect(() => {
     const fetchCoupons = async () => {
-      const response = await axios.get('http://localhost:8080/api/coupons'); // Adjust API endpoint
+      const response = await axios.get('http://localhost:8080/api/coupons');
       setCoupons(response.data);
     };
     fetchCoupons();
   }, []);
 
+  // Handle navigating to the edit form
+  const handleEdit = (coupon) => {
+    navigate(`/admin/coupons/edit/${coupon.id}`);
+  };
+
+  // Handle navigating to the new coupon form
+  const handleAdd = () => {
+    navigate('/admin/coupons/new');
+  };
+
+  // Handle deleting a coupon
   const handleDelete = async (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xoá mã giảm giá này?')) {
       await axios.delete(`http://localhost:8080/api/coupons/${id}`);
@@ -26,11 +39,12 @@ const CouponList = ({ onEdit, onAdd }) => {
     <section className="container mx-auto bg-white p-6 rounded-lg shadow-md">
       <h5 className="text-xl font-bold mb-4">Danh sách mã giảm giá</h5>
       <button
-        onClick={onAdd}
+        onClick={handleAdd}
         className="bg-green-400 hover:bg-green-500 rounded text-white px-4 py-2 mb-4"
       >
-        Thêm mã giảm giá mới
+        Thêm mã giảm giá
       </button>
+
       <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gray-200 text-left">
@@ -56,17 +70,22 @@ const CouponList = ({ onEdit, onAdd }) => {
               <td className="px-4 py-2">{coupon.title}</td>
               <td className="px-4 py-2">{coupon.code}</td>
               <td className="px-4 py-2">{coupon.value}</td>
-              <td className="px-4 py-2">{coupon.min_amount}</td>
+              <td className="px-4 py-2">{coupon.minAmount}</td>
               <td
-                className={`px-4 py-2 ${
-                  coupon.status ? 'text-green-600' : 'text-red-600'
+                className={`px-4 py-2 rounded ${
+                  new Date(coupon.expired) < new Date()
+                    ? 'text-gray-300 '
+                    : 'text-green-500'
                 }`}
               >
-                {coupon.status ? 'Hoạt động' : 'Hết hạn'}
+                {new Date(coupon.expired) < new Date()
+                  ? 'Hết hạn'
+                  : 'Hoạt động'}
               </td>
+
               <td className="px-4 py-2">
                 <button
-                  onClick={() => onEdit(coupon)}
+                  onClick={() => handleEdit(coupon)}
                   className="text-blue-500 mr-3"
                 >
                   Sửa
@@ -86,8 +105,4 @@ const CouponList = ({ onEdit, onAdd }) => {
   );
 };
 
-CouponList.propTypes = {
-  onEdit: PropTypes.func.isRequired,
-  onAdd: PropTypes.func.isRequired,
-};
 export default CouponList;

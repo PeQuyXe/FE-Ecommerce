@@ -14,7 +14,6 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      // Đăng nhập Google bằng Firebase
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.accessToken;
 
@@ -29,7 +28,6 @@ const Login = () => {
         }
       );
 
-      // Lưu JWT vào localStorage để sử dụng trong các phiên tiếp theo
       localStorage.setItem('userData', JSON.stringify(response.data));
 
       toast.success('Đăng nhập thành công!');
@@ -48,7 +46,7 @@ const Login = () => {
       );
       localStorage.setItem('userData', JSON.stringify(response.data));
       toast.success('Đăng nhập thành công!');
-      navigate('/admin/category');
+      navigate('/');
     } catch (error) {
       toast.error(`Đăng nhập thất bại: ${error.message}`);
     }
@@ -57,9 +55,11 @@ const Login = () => {
   return (
     <section
       style={{ backgroundImage: `url(${backgroundImage})` }}
-      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50"
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-16 bg-gray-50" // Tăng padding ở màn hình lớn
     >
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="sm:mx-auto sm:w-full sm:max-w-lg">
+        {' '}
+        {/* Tăng kích thước max-w */}
         <Link to="/" className="flex justify-center">
           <img
             className="h-12 w-auto"
@@ -69,10 +69,14 @@ const Login = () => {
         </Link>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <h3 className="text-center text-2xl font-extrabold text-gray-900">
-            Đăng nhập
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+        {' '}
+        {/* Tăng max-w của form */}
+        <div className="bg-white py-8 px-6 shadow-lg sm:rounded-lg sm:px-12">
+          {' '}
+          {/* Tăng padding */}
+          <h3 className="text-center text-3xl font-bold text-gray-900 mb-4">
+            Đăng Nhập
           </h3>
           <p className="mt-2 text-center text-sm text-gray-600 mb-6">
             Nhập chi tiết thông tin của bạn bên dưới
@@ -87,7 +91,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="form-control mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Email"
               />
             </div>
@@ -101,7 +105,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="form-control mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Mật khẩu"
               />
             </div>
@@ -109,13 +113,12 @@ const Login = () => {
             <div className="mt-5 flex justify-center">
               <button
                 type="submit"
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
+                className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
               >
                 Đăng nhập
               </button>
             </div>
           </form>
-
           <div className="mt-6 flex items-center justify-center">
             <p className="text-sm text-gray-600">
               Bạn chưa có tài khoản?{' '}
@@ -127,11 +130,10 @@ const Login = () => {
               </Link>
             </p>
           </div>
-
           <div className="mt-6 flex items-center justify-center">
             <button
               onClick={handleGoogleSignIn}
-              className="bg-white text-blue-600 px-4 py-2 rounded hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110 shadow-md"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110 shadow-md"
             >
               <span>
                 <FcGoogle />

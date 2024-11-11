@@ -1,138 +1,206 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+import { FaPlus, FaEdit } from 'react-icons/fa'; // Import icons from react-icons
 
-const CouponForm = ({ initialData = {}, onSubmit }) => {
+const CouponForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    title: '',
+    id: null,
     code: '',
+    thumb: '',
+    title: '',
     value: '',
-    min_amount: '',
-    quantity: '',
+    minAmount: '',
     expired: '',
-    thumb: null,
-    ...initialData,
+    quantity: '',
+    status: '',
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: files ? files[0] : value,
-    }));
+  useEffect(() => {
+    if (id) {
+      const fetchCoupon = async () => {
+        const response = await axios.get(
+          `http://localhost:8080/api/coupons/${id}`
+        );
+        setFormData(response.data);
+      };
+      fetchCoupon();
+    }
+  }, [id]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-    await axios.post('/api/coupons', data); // Adjust API endpoint as needed
-    onSubmit();
+
+    const dataToSubmit = {
+      ...formData,
+      value: parseFloat(formData.value),
+      minAmount: parseFloat(formData.minAmount),
+      quantity: parseInt(formData.quantity),
+    };
+
+    try {
+      if (id) {
+        await axios.put(
+          `http://localhost:8080/api/coupons/${id}`,
+          dataToSubmit
+        );
+      } else {
+        await axios.post('http://localhost:8080/api/coupons', dataToSubmit);
+      }
+      navigate('/admin/coupons');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
-    <section className="bg-gray-100 p-6 rounded-lg shadow-md">
-      <h5 className="text-xl font-bold mb-6">Thông tin mã giảm giá</h5>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* Title */}
+    <div className="container mx-auto py-6 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 shadow-lg rounded-lg max-w-2xl mx-auto"
+      >
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+          {id ? 'Sửa mã giảm giá' : 'Thêm mã giảm giá'}
+        </h2>
+
         <div className="mb-4">
-          <label className="block font-medium mb-1">Tiêu đề mã giảm giá</label>
-          <input
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            type="text"
-            placeholder="Tiêu đề mã giảm giá"
-            className="input"
-            required
-          />
-        </div>
-        {/* Code */}
-        <div className="mb-4">
-          <label className="block font-medium mb-1">Mã</label>
-          <input
-            name="code"
-            value={formData.code}
-            onChange={handleChange}
-            type="text"
-            placeholder="Ex: CMT3304"
-            className="input"
-            required
-          />
-        </div>
-        {/* Value */}
-        <div className="mb-4">
-          <label className="block font-medium mb-1">
-            Giá trị mã (% hoặc VND)
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Tiêu đề mã giảm giá *
           </label>
           <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Mã giảm giá *
+          </label>
+          <input
+            type="text"
+            name="code"
+            value={formData.code}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Giá trị mã giảm giá *
+          </label>
+          <input
+            type="number"
             name="value"
             value={formData.value}
-            onChange={handleChange}
-            type="text"
-            placeholder="Ex: 100000 hoặc 10%"
-            className="input"
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
-        {/* Minimum Amount */}
+
         <div className="mb-4">
-          <label className="block font-medium mb-1">Giá tối thiểu</label>
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Giá tối thiểu *
+          </label>
           <input
-            name="min_amount"
-            value={formData.min_amount}
-            onChange={handleChange}
             type="number"
-            placeholder="Giá tối thiểu để áp dụng mã"
-            className="input"
+            name="minAmount"
+            value={formData.minAmount}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
-        {/* Quantity */}
+
         <div className="mb-4">
-          <label className="block font-medium mb-1">Số lượng</label>
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Số lượng
+          </label>
           <input
+            type="number"
             name="quantity"
             value={formData.quantity}
-            onChange={handleChange}
-            type="number"
-            placeholder="Số lượng sử dụng mã giảm giá"
-            className="input"
-            required
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        {/* Expiration Date */}
+
         <div className="mb-4">
-          <label className="block font-medium mb-1">Ngày hết hạn</label>
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Ngày hết hạn
+          </label>
           <input
+            type="datetime-local"
             name="expired"
             value={formData.expired}
-            onChange={handleChange}
-            type="datetime-local"
-            className="input"
-            required
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        {/* Thumbnail */}
+
         <div className="mb-4">
-          <label className="block font-medium mb-1">Ảnh mã giảm giá</label>
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Ảnh mã giảm giá (URL)
+          </label>
           <input
+            type="url"
             name="thumb"
-            type="file"
-            onChange={handleChange}
-            className="input"
+            value={formData.thumb}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button type="submit" className="btn-custom mt-6">
-          {initialData ? 'Cập nhập mã giảm giá' : 'Thêm mã giảm giá mới'}
+
+        <div className="mb-4">
+          <label className="block text-lg font-medium text-gray-700 mb-2">
+            Trạng thái
+          </label>
+          <input
+            type="text"
+            name="status"
+            value={formData.status}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out flex items-center justify-center"
+        >
+          {id ? (
+            <>
+              <FaEdit className="mr-2" />
+              Cập nhật mã giảm giá
+            </>
+          ) : (
+            <>
+              <FaPlus className="mr-2" />
+              Thêm mã giảm giá
+            </>
+          )}
         </button>
       </form>
-    </section>
+    </div>
   );
-};
-CouponForm.propTypes = {
-  initialData: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default CouponForm;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaEdit, FaTrash, FaPlus, FaTimes } from 'react-icons/fa';
 
 const AttributePage = () => {
   const [attributes, setAttributes] = useState([]);
@@ -8,8 +9,9 @@ const AttributePage = () => {
   const [displayName, setDisplayName] = useState('');
   const [values, setValues] = useState([]);
   const [valueName, setValueName] = useState('');
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
-  // Lấy danh sách thuộc tính
   const fetchAttributes = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/attributes');
@@ -19,7 +21,6 @@ const AttributePage = () => {
     }
   };
 
-  // Lấy giá trị thuộc tính theo attributeId
   const fetchAttributeValues = async (attributeId) => {
     try {
       const response = await axios.get(
@@ -35,31 +36,26 @@ const AttributePage = () => {
     fetchAttributes();
   }, []);
 
-  // Thêm hoặc cập nhật thuộc tính
   const handleSaveAttribute = async (e) => {
     e.preventDefault();
+    const attributeData = { name, displayName };
+
     try {
-      const attributeData = { name, display_name: displayName };
       if (selectedAttribute) {
-        // Cập nhật thuộc tính
         await axios.put(
           `http://localhost:8080/api/attributes/${selectedAttribute.id}`,
           attributeData
         );
       } else {
-        // Thêm thuộc tính mới
         await axios.post('http://localhost:8080/api/attributes', attributeData);
       }
       fetchAttributes();
-      setName('');
-      setDisplayName('');
-      setSelectedAttribute(null);
+      resetForm();
     } catch (error) {
       console.error('Error saving attribute:', error);
     }
   };
 
-  // Xóa thuộc tính
   const handleDeleteAttribute = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/attributes/${id}`);
@@ -69,7 +65,6 @@ const AttributePage = () => {
     }
   };
 
-  // Thêm giá trị thuộc tính
   const handleAddValue = async () => {
     if (valueName.trim()) {
       try {
@@ -85,7 +80,6 @@ const AttributePage = () => {
     }
   };
 
-  // Xóa giá trị thuộc tính
   const handleDeleteValue = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/attributes/value/${id}`);
@@ -93,6 +87,24 @@ const AttributePage = () => {
     } catch (error) {
       console.error('Error deleting attribute value:', error);
     }
+  };
+
+  const resetForm = () => {
+    setSelectedAttribute(null);
+    setName('');
+    setDisplayName('');
+    setValues([]);
+  };
+
+  const openDeleteModal = (id) => {
+    setDeleteModalOpen(true);
+    setDeleteTargetId(id);
+  };
+
+  const confirmDelete = () => {
+    handleDeleteAttribute(deleteTargetId);
+    setDeleteModalOpen(false);
+    setDeleteTargetId(null);
   };
 
   return (
@@ -121,19 +133,17 @@ const AttributePage = () => {
         <div className="flex gap-2">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
+            <FaPlus />
             {selectedAttribute ? 'Cập nhật' : 'Thêm mới'}
           </button>
           <button
             type="button"
-            onClick={() => {
-              setSelectedAttribute(null);
-              setName('');
-              setDisplayName('');
-            }}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+            onClick={resetForm}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
           >
+            <FaTimes />
             Hủy
           </button>
         </div>
@@ -157,15 +167,15 @@ const AttributePage = () => {
                     setDisplayName(attribute.display_name);
                     fetchAttributeValues(attribute.id);
                   }}
-                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                 >
-                  Chọn
+                  <FaEdit /> Chọn
                 </button>
                 <button
-                  onClick={() => handleDeleteAttribute(attribute.id)}
-                  className="px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                  onClick={() => openDeleteModal(attribute.id)}
+                  className="flex items-center gap-2 px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
                 >
-                  Xóa
+                  <FaTrash /> Xóa
                 </button>
               </div>
             </div>
@@ -211,6 +221,29 @@ const AttributePage = () => {
           </li>
         ))}
       </ul>
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-md shadow-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-semibold mb-4">Xác nhận xóa?</h3>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

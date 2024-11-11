@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import icons từ react-icons
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const NewsList = () => {
   const [newsList, setNewsList] = useState([]);

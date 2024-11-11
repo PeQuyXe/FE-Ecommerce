@@ -92,7 +92,7 @@ const Header = () => {
               {t('Liên hệ')}
             </NavLink>
             {userData ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex font-sans text-white items-center space-x-4">
                 <NavLink
                   to="/account"
                   className="flex items-center space-x-2 hover:text-gray-400"

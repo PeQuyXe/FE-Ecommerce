@@ -39,19 +39,18 @@ const NewsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Lấy userId từ localStorage
     const userData = JSON.parse(localStorage.getItem('userData'));
     const userId = userData ? userData.id : null;
     console.log('userId', userId);
 
     // Thêm các thông tin cần thiết vào formData
-    const currentTime = new Date().toISOString(); // Định dạng thời gian dưới chuẩn ISO
+    const currentTime = new Date().toISOString();
 
     const updatedFormData = {
       ...formData,
-      userId: userId, // Thêm userId vào dữ liệu
-      createAt: id ? formData.createAt : currentTime, // Nếu không có id thì thêm createAt
-      updateAt: currentTime, // Cập nhật updateAt mỗi khi gửi
+      userId: userId,
+      createAt: id ? formData.createAt : currentTime,
+      updateAt: currentTime,
       view: 0,
     };
     console.log('Form', updatedFormData);
@@ -65,7 +64,7 @@ const NewsForm = () => {
       await axios({
         method,
         url: apiUrl,
-        data: updatedFormData, // Gửi dữ liệu đã được cập nhật
+        data: updatedFormData,
       });
       navigate('/admin/news');
     } catch (error) {
