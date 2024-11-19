@@ -38,6 +38,7 @@ import NewsPage from './pages/client/news/NewsPage';
 import NewDetail from './pages/client/news/NewDetail';
 import CategoryProduct from './pages/client/category/CategoryProduct';
 import Profile from './pages/client/account/Profile';
+import Profile2 from './pages/client/account/Profile2';
 import UserList from './pages/admin/user/UserList';
 import UserForm from './pages/admin/user/UserForm';
 import ProductList from './pages/admin/product/ProductList';
@@ -48,6 +49,7 @@ import OrderDetail from './pages/admin/orders/OrderDetail';
 import OrderListUser from './pages/client/orders/OrderListUser';
 import OrderDetailUser from './pages/client/orders/OrderDetailUser';
 import AdminLayout from './pages/admin/AdminLayout';
+import ProtectedRoute from './ProtectedRoute';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
@@ -84,7 +86,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               />
             </Route>
             {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={[1]}>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="profile" element={<Profile2 />} />
               <Route path="brand" element={<Brand />} />
               <Route path="category" element={<CategoryList />} />
               <Route path="add-category" element={<CategoryForm />} />
