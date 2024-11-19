@@ -66,10 +66,10 @@ const AttributePage = () => {
   };
 
   const handleAddValue = async () => {
-    if (valueName.trim()) {
+    if (selectedAttribute && valueName.trim()) {
       try {
         await axios.post('http://localhost:8080/api/attributes/value', {
-          attributeId: selectedAttribute.id,
+          attribute: { id: selectedAttribute.id },
           valueName,
         });
         fetchAttributeValues(selectedAttribute.id);
@@ -77,6 +77,8 @@ const AttributePage = () => {
       } catch (error) {
         console.error('Error adding attribute value:', error);
       }
+    } else {
+      console.error('Please select an attribute and provide a value name.');
     }
   };
 
@@ -156,7 +158,7 @@ const AttributePage = () => {
               <div>
                 <span className="font-medium">{attribute.name}</span>
                 <span className="block text-sm text-gray-500">
-                  {attribute.display_name}
+                  {attribute.displayName}
                 </span>
               </div>
               <div className="flex gap-2">
@@ -164,7 +166,7 @@ const AttributePage = () => {
                   onClick={() => {
                     setSelectedAttribute(attribute);
                     setName(attribute.name);
-                    setDisplayName(attribute.display_name);
+                    setDisplayName(attribute.displayName);
                     fetchAttributeValues(attribute.id);
                   }}
                   className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
@@ -222,7 +224,6 @@ const AttributePage = () => {
         ))}
       </ul>
 
-      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-md shadow-lg p-6 max-w-sm w-full">

@@ -7,7 +7,7 @@ const ProductForm = ({ isEdit }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Khởi tạo state cho form data
+  // Khởi tạo state cho form data và danh sách ảnh
   const [formData, setFormData] = useState({
     title: '',
     brandId: '',
@@ -18,7 +18,7 @@ const ProductForm = ({ isEdit }) => {
     quantity: '',
     thumb: '',
     totalRatings: '',
-    totalUserRatings: '',
+    totalUserRatings: '1',
     shortDescription: '',
     description: '',
     cateId: '',
@@ -28,6 +28,8 @@ const ProductForm = ({ isEdit }) => {
     createAt: '',
     updateAt: '',
   });
+  const [images, setImages] = useState([]); // State để lưu danh sách URL ảnh
+  const [newImage, setNewImage] = useState(''); // State để lưu URL ảnh mới
 
   // State cho danh sách brand và category
   const [brands, setBrands] = useState([]);
@@ -37,6 +39,7 @@ const ProductForm = ({ isEdit }) => {
   useEffect(() => {
     if (isEdit && id) {
       fetchProductById(id);
+      fetchImagesByProductId(id); // Fetch ảnh sản phẩm khi đang chỉnh sửa
     }
     fetchBrands();
     fetchCategories();
@@ -51,6 +54,18 @@ const ProductForm = ({ isEdit }) => {
       setFormData(response.data);
     } catch (error) {
       console.error('Failed to fetch product by ID', error);
+    }
+  };
+
+  // Fetch images by product ID
+  const fetchImagesByProductId = async (productId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/image-products/product/${productId}`
+      );
+      setImages(response.data.map((img) => img.image));
+    } catch (error) {
+      console.error('Failed to fetch images by product ID', error);
     }
   };
 
@@ -82,6 +97,15 @@ const ProductForm = ({ isEdit }) => {
       [name]: type === 'checkbox' ? (checked ? 1 : 0) : value,
     });
   };
+
+  // Xử lý thêm URL ảnh mới vào danh sách images
+  const handleAddImage = () => {
+    if (newImage) {
+      setImages([...images, newImage]);
+      setNewImage('');
+    }
+  };
+
   // Xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,13 +113,25 @@ const ProductForm = ({ isEdit }) => {
       ? `http://localhost:8080/api/products/${id}`
       : 'http://localhost:8080/api/products';
     const method = isEdit ? 'put' : 'post';
-    console.log(formData);
+
     try {
-      await axios({
+      const productResponse = await axios({
         method,
         url: apiUrl,
         data: formData,
       });
+
+      const productId = isEdit ? id : productResponse.data.id;
+
+      // Gửi ảnh đến bảng image_product
+      await Promise.all(
+        images.map((image) =>
+          axios.post('http://localhost:8080/api/image-products', {
+            image,
+            prodId: productId,
+          })
+        )
+      );
 
       navigate('/admin/products');
     } catch (error) {
@@ -259,6 +295,33 @@ const ProductForm = ({ isEdit }) => {
             className="mr-2"
           />
           <span className="text-sm text-gray-700">Đang bán</span>
+        </div>
+        {/* Hình ảnh URL */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Thêm URL ảnh sản phẩm
+          </label>
+          <input
+            type="text"
+            name="newImage"
+            value={newImage}
+            onChange={(e) => setNewImage(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+          />
+          <button
+            type="button"
+            onClick={handleAddImage}
+            className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md shadow-md"
+          >
+            Thêm ảnh
+          </button>
+          <div className="mt-4">
+            {images.map((image, index) => (
+              <p key={index} className="text-gray-700">
+                {image}
+              </p>
+            ))}
+          </div>
         </div>
 
         {/* Submit Button */}

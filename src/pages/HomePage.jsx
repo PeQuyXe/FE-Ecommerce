@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import { ADD_TO_CART } from '../actions/cartAction';
+import { AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
 import useScrollRestoration from '../hooks/useScrollRestoration';
 import {
   FaEye,
@@ -16,8 +16,6 @@ import {
 } from 'react-icons/fa';
 import { renderStars, formatCurrency } from '../utils/configformat';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { calculateOriginalPrice } from '../utils/configformat';
 
 const HomePage = () => {
@@ -27,14 +25,16 @@ const HomePage = () => {
   const [dataProdNewDate, setDataProdNewDate] = useState([]);
   const [, setDataProdMostSold] = useState([]);
   const [, setDataProduct] = useState([]);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const dataBanners = [
-    'src/assets/banner/banner1.jpg',
-    'src/assets/banner/banner2.jpg',
+    'src/assets/banner/banner5.jpg',
+    'src/assets/banner/banner6.jpg',
     // 'src/assets/banner/banner3.jpg',
   ];
-
+  const handleProductClick = () => {
+    window.scrollTo(0, 0);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,18 +68,19 @@ const HomePage = () => {
   const goToProductDetail = (productId) => {
     navigate(`/product/${productId}`);
   };
-
   const addToCart = (item) => {
-    const productWithQuantity = {
-      ...item,
-      quantity: 1,
-    };
+    // const productWithQuantity = {
+    //   ...item,
+    //   quantity: 1,
+    // };
 
-    dispatch(ADD_TO_CART(productWithQuantity));
-    toast.success('Đã thêm vào giỏ hàng', {
-      autoClose: 1000,
-    });
-    navigate('/cart');
+    // dispatch(ADD_TO_CART(productWithQuantity));
+    // toast.success('Đã thêm vào giỏ hàng', {
+    //   autoClose: 1000,
+    // });
+
+    window.scrollTo(0, 0);
+    navigate(`/product/${item.id}`);
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -382,7 +383,7 @@ const HomePage = () => {
           <div className="flex justify-center mt-10 mb-4">
             <Link
               to="/product"
-              className="bg-gray-200 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition-colors duration-200 "
+              className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out font-medium"
               onClick={() => {
                 window.scrollTo(0, 0);
               }}
@@ -400,19 +401,19 @@ const HomePage = () => {
               <div className="lg:w-7/12 md:w-full">
                 <div className="p-4 md:p-0">
                   <div className="mb-6">
-                    <div className="text-4xl font-semibold text-red-500 flex items-center mb-2">
+                    <div className="text-2xl font-semibold text-red-500 flex items-center mb-2">
                       <FaHeadphones className="mr-2" /> Không nên bỏ lỡ
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-400">
+                    <h2 className="text-2xl font-bold text-gray-400">
                       Nâng cao trải nghiệm âm nhạc của bạn
                     </h2>
                   </div>
                   <Link
                     to="category/4"
-                    className=" font-medium bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 flex items-center text-xl transition-transform transform motion-safe:hover:scale-105 w-max"
+                    className="font-semibold bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 text-white px-5 py-2 rounded-full flex items-center text-lg shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 ease-in-out w-max"
                     onClick={() => window.scrollTo(0, 0)}
                   >
-                    Kiểm tra !
+                    Kiểm tra!
                   </Link>
                 </div>
               </div>
@@ -440,44 +441,83 @@ const HomePage = () => {
       </section>
 
       {/* New Arrivals Section */}
-      <section className="py-6">
-        <div className="container mx-auto ">
-          <div className="p-4 md:p-0">
-            <div className="mb-6">
-              <div className="text-xl font-semibold text-red-500 flex items-center mb-2">
-                <FaShoppingBag className="mr-2" /> Tuần Này
-              </div>
-              <h2 className="text-2xl font-bold text-gray-400">
-                Sản phẩm mới trong cửa hàng
-              </h2>
+      <section className="most-sold-product py-8 bg-gray-100">
+        <div className="container mx-auto px-6">
+          <div className="mb-6">
+            <div className="text-2xl font-semibold text-red-500 flex items-center mb-2">
+              <FaHeadphones className="mr-2" /> Sản Phẩm
             </div>
+            <h2 className="text-2xl font-bold text-gray-400">
+              Các sản phẩm mới
+            </h2>
           </div>
-          <div className="flex overflow-x-auto">
-            {dataProdNewDate.map((item) => (
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {dataProdNewDate.slice(0, 8).map((product) => (
               <div
-                className="bg-white shadow-md rounded p-4 m-2 flex-none w-64"
-                key={item.id}
+                key={product.id}
+                className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-all transform hover:scale-105"
               >
-                <img
-                  src={item.thumb}
-                  alt={item.title}
-                  className="w-full h-32 object-contain mb-2 rounded"
-                />
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                <div className="text-lg font-bold mb-2">
-                  <div>{renderStars(item.totalRating)}</div>
-                  {formatCurrency(item.price)}
+                {/* Hình ảnh sản phẩm */}
+                <div className="relative">
+                  <Link
+                    to={`/product/${product.id}`}
+                    onClick={handleProductClick}
+                  >
+                    <img
+                      className="w-full h-40 object-contain transition duration-300 ease-in-out transform hover:scale-105"
+                      src={product.thumb}
+                      alt={product.title}
+                    />
+                  </Link>
                 </div>
 
-                <Link
-                  to={`/product/${item.id}`}
-                  className="text-blue-500 hover:text-orange-700 "
-                  onClick={() => {
-                    window.scrollTo(0, 0);
-                  }}
-                >
-                  Xem chi tiết
-                </Link>
+                {/* Nội dung sản phẩm */}
+                <div className="p-4">
+                  <div className="flex items-center mb-2">
+                    <span className="flex items-center text-yellow-500">
+                      {renderStars(product.totalRating)}
+                    </span>
+                    <span className="text-gray-500 text-sm ml-2">
+                      {product.totalUserRatings} Đánh giá
+                    </span>
+                  </div>
+                  <h6 className="text-gray-800 text-lg font-semibold truncate">
+                    <Link
+                      to={`/product/${product.id}`}
+                      onClick={handleProductClick}
+                    >
+                      {product.title}
+                    </Link>
+                  </h6>
+                  <div className="flex items-baseline space-x-2 mt-2">
+                    <span className="text-lg text-red-500 font-bold">
+                      {formatCurrency(product.price)} ₫
+                    </span>
+                    {product.discount !== 0 && (
+                      <span className="text-gray-400 text-sm line-through">
+                        {formatCurrency(
+                          product.price / (1 - product.discount / 100)
+                        )}{' '}
+                        ₫
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Nút chức năng */}
+                <div className="p-4 border-t border-gray-200 flex justify-between items-center">
+                  <Link
+                    to={`/product/${product.id}`}
+                    className="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
+                    onClick={handleProductClick}
+                  >
+                    <AiOutlineShoppingCart size={20} />
+                  </Link>
+                  <button className="flex items-center text-gray-500 hover:text-red-500 transition-colors duration-200">
+                    <AiOutlineHeart size={20} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

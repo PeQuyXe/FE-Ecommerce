@@ -1,24 +1,33 @@
 const initialState = {
   cartItems: [],
 };
-console.log('cartItems', initialState.cartItems);
+
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_CART_ITEMS':
+      return {
+        ...state,
+        cartItems: action.payload,
+      };
     case 'ADD_TO_CART': {
       const item = action.payload;
-      const existingItem = state.cartItems.find((x) => x.id === item.id);
-      const quantityToAdd = item.quantity || 1; // Sử dụng giá trị quantity hoặc mặc định là 1
+      const existingItem = state.cartItems.find(
+        (x) => x.cartId === item.cartId
+      );
+      const quantityToAdd = item.quantity || 1;
 
       if (existingItem) {
+        // Cập nhật số lượng nếu quantity tồn tại
         return {
           ...state,
           cartItems: state.cartItems.map((x) =>
-            x.id === existingItem.id
+            x.cartId === existingItem.cartId
               ? { ...x, quantity: x.quantity + quantityToAdd }
               : x
           ),
         };
       } else {
+        // Thêm mới sản phẩm vào giỏ hàng
         return {
           ...state,
           cartItems: [...state.cartItems, { ...item, quantity: quantityToAdd }],
@@ -28,35 +37,22 @@ const cartReducer = (state = initialState, action) => {
     case 'REMOVE_FROM_CART':
       return {
         ...state,
-        cartItems: state.cartItems.filter((x) => x.id !== action.payload),
+        cartItems: state.cartItems.filter((x) => x.cartId !== action.payload),
       };
+
     case 'UPDATE_CART_ITEM_QUANTITY':
       return {
         ...state,
         cartItems: state.cartItems.map((x) =>
-          x.id === action.payload.productId
+          x.cartId === action.payload.cartId
             ? { ...x, quantity: action.payload.quantity }
             : x
         ),
       };
+
     default:
       return state;
   }
 };
 
 export default cartReducer;
-
-export const ADD_TO_CART = (product) => ({
-  type: 'ADD_TO_CART',
-  payload: product,
-});
-
-export const UPDATE_CART_ITEM_QUANTITY = (productId, quantity) => ({
-  type: 'UPDATE_CART_ITEM_QUANTITY',
-  payload: { productId, quantity },
-});
-
-export const REMOVE_FROM_CART = (productId) => ({
-  type: 'REMOVE_FROM_CART',
-  payload: productId,
-});

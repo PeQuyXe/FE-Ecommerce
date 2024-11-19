@@ -15,40 +15,65 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const token = await result.user.accessToken;
+      const googleAccessToken = await result.user.accessToken;
 
       const response = await axios.post(
         'http://localhost:8080/api/auth/google',
-        { token },
+        { token: googleAccessToken },
         {
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
           },
         }
       );
 
-      localStorage.setItem('userData', JSON.stringify(response.data));
+      // Lưu JWT token và thông tin người dùng
+      const userData = response.data;
+      localStorage.setItem('userData', JSON.stringify(userData));
 
-      toast.success('Đăng nhập thành công!');
+      toast.success('Đăng nhập Google thành công!');
       navigate('/');
     } catch (error) {
-      toast.error(`Đăng nhập thất bại: ${error.message}`);
+      toast.error(
+        `Đăng nhập Google thất bại: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   };
 
+  // Xử lý đăng nhập với email và mật khẩu
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
         'http://localhost:8080/api/auth/login',
-        { email, password }
+        { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       );
-      localStorage.setItem('userData', JSON.stringify(response.data));
-      toast.success('Đăng nhập thành công!');
-      navigate('/');
+
+      // Lưu JWT token và thông tin người dùng
+      const userData = response.data;
+      localStorage.setItem('userData', JSON.stringify(userData));
+
+      const roleId = userData?.roleId;
+
+      // Điều hướng dựa trên vai trò
+      if (roleId === 1) {
+        toast.success('Đăng nhập thành công - Quản trị viên');
+        navigate('/admin/dashboard');
+      } else {
+        toast.success('Đăng nhập thành công!');
+        navigate('/');
+      }
     } catch (error) {
-      toast.error(`Đăng nhập thất bại: ${error.message}`);
+      toast.error(
+        `Đăng nhập thất bại: ${error.response?.data?.message || error.message}`
+      );
     }
   };
 

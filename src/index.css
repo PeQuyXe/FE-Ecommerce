@@ -5,6 +5,9 @@
   --bg-color: theme('colors.dark.primary');
   --text-color: theme('colors.dark.secondary');
 }
+input::state(ms-input-placeholder) {
+  color: #9ca3af; /* Màu sắc bạn muốn */
+}
 
 .light {
   --bg-color: theme('colors.light.primary');

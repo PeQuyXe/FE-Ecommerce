@@ -1,32 +1,48 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const NewDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Lấy ID từ URL
+
   const [dataNew, setDataNew] = useState({});
   const [dataNews, setDataNews] = useState([]);
   const [dataProdRecent, setDataProdRecent] = useState([]);
-  const navigate = useNavigate();
+
+  // Fetch dữ liệu từ API
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchNew = async () => {
       try {
         const newRes = await axios.get(`http://localhost:8080/api/news/${id}`);
-        const newsRes = await axios.get('http://localhost:8080/api/news');
-        const prodRecentRes = await axios.get(
-          'http://localhost:8080/api/products-recent'
-        );
-
         setDataNew(newRes.data);
-        setDataNews(newsRes.data);
-        setDataProdRecent(prodRecentRes.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching new detail:', error);
       }
     };
 
-    fetchData();
+    const fetchNews = async () => {
+      try {
+        const newsRes = await axios.get('http://localhost:8080/api/news');
+        setDataNews(newsRes.data);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      }
+    };
+
+    const fetchRecentProducts = async () => {
+      try {
+        const prodRecentRes = await axios.get(
+          'http://localhost:8080/api/products-recent'
+        );
+        setDataProdRecent(prodRecentRes.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchNew();
+    fetchNews();
+    fetchRecentProducts();
   }, [id]);
 
   return (
@@ -37,9 +53,15 @@ const NewDetail = () => {
           <nav className="text-blue-500">
             <Link to="/" className="hover:underline">
               Trang chủ
-            </Link>{' '}
+            </Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-500">Tin tức</span>
+            <Link to="/news" className="hover:underline">
+              Tin tức
+            </Link>
+            <span className="mx-2">/</span>
+            <span className="text-gray-500">
+              {dataNew.title || 'Chi tiết tin tức'}
+            </span>
           </nav>
         </div>
 
@@ -59,13 +81,18 @@ const NewDetail = () => {
                 <div className="text-gray-600 text-sm mb-4">
                   <ul className="list-disc pl-4">
                     <li>
-                      {new Date(dataNew.createAt).toLocaleDateString('vi-VN', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
+                      {dataNew.createAt
+                        ? new Date(dataNew.createAt).toLocaleDateString(
+                            'vi-VN',
+                            {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            }
+                          )
+                        : ''}
                     </li>
-                    <li>{dataNew.view} Lượt xem</li>
+                    <li>{dataNew.view || 0} Lượt xem</li>
                   </ul>
                 </div>
                 <div
@@ -86,44 +113,43 @@ const NewDetail = () => {
                 </h6>
                 {dataNews.map((newsItem) => (
                   <div className="flex mb-4" key={newsItem.id}>
-                    <div
-                      className="flex-shrink-0 w-24 h-24 mr-4 cursor-pointer"
-                      onClick={() =>
-                        navigate(`/news/news/${newsItem.id}`) &&
-                        window.scrollTo(0, 0)
-                      }
-                    >
-                      <img
-                        src={newsItem.thumb}
-                        alt={newsItem.title}
-                        className="w-full h-full object-cover rounded"
-                      />
+                    <div className="flex-shrink-0 w-24 h-24 mr-4">
+                      <Link
+                        to={`/news/news/${newsItem.id}`}
+                        onClick={() => window.scrollTo(0, 0)}
+                      >
+                        <img
+                          src={newsItem.thumb}
+                          alt={newsItem.title}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </Link>
                     </div>
                     <div className="flex-1">
                       <h6 className="text-md font-semibold mb-2">
-                        <div
-                          onClick={() =>
-                            navigate(`/news/news/${newsItem.id}`) &&
-                            window.scrollTo(0, 0)
-                          }
-                          className="text-gray-600 hover:underline cursor-pointer"
+                        <Link
+                          to={`/news/news/${newsItem.id}`}
+                          className="text-gray-600 hover:underline"
+                          onClick={() => window.scrollTo(0, 0)}
                         >
                           {newsItem.title}
-                        </div>
+                        </Link>
                       </h6>
                       <div className="text-gray-600 text-sm">
                         <ul className="list-disc pl-4">
                           <li>
-                            {new Date(newsItem.createAt).toLocaleDateString(
-                              'vi-VN',
-                              {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                              }
-                            )}
+                            {newsItem.createAt
+                              ? new Date(newsItem.createAt).toLocaleDateString(
+                                  'vi-VN',
+                                  {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                  }
+                                )
+                              : ''}
                           </li>
-                          <li>{newsItem.view} Lượt xem</li>
+                          <li>{newsItem.view || 0} Lượt xem</li>
                         </ul>
                       </div>
                     </div>
@@ -161,11 +187,19 @@ const NewDetail = () => {
                           <span className="block">
                             {item.discount ? (
                               <del className="text-red-500 mr-2">
-                                {item.price -
-                                  (item.price * item.discount) / 100}
+                                {(
+                                  item.price *
+                                  (1 - item.discount / 100)
+                                ).toLocaleString('vi-VN', {
+                                  style: 'currency',
+                                  currency: 'VND',
+                                })}
                               </del>
                             ) : null}
-                            {item.price}
+                            {item.price.toLocaleString('vi-VN', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })}
                           </span>
                         </div>
                       </div>

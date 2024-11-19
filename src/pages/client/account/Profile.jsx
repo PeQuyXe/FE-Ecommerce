@@ -1,19 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { FaUserEdit, FaSignOutAlt, FaBox } from 'react-icons/fa';
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem('userData'))
+  );
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({});
 
-  // Parse user data from localStorage
-  const user = JSON.parse(localStorage.getItem('userData'));
-
-  // State to manage menu visibility
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Redirect to login if no user data is found
   useEffect(() => {
     if (!user) {
       navigate('/login');
+    } else {
+      setFormData({ ...user, password: '' });
     }
   }, [user, navigate]);
 
@@ -22,79 +26,178 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userData'); // Clear user data from localStorage
-    navigate('/login'); // Redirect to login page
+    localStorage.removeItem('userData');
+    navigate('/login');
   };
 
-  const handleNavigate = (path) => {
-    navigate(path);
-    setIsMenuOpen(false); // Close menu after selection
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  if (!user) return null; // Return null to avoid rendering if user data is missing
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    const isUnchanged =
+      JSON.stringify(user) ===
+      JSON.stringify({
+        ...formData,
+        password: user.password,
+      });
+    if (isUnchanged) {
+      toast.success('Thông tin đã cập nhật thành công!');
+      return;
+    }
+
+    const updatedData = {
+      ...formData,
+      password: user.password || '',
+      isBlock: user.isBlock || '0',
+      roleId: user.roleId,
+    };
+
+    try {
+      await axios.put(`http://localhost:8080/users/${user.id}`, updatedData);
+      localStorage.setItem('userData', JSON.stringify(updatedData));
+      setUser(updatedData);
+      setIsEditing(false);
+      toast.success('Cập nhật thông tin thành công!');
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError('Có lỗi xảy ra khi cập nhật thông tin.');
+    }
+  };
+
+  const handleManageOrders = () => {
+    navigate('/order-list'); // Chuyển hướng đến trang quản lý đơn hàng
+  };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-md w-96 relative">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-96 relative transform transition-all duration-500 ease-in-out">
         <button
           onClick={handleClosePopup}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300"
         >
-          ×
+          x
         </button>
-        <h2 className="text-2xl mb-6 text-center">Hồ sơ người dùng</h2>
-        <div className="mb-4">
-          <div className="py-6">
-            <img
-              src={user.avatar} // Assumes userData has an avatar field
-              alt={user.fullname}
-              className="w-20 h-20 object-cover rounded-full mx-auto"
+        <h2 className="text-2xl mb-6 text-center text-indigo-600 font-semibold">
+          Hồ sơ người dùng
+        </h2>
+
+        <div className="mb-6 text-center">
+          <img
+            src={user.avatar}
+            alt={user.fullname}
+            className="w-24 h-24 object-cover rounded-full mx-auto shadow-lg mb-4 transition-transform duration-300 hover:scale-110"
+          />
+          <h1 className="text-xl font-medium text-gray-800">{user.fullname}</h1>
+          <p className="text-gray-600">Email: {user.email}</p>
+          <p className="text-gray-600">
+            Ngày Tạo: {new Date(user.createAt).toLocaleDateString()}
+          </p>
+        </div>
+
+        {isEditing ? (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="fullname"
+              value={formData.fullname}
+              onChange={handleInputChange}
+              placeholder="Họ và tên"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+              required
             />
-          </div>
-          <div className="text-center font-sans mb-4">
-            <h1>{user.fullname}</h1>
-            <p className="text-gray-700">Email: {user.email}</p>
-            <p className="text-gray-700">
-              Ngày Tạo: {new Date(user.createAt).toLocaleDateString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Button to toggle menu */}
-        <div className="text-center mb-4">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
-          >
-            Quản lý tài khoản
-          </button>
-        </div>
-
-        {/* Menu */}
-        {isMenuOpen && (
-          <div className="space-y-2">
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+              required
+            />
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Số điện thoại"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              value={user.password}
+              readOnly
+              onChange={handleInputChange}
+              placeholder="Mật khẩu mới"
+              className="w-full p-3 border border-gray-300 bg-gray-200 rounded-lg shadow-md cursor-not-allowed"
+            />
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Địa chỉ"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+            />
+            <input
+              type="url"
+              name="avatar"
+              value={formData.avatar}
+              onChange={handleInputChange}
+              placeholder="Ảnh đại diện (URL)"
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+            />
+            <div className="flex justify-between mt-4">
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+              >
+                Trở về
+              </button>
+              <button
+                type="submit"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                Cập nhật
+              </button>
+            </div>
+            {error && <p className="text-red-500 text-center">{error}</p>}
+          </form>
+        ) : (
+          <div className="text-center space-y-4">
             <button
-              onClick={() => handleNavigate('/profile/edit')}
-              className="w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300"
+              onClick={() => setIsEditing(true)}
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
             >
-              Cập nhật thông tin
+              <FaUserEdit className="inline mr-2" />
+              Quản lý tài khoản
             </button>
             <button
-              onClick={() => handleNavigate('/orders')}
-              className="w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300"
+              onClick={handleManageOrders}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
+              <FaBox className="inline mr-2" />
               Quản lý đơn hàng
             </button>
-            {/* Additional menu items can be added here */}
+            <button
+              onClick={handleLogout}
+              className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
+            >
+              <FaSignOutAlt className="inline mr-2" />
+              Thoát
+            </button>
           </div>
         )}
-
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 mt-4"
-        >
-          Thoát
-        </button>
       </div>
     </div>
   );

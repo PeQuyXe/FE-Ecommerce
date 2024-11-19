@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { ADD_TO_CART } from '../../../actions/cartAction';
 import { FaEye, FaHeart } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   formatCurrency,
@@ -26,9 +23,9 @@ const priceOptions = [
 ];
 
 const dataBanners = [
-  'src/assets/banner/banner1.jpg',
-  'src/assets/banner/banner2.jpg',
-  'src/assets/banner/banner3.jpg',
+  'src/assets/banner/banner5.jpg',
+  'src/assets/banner/banner6.jpg',
+  'src/assets/banner/banner4.jpg',
 ];
 
 const ProductList2 = () => {
@@ -46,7 +43,7 @@ const ProductList2 = () => {
   const productsPerPage = 12;
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,18 +150,18 @@ const ProductList2 = () => {
   };
 
   const addToCart = (item) => {
-    const productWithQuantity = {
-      ...item,
-      quantity: 1,
-    };
+    // const productWithQuantity = {
+    //   ...item,
+    //   quantity: 1,
+    // };
 
-    dispatch(ADD_TO_CART(productWithQuantity));
-    toast.success('Đã thêm vào giỏ hàng', {
-      autoClose: 1000,
-    });
+    // dispatch(ADD_TO_CART(productWithQuantity));
+    // toast.success('Đã thêm vào giỏ hàng', {
+    //   autoClose: 1000,
+    // });
 
     window.scrollTo(0, 0);
-    navigate('/cart');
+    navigate(`/product/${item.id}`);
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -183,33 +180,36 @@ const ProductList2 = () => {
           </nav>
         </div>
 
-        <div className="mb-2 flex flex-col lg:flex-row justify-between items-center">
+        <div className="mb-4 flex flex-col lg:flex-row justify-between items-center">
+          {/* Input Tìm kiếm */}
           <label className="relative block w-full lg:w-auto mb-4 lg:mb-0">
             <input
-              className="placeholder-italic placeholder-gray-400 block bg-white border border-gray-300 rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm w-full lg:w-auto"
-              placeholder="Tìm tên sản phẩm ..."
+              className="placeholder-italic placeholder-gray-500 block bg-gray-100 border border-gray-300 rounded-lg py-3 pl-5 pr-10 shadow-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 sm:text-sm w-full lg:w-auto transition-all duration-300 ease-in-out transform hover:scale-105"
+              placeholder="Tìm tên sản phẩm..."
               type="text"
               value={filters.search}
               onChange={handleSearchChange}
             />
+            <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-400">
+              🔍
+            </span>
           </label>
 
+          {/* Menu Filters */}
           <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
+            {/* Dropdown Danh mục */}
             <Menu
               as="div"
               className="relative inline-block text-left w-full lg:w-auto"
             >
-              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.category
                   ? categories.find((cate) => cate.id === filters.category)
                       ?.name
                   : 'Danh mục'}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="w-5 h-5 text-gray-400"
-                />
+                <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
-              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
                 {categories.map((cateItem) => (
                   <MenuItem
                     key={cateItem.id}
@@ -224,20 +224,18 @@ const ProductList2 = () => {
               </MenuItems>
             </Menu>
 
+            {/* Dropdown Thương hiệu */}
             <Menu
               as="div"
               className="relative inline-block text-left w-full lg:w-auto"
             >
-              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.brand
                   ? brands.find((brand) => brand.id === filters.brand)?.name
                   : 'Thương hiệu'}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="w-5 h-5 text-gray-400"
-                />
+                <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
-              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
                 {brands.map((brandItem) => (
                   <MenuItem
                     key={brandItem.id}
@@ -252,22 +250,20 @@ const ProductList2 = () => {
               </MenuItems>
             </Menu>
 
+            {/* Dropdown Khoảng giá */}
             <Menu
               as="div"
               className="relative inline-block text-left w-full lg:w-auto"
             >
-              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.price
                   ? priceOptions.find(
                       (option) => option.value === filters.price
                     )?.title
                   : 'Khoảng giá'}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="w-5 h-5 text-gray-400"
-                />
+                <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
-              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
                 {priceOptions.map((priceOption) => (
                   <MenuItem
                     key={priceOption.value}
@@ -284,11 +280,12 @@ const ProductList2 = () => {
               </MenuItems>
             </Menu>
 
+            {/* Dropdown Sắp xếp */}
             <Menu
               as="div"
               className="relative inline-block text-left w-full lg:w-auto"
             >
-              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.sort === '-create_at'
                   ? 'Mới nhất'
                   : filters.sort === '-sold'
@@ -296,12 +293,9 @@ const ProductList2 = () => {
                   : filters.sort === 'price'
                   ? 'Giá từ thấp đến cao'
                   : 'Giá từ cao đến thấp'}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="w-5 h-5 text-gray-400"
-                />
+                <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
-              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
                 <MenuItem
                   as="button"
                   onClick={() => handleFilterChange('sort', '-create_at')}
@@ -336,6 +330,8 @@ const ProductList2 = () => {
                 </MenuItem>
               </MenuItems>
             </Menu>
+
+            {/* Nút Làm mới */}
             <div className="w-full lg:w-auto">
               <button
                 type="button"
@@ -348,7 +344,7 @@ const ProductList2 = () => {
                     search: '',
                   })
                 }
-                className="w-full lg:w-auto bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600"
+                className="w-full lg:w-auto bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out font-medium"
               >
                 Làm mới
               </button>

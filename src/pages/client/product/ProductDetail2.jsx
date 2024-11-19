@@ -18,7 +18,8 @@ Modal.setAppElement('#root');
 
 const ProductDetail2 = () => {
   const { productId } = useParams();
-  const user = JSON.parse(localStorage.getItem('userData'));
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const userId = userData?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -93,8 +94,23 @@ const ProductDetail2 = () => {
       console.error('Không tìm thấy biến thể!');
     }
   };
-
   const handleAddToCart = () => {
+    // Kiểm tra đăng nhập
+    const user = JSON.parse(localStorage.getItem('userData'));
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng', {
+        autoClose: 1500,
+      });
+      navigate('/login'); // Chuyển hướng đến trang đăng nhập
+      return;
+    }
+
+    // Kiểm tra chọn biến thể
+    if (!selectedVariantId) {
+      toast.error('Vui lòng chọn biến thể sản phẩm', { autoClose: 1500 });
+      return;
+    }
+
     const price = infor?.productVariant?.price || product.price;
     const variantName =
       infor?.variantValues
@@ -103,6 +119,9 @@ const ProductDetail2 = () => {
         )
         .join(', ') || '';
 
+    // Tạo cartId duy nhất dựa trên productId và variantId
+    const cartId = `${product.id}_${selectedVariantId || 'default'}`;
+
     const productWithQuantity = {
       ...product,
       quantity,
@@ -110,20 +129,44 @@ const ProductDetail2 = () => {
       variantId: selectedVariantId,
       variant: variantName,
       totalPrice: price * quantity,
+      cartId,
     };
-    console.log('Thông tin sản phẩm được thêm :', productWithQuantity);
+
+    // Lấy giỏ hàng từ localStorage hoặc Redux store
+    let currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Kiểm tra nếu sản phẩm đã có trong giỏ hàng
+    const existingProduct = currentCart.find((item) => item.cartId === cartId);
+
+    if (existingProduct) {
+      // Nếu sản phẩm đã có, cập nhật số lượng
+      existingProduct.quantity += quantity;
+      existingProduct.totalPrice =
+        existingProduct.price * existingProduct.quantity;
+    } else {
+      // Nếu sản phẩm chưa có, thêm mới vào giỏ
+      currentCart.push(productWithQuantity);
+    }
+
+    // Lưu lại giỏ hàng vào localStorage
+    localStorage.setItem('cart', JSON.stringify(currentCart));
+
+    // Cập nhật giỏ hàng trong Redux
     dispatch(ADD_TO_CART(productWithQuantity));
+
+    // Thông báo thành công
     toast.success('Đã thêm vào giỏ hàng', { autoClose: 1000 });
 
     window.scrollTo(0, 0);
-    navigate('/cart');
+    navigate('/cart'); // Chuyển hướng đến trang giỏ hàng
   };
-
-  const handleCommentSubmit = (e) => {
+  {
+    /**Rating **/
+  }
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
     const ratingValue = parseInt(e.target.rating.value);
-
     const commentContent = e.target.comment.value.trim();
 
     if (!ratingValue || !commentContent) {
@@ -131,20 +174,38 @@ const ProductDetail2 = () => {
       return;
     }
 
-    const newComment = {
-      id: comments.length + 1,
-      user: user.fullname || 'Người dùng ẩn danh',
-      comment: commentContent,
+    // Chuẩn bị dữ liệu để gửi
+    const newRating = {
+      prodId: productId,
+      userId: userId,
       star: ratingValue,
-      createAt: new Date().toISOString().slice(0, 19),
+      comment: commentContent,
+      status: 1,
+      createAt: new Date().toISOString(),
+      updateAt: new Date().toISOString(),
     };
 
-    setComments((prevComments) => [...prevComments, newComment]);
+    try {
+      // Gửi dữ liệu tới API backend
+      const response = await axios.post(
+        `http://localhost:8080/api/ratings`,
+        newRating
+      );
+      console.log('response:', newRating);
 
-    e.target.reset();
-    toast.success('Đã gửi đánh giá của bạn', { autoClose: 1000 });
+      if (response.status === 201) {
+        toast.success('Đã gửi đánh giá của bạn', { autoClose: 1000 });
+        e.target.reset();
+      } else {
+        toast.error('Có lỗi xảy ra khi gửi đánh giá', { autoClose: 1500 });
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      toast.error('Không thể gửi đánh giá. Vui lòng thử lại.', {
+        autoClose: 1500,
+      });
+    }
   };
-
   const sliderSettings = {
     dots: false,
     infinite: true,
@@ -216,7 +277,10 @@ const ProductDetail2 = () => {
               <h2 className="text-3xl font-bold mb-4">{product.title}</h2>
               <div className="flex items-center mb-4">
                 <span className="text-lg text-blue-500 mr-4">
-                  Số lượng: {product.quantity}
+                  Số lượng:{' '}
+                  {selectedVariant
+                    ? selectedVariant.quantity
+                    : product.quantity}
                 </span>
                 <span className="text-lg text-orange-500">
                   {product.sold} Đã bán
@@ -374,15 +438,21 @@ const ProductDetail2 = () => {
               <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Comments Section */}
                 <div>
-                  {comments.map((comment) => (
+                  {comments.slice(0, 3).map((comment) => (
                     <div
                       key={comment.id}
                       className="mb-4 bg-white p-4 rounded shadow-md"
                     >
                       <div className="flex items-center mb-2">
-                        <span className="font-semibold mr-2">
-                          {comment.user}
+                        <span className="font-semibold mr-2 flex items-center">
+                          <img
+                            src={comment.user.avatar}
+                            alt={comment.user.fullname}
+                            className="w-8 h-8 rounded-full mr-2"
+                          />
+                          {comment.user.fullname}
                         </span>
+                        {''}
                         <span className="text-gray-500 text-sm">
                           {new Date(comment.createAt).toLocaleDateString()}
                         </span>
@@ -463,7 +533,7 @@ const ProductDetail2 = () => {
               onClick={closePopup} // Add click event to the overlay
             >
               <div
-                className="bg-white p-4 rounded shadow w-1/3 max-h-[85vh] overflow-hidden mx-4 relative"
+                className="bg-white p-4 rounded shadow w-1/3 max-h-[85vh] mx-4 relative"
                 onClick={(e) => e.stopPropagation()} // Prevent clicks from propagating to the overlay
               >
                 {/* Close button positioned absolutely in the modal */}

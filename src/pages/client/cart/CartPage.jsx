@@ -4,41 +4,101 @@ import { Link } from 'react-router-dom';
 import {
   REMOVE_FROM_CART,
   UPDATE_CART_ITEM_QUANTITY,
+  SET_CART_ITEMS,
 } from '../../../actions/cartAction';
+import { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const userId = userData?.id;
+  const [loading, setLoading] = useState(true);
 
-  const handleRemoveFromCart = (productId) => {
-    dispatch(REMOVE_FROM_CART(productId));
-  };
-
-  const handleQuantityChange = (productId, quantity) => {
-    if (quantity > 0) {
-      dispatch(UPDATE_CART_ITEM_QUANTITY(productId, quantity));
+  const handleCheckout = async () => {
+    setLoading(true);
+    try {
+      const cartData = {
+        userId: userId,
+        items: cartItems.map((item) => ({
+          productVariantId: item.variantId,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      };
+      await axios.post('http://localhost:8080/api/cart', cartData);
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại sau.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Hàm lưu giỏ hàng vào localStorage
+  const saveCartToLocalStorage = useCallback(
+    (cart) => {
+      localStorage.setItem(`cart`, JSON.stringify(cart));
+    },
+    // eslint-disable-next-line
+    [userId]
+  );
+
+  // Tải giỏ hàng từ localStorage khi component được tải
+  useEffect(() => {
+    const storedCart = localStorage.getItem(`cart`);
+    if (storedCart) {
+      const cart = JSON.parse(storedCart);
+      dispatch(SET_CART_ITEMS(cart)); // Cập nhật Redux store
+    }
+    setLoading(false);
+  }, [userId, dispatch]);
+
+  // Cập nhật số lượng sản phẩm trong giỏ hàng
+  const handleQuantityChange = (cartId, quantity) => {
+    if (quantity > 0) {
+      const updatedCartItems = cartItems.map((item) =>
+        item.cartId === cartId
+          ? { ...item, quantity: parseInt(quantity) }
+          : item
+      );
+      dispatch(UPDATE_CART_ITEM_QUANTITY(cartId, quantity)); // Cập nhật Redux store
+      saveCartToLocalStorage(updatedCartItems); // Cập nhật localStorage
+    }
+  };
+
+  // Xóa sản phẩm khỏi giỏ hàng
+  const handleRemoveFromCart = (cartId) => {
+    const updatedCartItems = cartItems.filter((item) => item.cartId !== cartId);
+    dispatch(REMOVE_FROM_CART(cartId)); // Cập nhật Redux store
+    saveCartToLocalStorage(updatedCartItems); // Cập nhật localStorage
+  };
+
+  // Tính tổng giá trị đơn hàng
   const totalAmount = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  console.log(cartItems);
+
+  // Hàm thêm sản phẩm vào giỏ hàng
+
+  if (loading) {
+    return <div>Đang tải...</div>;
+  }
+
   return (
     <section className="py-8">
-      {/* Breadcrumb Section */}
       <section className="py-4 mb-2">
         <div className="container mx-auto">
           <nav className="text-blue-500">
             <Link to="/" className="hover:underline">
               Trang chủ
-            </Link>{' '}
+            </Link>
             <span className="mx-2">/</span>
             <Link to="/product" className="text-gray-500">
-              {' '}
               Giỏ Hàng
-            </Link>{' '}
+            </Link>
           </nav>
         </div>
       </section>
@@ -63,8 +123,8 @@ const CartPage = () => {
               {cartItems.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
-                    className="text-center items-center py-4 text-gray-500 "
+                    colSpan="7"
+                    className="text-center text-2xl py-4 text-gray-500 font-sans"
                   >
                     <img
                       src="src/assets/bg/bg-image-14.jpg"
@@ -74,8 +134,8 @@ const CartPage = () => {
                   </td>
                 </tr>
               ) : (
-                cartItems.map((item) => (
-                  <tr key={item.id} className="border-b">
+                cartItems.map((item, index) => (
+                  <tr key={`${item.cartId}-${index}`} className="border-b">
                     <td className="px-4 py-2">
                       <img
                         src={item.thumb}
@@ -83,21 +143,13 @@ const CartPage = () => {
                         className="w-16 h-16 object-cover rounded-md"
                       />
                     </td>
+                    <td className="px-4 py-2">{item.title}</td>
+                    <td className="px-4 py-2 text-gray-400">{item.variant}</td>
                     <td className="px-4 py-2">
-                      <h3 className="text-lg font-semibold">{item.title}</h3>
-                    </td>
-                    <td className="px-4 py-2">
-                      <h3 className="text-xm text-gray-400 font-bold">
-                        {item.variant}
-                      </h3>
-                    </td>
-                    <td className="px-4 py-2">
-                      <p className="font-semibold">
-                        {item.price.toLocaleString('vi-VN', {
-                          style: 'currency',
-                          currency: 'VND',
-                        })}
-                      </p>
+                      {item.price.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                      })}
                     </td>
                     <td className="px-4 py-2">
                       <input
@@ -106,7 +158,7 @@ const CartPage = () => {
                         value={item.quantity}
                         onChange={(e) =>
                           handleQuantityChange(
-                            item.id,
+                            item.cartId,
                             parseInt(e.target.value)
                           )
                         }
@@ -121,7 +173,7 @@ const CartPage = () => {
                     </td>
                     <td className="px-4 py-2">
                       <button
-                        onClick={() => handleRemoveFromCart(item.id)}
+                        onClick={() => handleRemoveFromCart(item.cartId)}
                         className="bg-red-500 hover:bg-red-700 text-white py-2 px-2 rounded"
                       >
                         <FaTrash />
@@ -160,12 +212,29 @@ const CartPage = () => {
                     </tr>
                   </tbody>
                 </table>
-                <Link
-                  to="/checkout"
-                  className="bg-green-500 text-white px-4 py-2 rounded-md mt-4 block text-center hover:bg-green-600"
-                >
-                  Thanh toán
-                </Link>
+                <div className="mt-4 flex justify-end">
+                  <Link
+                    to="/checkout"
+                    onClick={handleCheckout}
+                    className="bg-gradient-to-r from-green-400 to-green-600 text-white py-3 px-6 rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-transform duration-300 ease-in-out font-semibold flex items-center justify-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 8v4l3 3m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Thanh toán
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

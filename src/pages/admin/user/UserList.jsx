@@ -63,13 +63,13 @@ function UserList() {
 
   return (
     <section className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-800">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-semibold text-gray-800">
           Danh sách người dùng
         </h2>
         <Link
           to="/admin/add-user"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all duration-300"
         >
           Thêm người dùng
         </Link>
@@ -77,12 +77,12 @@ function UserList() {
 
       {loading ? (
         <div className="flex justify-center items-center min-h-[200px]">
-          <div className="spinner border-t-4 border-blue-600 border-solid w-12 h-12 rounded-full animate-spin"></div>
+          <div className="spinner border-t-4 border-green-600 border-solid w-12 h-12 rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+        <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead className="bg-gray-100">
+            <thead className="bg-green-100">
               <tr>
                 <th className="p-4 text-left">Ảnh</th>
                 <th className="p-4 text-left">Ngày tham gia</th>
@@ -98,7 +98,7 @@ function UserList() {
               {users.map((user) => (
                 <tr
                   key={user.id}
-                  className="border-b hover:bg-gray-50 transition"
+                  className="border-b hover:bg-green-50 transition-all duration-300"
                 >
                   <td className="p-4">
                     <img
@@ -119,15 +119,15 @@ function UserList() {
                       type="checkbox"
                       checked={user.isBlock === 1}
                       onChange={() => handleBlockUser(user.id)}
-                      className="form-checkbox h-5 w-5"
+                      className="form-checkbox h-5 w-5 text-green-600 transition-all duration-300"
                     />
                   </td>
                   <td className="p-4 flex gap-4">
                     <Link to={`/admin/update-user/${user.id}`}>
-                      <FaEdit className="text-blue-500 hover:text-blue-700" />
+                      <FaEdit className="text-blue-500 hover:text-blue-700 transition-all duration-300" />
                     </Link>
                     <button onClick={() => openModal(user.id)}>
-                      <FaTrashAlt className="text-red-500 hover:text-red-700" />
+                      <FaTrashAlt className="text-red-500 hover:text-red-700 transition-all duration-300" />
                     </button>
                   </td>
                 </tr>
@@ -145,18 +145,20 @@ function UserList() {
           className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-20"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         >
-          <h3 className="text-lg font-bold mb-4">Xóa người dùng</h3>
+          <h3 className="text-lg font-bold mb-4 text-red-600">
+            Xóa người dùng
+          </h3>
           <p>Bạn có chắc chắn muốn xóa người dùng này không?</p>
           <div className="mt-6 flex justify-end gap-4">
             <button
               onClick={closeModal}
-              className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+              className="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition-all duration-300"
             >
               Hủy
             </button>
             <button
               onClick={handleDeleteUser}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all duration-300"
             >
               Xóa
             </button>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaUpload, FaImage } from 'react-icons/fa';
+import { FaUpload, FaImage, FaArrowLeft } from 'react-icons/fa';
 
 function CategoryForm() {
   const [name, setName] = useState('');
@@ -57,6 +57,14 @@ function CategoryForm() {
   return (
     <section className="p-8 bg-gray-50 min-h-screen">
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto">
+        {/* Nút quay lại */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-6 text-indigo-600 flex items-center space-x-2 hover:text-indigo-800 transition duration-300"
+        >
+          <FaArrowLeft /> <span>Quay lại</span>
+        </button>
+
         <h5 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           {id ? 'Cập nhật danh mục' : 'Thêm danh mục'}
         </h5>

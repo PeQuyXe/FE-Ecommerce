@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { ADD_TO_CART } from '../../../actions/cartAction';
+// import { useDispatch } from 'react-redux';
+// import { ADD_TO_CART } from '../../../actions/cartAction';
 import {
   formatCurrency,
   renderStars,
@@ -42,7 +42,7 @@ const CategoryProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,16 +170,18 @@ const CategoryProduct = () => {
   };
 
   const addToCart = (item) => {
-    const productWithQuantity = {
-      ...item,
-      quantity: 1,
-    };
+    // const productWithQuantity = {
+    //   ...item,
+    //   quantity: 1,
+    // };
 
-    dispatch(ADD_TO_CART(productWithQuantity));
-    toast.success('Đã thêm vào giỏ hàng', {
-      autoClose: 1000,
-    });
-    navigate('/cart');
+    // dispatch(ADD_TO_CART(productWithQuantity));
+    // toast.success('Đã thêm vào giỏ hàng', {
+    //   autoClose: 1000,
+    // });
+
+    window.scrollTo(0, 0);
+    navigate(`/product/${item.id}`);
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);

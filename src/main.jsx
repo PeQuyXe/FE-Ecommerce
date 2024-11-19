@@ -13,13 +13,15 @@ import Login from './pages/client/account/Login';
 import Register from './pages/client/account/Register';
 import ProductVariantPage from './pages/admin/product/ProductVariantPage';
 import ProductVariantForm from './pages/admin/product/ProductVariantForm';
-
+import PaymentMethodList from './pages/admin/payment/PaymentMethodList';
+import AddPaymentMethod from './pages/admin/payment/AddPaymentMethod';
+import UpdatePaymentMethod from './pages/admin/payment/UpdatePaymentMethod';
 import CouponList from './pages/admin/coupon/CouponList';
 import CouponForm from './pages/admin/coupon/CouponForm';
 import Brand from './pages/admin/brand/brandpage';
 import CategoryList from './pages/admin/category/categoryList';
 import CategoryForm from './pages/admin/category/categoryForm';
-// import DashboardAdmin from './pages/admin/DashboardAdmin';
+import DashboardAdmin from './pages/admin/DashboardAdmin';
 import NewsList from './pages/admin/news/NewsList';
 import NewsForm from './pages/admin/news/NewsForm';
 import AttributePage from './pages/admin/attribute/attributePage';
@@ -38,11 +40,14 @@ import CategoryProduct from './pages/client/category/CategoryProduct';
 import Profile from './pages/client/account/Profile';
 import UserList from './pages/admin/user/UserList';
 import UserForm from './pages/admin/user/UserForm';
-import ProductList from './pages/admin/product/ProductList'; // Thêm import ProductList
-// import ProductForm from './pages/admin/product/ProductForm';
+import ProductList from './pages/admin/product/ProductList';
 import ProductRating from './pages/admin/product/ProductRating';
 import UpdateProduct from './pages/admin/product/UpdateProduct';
-
+import OrderList from './pages/admin/orders/OrderList';
+import OrderDetail from './pages/admin/orders/OrderDetail';
+import OrderListUser from './pages/client/orders/OrderListUser';
+import OrderDetailUser from './pages/client/orders/OrderDetailUser';
+import AdminLayout from './pages/admin/AdminLayout';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
@@ -52,7 +57,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Routes>
             <Route path="/" element={<App />}>
               <Route index element={<HomePage />} />
-              <Route path="/home" element={<HomePage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/product" element={<ProductList2 />} />
               <Route
@@ -72,9 +76,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 path="home/category/:cateId/*"
                 element={<CategoryProduct />}
               />
+              <Route path="/update-user/:userId" element={<UserForm />} />
+              <Route path="/order-list" element={<OrderListUser />} />
+              <Route
+                path="/order-detail/:orderId"
+                element={<OrderDetailUser />}
+              />
             </Route>
             {/* Admin Routes */}
-            <Route path="/admin">
+            <Route path="/admin" element={<AdminLayout />}>
               <Route path="brand" element={<Brand />} />
               <Route path="category" element={<CategoryList />} />
               <Route path="add-category" element={<CategoryForm />} />
@@ -85,7 +95,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="news" element={<NewsList />} />
               <Route path="add-news" element={<NewsForm />} />
               <Route path="edit-news/:id" element={<NewsForm />} />
-              <Route path="page/attributes" element={<AttributePage />} />
+              <Route path="attributes" element={<AttributePage />} />
               <Route path="user-list" element={<UserList />} />
               <Route path="add-user" element={<UserForm />} />
               <Route path="update-user/:userId" element={<UserForm />} />
@@ -115,13 +125,22 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 path="edit-product-variant/:variantId"
                 element={<ProductVariantForm />}
               />
+              <Route path="payment-methods" element={<PaymentMethodList />} />
+              <Route path="add-payment-method" element={<AddPaymentMethod />} />
+              <Route
+                path="update-payment-method/:id"
+                element={<UpdatePaymentMethod />}
+              />
+              <Route path="order-list" element={<OrderList />} />
+              <Route path="order-detail/:orderId" element={<OrderDetail />} />
+              <Route path="products" element={<ProductList />} />{' '}
+              <Route
+                path="rating-product/:prodId"
+                element={<ProductRating />}
+              />{' '}
+              <Route path="dashboard" element={<DashboardAdmin />} />{' '}
             </Route>
-            {/* Admin Product Routes */}
-            <Route path="/admin/products" element={<ProductList />} />{' '}
-            <Route
-              path="/admin/rating-product/:prodId"
-              element={<ProductRating />}
-            />{' '}
+
             {/* Client Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

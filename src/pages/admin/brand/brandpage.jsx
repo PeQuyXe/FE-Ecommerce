@@ -6,10 +6,10 @@ const Brand = () => {
   const [brands, setBrands] = useState([]);
   const [brandName, setBrandName] = useState('');
   const [editingBrand, setEditingBrand] = useState(null);
-  const [modalType, setModalType] = useState(null); // For Add/Edit
-  const [deleteBrandId, setDeleteBrandId] = useState(null); // To store the brand id for deletion
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(''); // Error handling
+  const [modalType, setModalType] = useState(null);
+  const [deleteBrandId, setDeleteBrandId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchBrands();
@@ -81,47 +81,52 @@ const Brand = () => {
           <h5 className="text-2xl font-semibold text-gray-700">
             Danh sách thương hiệu
           </h5>
-          <button
-            onClick={() => {
-              setModalType('add');
-              setBrandName('');
-            }}
-            className="px-4 py-2 bg-green-500 text-white font-medium rounded hover:bg-green-600 transition duration-300"
-          >
-            Thêm thương hiệu
-          </button>
         </div>
-
-        {loading && <div className="text-center py-4">Đang tải dữ liệu...</div>}
+        <button
+          onClick={() => {
+            setModalType('add');
+            setBrandName('');
+          }}
+          className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:from-blue-500 hover:to-purple-500 transition duration-300 ease-in-out"
+        >
+          <span className="flex items-center space-x-2">
+            <FaEdit /> <span>Thêm Thương Hiệu</span>
+          </span>
+        </button>
+        {loading && (
+          <div className="text-center py-4 text-gray-500">
+            Đang tải dữ liệu...
+          </div>
+        )}
         {error && <div className="text-red-500 text-center py-4">{error}</div>}
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="overflow-x-auto mt-5 ">
+          <table className="min-w-full bg-white shadow-md rounded-lg">
             <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left">Tên thương hiệu</th>
-                <th className="py-3 px-6 text-left">Thao tác</th>
+              <tr className="bg-indigo-600 text-white uppercase text-sm leading-normal ">
+                <th className="py-3 px-6 text-center">Tên thương hiệu</th>
+                <th className="py-3 px-6 text-center">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700 text-sm font-light">
+            <tbody className="text-gray-700 text-lg font-light">
               {brands.map((brand) => (
                 <tr
                   key={brand.id}
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
-                  <td className="py-3 px-6">{brand.name}</td>
-                  <td className="py-3 px-6">
+                  <td className="py-3 px-6 text-center">{brand.name}</td>
+                  <td className="py-3 px-6 flex items-center justify-center space-x-6">
                     <button
                       onClick={() => handleEdit(brand)}
-                      className="text-blue-500 hover:text-blue-700 mr-4"
+                      className="text-indigo-600 hover:text-indigo-800 flex items-center space-x-2 transition duration-300"
                     >
-                      <FaEdit />
+                      <FaEdit /> <span>Sửa</span>
                     </button>
                     <button
                       onClick={() => setDeleteBrandId(brand.id)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-600 hover:text-red-800 flex items-center space-x-2 transition duration-300"
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt /> <span>Sửa</span>
                     </button>
                   </td>
                 </tr>
@@ -133,7 +138,7 @@ const Brand = () => {
         {/* Modal for Add/Edit Brand */}
         {modalType && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
               <h5 className="text-xl font-semibold text-gray-700 mb-4">
                 {modalType === 'add'
                   ? 'Thêm thương hiệu mới'
@@ -151,20 +156,20 @@ const Brand = () => {
                 <div className="flex justify-end space-x-2">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded hover:bg-gray-400 transition duration-300"
+                    className="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-400 transition duration-300"
                     onClick={() => setModalType(null)}
                   >
-                    Huỷ bỏ
+                    Huỷ
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 transition duration-300"
+                    className="px-4 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition duration-300"
                     disabled={loading}
                   >
                     {loading
                       ? 'Đang lưu...'
                       : modalType === 'add'
-                      ? 'Thêm mới'
+                      ? 'Thêm'
                       : 'Cập nhật'}
                   </button>
                 </div>
@@ -176,7 +181,7 @@ const Brand = () => {
         {/* Confirmation Modal for Deletion */}
         {deleteBrandId && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
               <h5 className="text-xl font-semibold text-gray-700 mb-4">
                 Bạn có chắc chắn muốn xóa thương hiệu này không?
               </h5>
@@ -186,11 +191,11 @@ const Brand = () => {
                   className="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded hover:bg-gray-400 transition duration-300"
                   onClick={() => setDeleteBrandId(null)}
                 >
-                  Hủy bỏ
+                  Hủy
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-500 text-white font-medium rounded hover:bg-red-600 transition duration-300"
+                  className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-300"
                   onClick={() => handleDelete(deleteBrandId)}
                 >
                   Xóa

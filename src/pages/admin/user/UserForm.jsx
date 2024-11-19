@@ -188,7 +188,7 @@ function UserForm() {
           ) : (
             <select
               name="roleId" // Thay role_id thành roleId
-              value={user.roleId}
+              value={user.roleId || ''}
               onChange={handleInputChange}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               required

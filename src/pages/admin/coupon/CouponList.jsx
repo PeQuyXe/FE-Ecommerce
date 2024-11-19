@@ -40,12 +40,12 @@ const CouponList = () => {
       <h5 className="text-xl font-bold mb-4">Danh sách mã giảm giá</h5>
       <button
         onClick={handleAdd}
-        className="bg-green-400 hover:bg-green-500 rounded text-white px-4 py-2 mb-4"
+        className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300 ease-in-out"
       >
         Thêm mã giảm giá
       </button>
 
-      <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden">
+      <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-5">
         <thead>
           <tr className="bg-gray-200 text-left">
             <th className="px-4 py-2">Ảnh</th>

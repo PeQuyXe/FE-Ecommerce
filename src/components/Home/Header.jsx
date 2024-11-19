@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { GoSun, GoMoon } from 'react-icons/go';
 import { MdLanguage } from 'react-icons/md';
 import { CiHeart, CiUser } from 'react-icons/ci';
@@ -13,7 +13,7 @@ import backgroundImage from '../../assets/bg/bg-image-4.jpg';
 import { useAuth } from '../../AuthContext';
 
 const menu = [
-  { name: 'TRANG CHỦ', path: 'home' },
+  { name: 'TRANG CHỦ', path: '' },
   { name: 'SẢN PHẨM', path: 'product' },
   { name: 'TIN TỨC', path: 'news' },
   { name: 'LIÊN HỆ', path: 'contact' },
@@ -27,7 +27,16 @@ const Header = () => {
   const [userData, setUserData] = useState(null);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalItems = cartItems.length;
+  const navigate = useNavigate();
 
+  const handleNavigation = () => {
+    const userData = localStorage.getItem('userData');
+    if (!userData) {
+      navigate('/login'); // Chuyển hướng đến trang đăng nhập nếu chưa có userData
+    } else {
+      navigate('/profile');
+    }
+  };
   useEffect(() => {
     // Lấy dữ liệu từ localStorage
     const storedUserData = localStorage.getItem('userData');
@@ -113,7 +122,7 @@ const Header = () => {
                   className="hover:text-red-500 font-roboto"
                   aria-label="Logout"
                 >
-                  Thoát
+                  {t('Thoát')}
                 </button>
               </div>
             ) : (
@@ -146,7 +155,7 @@ const Header = () => {
                     className={({ isActive }) =>
                       `transition-all duration-500 ease-in-out relative ${
                         isActive
-                          ? 'text-pink-400 font-bold'
+                          ? 'text-pink-400 '
                           : 'text-gray-600 hover:text-pink-400'
                       }`
                     }
@@ -169,16 +178,16 @@ const Header = () => {
               <input
                 type="text"
                 name="search"
-                className="border border-gray-300 rounded px-3 py-1"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-400"
                 placeholder={t('Tìm')}
                 aria-label={t('Search')}
               />
               <button
                 type="submit"
-                className="absolute right-0 top-0 mt-2 mr-3"
+                className="absolute right-0 top-0 mt-2 mr-3 text-gray-700 hover:text-blue-500 transition-colors"
                 aria-label="Search"
               >
-                <SearchIcon className="h-5 w-5 text-gray-700" />
+                <SearchIcon className="h-5 w-5" />
               </button>
             </form>
 
@@ -209,26 +218,28 @@ const Header = () => {
             </NavLink>
 
             {/* User Profile */}
-            <NavLink
-              to="/profile"
-              className="text-gray-700 hover:text-blue-500"
+            <div
+              onClick={handleNavigation}
+              className="text-gray-700 hover:text-blue-500 cursor-pointer"
               aria-label="User Profile"
             >
               <CiUser className="h-6 w-6" />
-            </NavLink>
+            </div>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        <nav className="md:hidden mt-4">
-          <ul className="flex flex-col items-center space-y-2 text-l font-serif">
+        <nav className="md:hidden mt-4 bg-gray-100 shadow rounded-md">
+          <ul className="flex flex-col items-center space-y-3 text-base font-sans">
             {menu.map((item) => (
-              <li key={item.path}>
+              <li key={item.path} className="w-full">
                 <NavLink
                   to={`/${item.path}`}
                   className={({ isActive }) =>
-                    `text-black hover:underline font-extralight ${
-                      isActive ? 'text-red-600 underline' : ''
+                    `block w-full text-center py-2 px-4 rounded-md transition-colors ${
+                      isActive
+                        ? 'bg-red-500 text-white'
+                        : 'text-gray-700 hover:bg-red-100 hover:text-red-500'
                     }`
                   }
                   end

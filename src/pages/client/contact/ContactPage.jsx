@@ -1,152 +1,139 @@
 import { Link } from 'react-router-dom';
+import { FaMapMarkerAlt, FaPhoneAlt, FaClock } from 'react-icons/fa';
+
 const ContactPage = () => {
   return (
-    <div className="container mx-auto px-4 mt-10 mb-20">
-      <div className="container mx-auto mb-4">
-        <nav className="text-blue-500">
+    <div className="container mx-auto px-4 mt-10 mb-25">
+      {/* Breadcrumb Navigation */}
+      <div className="mb-6">
+        <nav className="text-blue-600 text-sm">
           <Link to="/" className="hover:underline">
             Trang chủ
-          </Link>{' '}
-          <span className="mx-2">/</span>
-          <span className="text-gray-400">Liên hệ</span>
+          </Link>
+          <span className="mx-2 text-gray-400">/</span>
+          <span className="text-gray-500">Liên hệ</span>
         </nav>
       </div>
-      <div className="flex text-xl">
-        <div className="flex flex-wrap -mx-4">
-          <div className="w-full lg:w-2/3 px-4">
-            <div className="contact-form">
-              <h3 className="title mb-4 font-semibold">
-                Chúng tôi rất mong nhận được phản hồi từ bạn.
-              </h3>
-              <p className="bot-title mb-6">
-                Nếu bạn có những sản phẩm tuyệt vời mà bạn đang tạo ra hoặc muốn
-                hợp tác với chúng tôi thì hãy liên hệ với chúng tôi.
-              </p>
-              <form>
-                <div className="flex flex-wrap -mx-4">
-                  <div className="w-full lg:w-1/3 px-4 mb-4">
-                    <div className="form-group">
-                      <label
-                        htmlFor="contact-name"
-                        className="block text-gray-700"
-                      >
-                        Họ và tên <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="contact-name"
-                        id="contact-name"
-                        className="w-full border border-gray-300 p-2 rounded"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-1/3 px-4 mb-4">
-                    <div className="form-group">
-                      <label
-                        htmlFor="contact-phone"
-                        className="block text-gray-700"
-                      >
-                        Số điện thoại <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="contact-phone"
-                        id="contact-phone"
-                        className="w-full border border-gray-300 p-2 rounded"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-1/3 px-4 mb-4">
-                    <div className="form-group">
-                      <label
-                        htmlFor="contact-email"
-                        className="block text-gray-700"
-                      >
-                        E-mail <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        name="contact-email"
-                        id="contact-email"
-                        className="w-full border border-gray-300 p-2 rounded"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4 mb-4">
-                    <div className="form-group">
-                      <label
-                        htmlFor="contact-message"
-                        className="block text-gray-700"
-                      >
-                        Tin nhắn của bạn
-                      </label>
-                      <textarea
-                        name="contact-message"
-                        id="contact-message"
-                        cols="30"
-                        rows="4"
-                        className="w-full border border-gray-300 p-2 rounded"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="w-full px-4 mb-4">
-                    <div className="form-group mb-0">
-                      <button
-                        name="submit"
-                        type="submit"
-                        id="submit"
-                        className="bg-blue-500 text-white py-2 px-4 rounded"
-                      >
-                        Gửi tin nhắn
-                      </button>
-                    </div>
-                  </div>
+
+      {/* Contact Form & Info Section */}
+      <div className="flex flex-wrap -mx-4 text-gray-800">
+        {/* Contact Form */}
+        <div className="w-full lg:w-2/3 px-4">
+          <div className="p-6 shadow rounded-md">
+            <h3 className="text-2xl font-semibold mb-4">
+              Chúng tôi rất mong nhận được phản hồi từ bạn.
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Nếu bạn có những sản phẩm tuyệt vời hoặc muốn hợp tác, hãy liên hệ
+              với chúng tôi.
+            </p>
+            <form>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Họ và tên <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
                 </div>
-              </form>
-            </div>
+                <div>
+                  <label
+                    htmlFor="contact-phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Số điện thoại <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-phone"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    E-mail <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="contact-message"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Tin nhắn của bạn
+                </label>
+                <textarea
+                  id="contact-message"
+                  rows="4"
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                ></textarea>
+              </div>
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                >
+                  Gửi tin nhắn
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="w-full lg:w-1/3 px-4">
-            <div className="contact-form-about">
-              <div className="contact-location mb-10">
-                <h4 className="title mb-4 font-bold">Cửa hàng của chúng tôi</h4>
-                <span className=" mb-4 block ">
-                  Địa chỉ: 155 Nguyễn Văn Trỗi, Mộ Lao, Hà Đông
-                </span>
-                <span className="phone block ">Số điện thoại: 0368002731</span>
-                <span className="email block ">
-                  Email: cuongpham17072002@gmail.com
-                </span>
-              </div>
-              <div className="contact-career mb-10">
-                <h4 className="title mb-4 font-bold">Giới thiệu</h4>
-                Cửa hàng mạng lại những sản phẩm chất lượng nhất cho khách hàng
-              </div>
-              <div className="opening-hour ">
-                <h4 className="title mb-4 font-bold">Giờ mở cửa</h4>
-                <p>8h-17h</p>
-              </div>
+        </div>
+
+        {/* Contact Information */}
+        <div className="w-full lg:w-1/3 px-6 mt-6 lg:mt-0">
+          <div className="p-8 shadow rounded-md space-y-6">
+            <div>
+              <h4 className="text-lg font-bold mb-2 flex items-center">
+                <FaMapMarkerAlt className="text-blue-600 mr-2" />
+                Cửa hàng của chúng tôi
+              </h4>
+              <p>Địa chỉ: 155 Nguyễn Văn Trỗi, Mộ Lao, Hà Đông</p>
+            </div>
+            <div>
+              <h4 className="text-lg font-bold mb-2 flex items-center">
+                <FaPhoneAlt className="text-blue-600 mr-2" />
+                Liên hệ
+              </h4>
+              <p>Số điện thoại: 0368002731</p>
+              <p>Email: cuongpham17072002@gmail.com</p>
+            </div>
+            <div>
+              <h4 className="text-lg font-bold mb-2 flex items-center">
+                <FaClock className="text-blue-600 mr-2" />
+                Giờ mở cửa
+              </h4>
+              <p>8h - 17h</p>
             </div>
           </div>
         </div>
       </div>
-      {/* Start Google Map Area  */}
-      <div className="google-map-wrap mt-10">
-        <div className="mapouter">
-          <div className="gmap_canvas">
-            <iframe
-              className="w-full"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29793.988211049866!2d105.8369637!3d21.022739599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab9bd9861ca1%3A0xe7887f7b72ca17a9!2sHanoi!5e0!3m2!1sen!2s!4v1700055425254!5m2!1sen!2s"
-              width="1280"
-              height="500"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
+
+      {/* Google Map */}
+      <div className="mt-10">
+        <iframe
+          className="w-full h-96 rounded shadow"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29793.988211049866!2d105.8369637!3d21.022739599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab9bd9861ca1%3A0xe7887f7b72ca17a9!2sHanoi!5e0!3m2!1sen!2s!4v1700055425254!5m2!1sen!2s"
+          style={{ border: 0 }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
-      {/* End Google Map Area  */}
     </div>
   );
 };
