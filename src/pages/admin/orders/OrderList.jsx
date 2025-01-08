@@ -38,7 +38,7 @@ const OrderList = () => {
   }
 
   return (
-    <section className="p-6 bg-gray-100 min-h-screen">
+    <section className="p-6 min-h-screen">
       <div className="bg-white shadow-xl rounded-lg overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6">
           <h2 className="text-white text-xl font-bold">Danh sách đơn hàng</h2>

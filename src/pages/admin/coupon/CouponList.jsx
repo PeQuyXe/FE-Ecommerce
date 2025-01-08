@@ -36,7 +36,7 @@ const CouponList = () => {
   };
 
   return (
-    <section className="container mx-auto bg-white p-6 rounded-lg shadow-md">
+    <section className=" p-6 min-h-screen">
       <h5 className="text-xl font-bold mb-4">Danh sách mã giảm giá</h5>
       <button
         onClick={handleAdd}
@@ -47,7 +47,7 @@ const CouponList = () => {
 
       <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-5">
         <thead>
-          <tr className="bg-gray-200 text-left">
+          <tr className="bg-indigo-600 text-white uppercase text-sm leading-normal text-center">
             <th className="px-4 py-2">Ảnh</th>
             <th className="px-4 py-2">Tiêu đề</th>
             <th className="px-4 py-2">Mã</th>
@@ -59,12 +59,12 @@ const CouponList = () => {
         </thead>
         <tbody>
           {coupons.map((coupon) => (
-            <tr key={coupon.id} className="border-b">
+            <tr key={coupon.id} className="border-b text-center">
               <td className="px-4 py-2">
                 <img
                   src={coupon.thumb}
                   alt={coupon.title}
-                  className="w-16 h-16 object-cover rounded"
+                  className="w-16 h-16 object-contain rounded"
                 />
               </td>
               <td className="px-4 py-2">{coupon.title}</td>

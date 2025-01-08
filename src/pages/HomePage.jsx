@@ -113,7 +113,7 @@ const HomePage = () => {
                   key={index}
                   className="w-full h-auto md:w-3/4 lg:w-2/3 xl:w-1/2 px-3"
                 >
-                  <div className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
+                  <div className="block rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
                     <div className="p-2 transform transition-transform duration-500 hover:scale-105">
                       <img
                         className=" w-full h-auto rounded-md object-contain "
@@ -144,7 +144,7 @@ const HomePage = () => {
           ].map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+              className="flex items-center justify-center p-4  border border-gray-200 rounded-lg shadow-sm transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
             >
               <div className="text-center">
                 <div className="mb-4">
@@ -299,7 +299,7 @@ const HomePage = () => {
               dataProdRecent.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white p-4 rounded-lg shadow-md relative flex flex-col justify-between h-full"
+                  className=" p-4 rounded-lg shadow-md relative flex flex-col justify-between h-full"
                 >
                   <Link to={`product/${item.id}`} className="block">
                     <img
@@ -317,7 +317,7 @@ const HomePage = () => {
                     )}
                   </Link>
 
-                  <div className="absolute inset-0 bg-white bg-opacity-10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0  bg-opacity-10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                     <ul className="flex space-x-2">
                       <li>
                         <button
@@ -440,8 +440,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* New Arrivals Section */}
-      <section className="most-sold-product py-8 bg-gray-100">
+      {/* New Product Section */}
+      <section className="most-sold-product py-8 ">
         <div className="container mx-auto px-6">
           <div className="mb-6">
             <div className="text-2xl font-semibold text-red-500 flex items-center mb-2">
@@ -456,7 +456,7 @@ const HomePage = () => {
             {dataProdNewDate.slice(0, 8).map((product) => (
               <div
                 key={product.id}
-                className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-all transform hover:scale-105"
+                className=" shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-all transform hover:scale-105"
               >
                 {/* Hình ảnh sản phẩm */}
                 <div className="relative">

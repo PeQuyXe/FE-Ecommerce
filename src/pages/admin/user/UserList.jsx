@@ -62,14 +62,14 @@ function UserList() {
   };
 
   return (
-    <section className="p-6 bg-gray-50 min-h-screen">
+    <section className="p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-semibold text-gray-800">
           Danh sách người dùng
         </h2>
         <Link
           to="/admin/add-user"
-          className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-all duration-300"
+          className="px-6 py-3 mb-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
         >
           Thêm người dùng
         </Link>
@@ -82,7 +82,7 @@ function UserList() {
       ) : (
         <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead className="bg-green-100">
+            <thead className="bg-indigo-600 text-white">
               <tr>
                 <th className="p-4 text-left">Ảnh</th>
                 <th className="p-4 text-left">Ngày tham gia</th>

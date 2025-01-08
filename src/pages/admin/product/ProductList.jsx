@@ -79,8 +79,8 @@ const ProductList = () => {
   }
 
   return (
-    <section className="p-8 bg-gray-50 min-h-screen">
-      <div className="container mx-auto bg-white shadow-lg rounded-lg p-6">
+    <section className="p-8 min-h-screen">
+      <div>
         <div className="flex justify-between items-center mb-6">
           <h5 className="text-xl font-semibold text-gray-700">
             Danh sách sản phẩm
@@ -123,7 +123,7 @@ const ProductList = () => {
                       <img
                         src={product.thumb}
                         alt={product.title}
-                        className="w-10 h-10 object-cover rounded"
+                        className="w-10 h-10 object-contain rounded"
                       />
                       <span>
                         <Link

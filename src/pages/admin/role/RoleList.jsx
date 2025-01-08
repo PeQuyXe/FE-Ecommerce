@@ -26,7 +26,7 @@ function RoleList() {
   };
 
   return (
-    <section className="container mx-auto bg-white p-6 rounded-lg shadow-md">
+    <section className="p-6 min-h-screen">
       <h5 className="text-3xl font-semibold text-gray-800 mb-5">
         Danh sách vai trò
       </h5>

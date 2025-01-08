@@ -27,6 +27,7 @@ const AdminLayout = () => {
     { path: 'coupons', icon: <FaTags />, label: 'Mã giảm giá' },
     { path: 'news', icon: <FaNewspaper />, label: 'Tin tức' },
     { path: 'roles', icon: <FaUserTag />, label: 'Vai trò' },
+    { path: 'attributes', icon: <FaSlidersH />, label: 'Thuộc tính' },
   ];
 
   return (
