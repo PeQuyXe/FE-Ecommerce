@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     token,
-    role, // Vai trò của người dùng
+    role,
     signup,
     login,
     logout,

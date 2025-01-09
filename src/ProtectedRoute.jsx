@@ -18,7 +18,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
 };
 
 ProtectedRoute.propTypes = {
-  allowedRoles: PropTypes.arrayOf(PropTypes.number).isRequired, // Đảm bảo roleId là số
+  allowedRoles: PropTypes.arrayOf(PropTypes.number).isRequired,
   children: PropTypes.node.isRequired,
 };
 
