@@ -31,22 +31,19 @@ const OrderList = () => {
       <div className="flex justify-center items-center h-96">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
         <p className="ml-4 text-blue-600 font-semibold">
-          Đang tải danh sách đơn hàng...
+          Đang tải danh sách đơn hàng
         </p>
       </div>
     );
   }
 
   return (
-    <section className="p-6 min-h-screen">
+    <section className="min-h-screen">
       <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6">
-          <h2 className="text-white text-xl font-bold">Danh sách đơn hàng</h2>
-        </div>
 
         <div className="overflow-x-auto">
           <table className="table-auto w-full bg-white border-collapse border border-gray-200 text-gray-700">
-            <thead className="bg-gray-100">
+            <thead className="bg-indigo-600 font-bold text-white">
               <tr>
                 <th className="px-4 py-3 border">Mã đơn hàng</th>
                 <th className="px-4 py-3 border">Ngày tạo đơn</th>
@@ -78,11 +75,10 @@ const OrderList = () => {
                     }).format(order.totalMoney)}
                   </td>
                   <td
-                    className={`px-4 py-3 border font-semibold ${
-                      order.orderStatusId === 5
-                        ? 'text-red-500'
-                        : 'text-green-500'
-                    }`}
+                    className={`px-4 py-3 border font-semibold ${order.orderStatusId === 5
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                      }`}
                   >
                     {order.orderStatus.name}
                   </td>

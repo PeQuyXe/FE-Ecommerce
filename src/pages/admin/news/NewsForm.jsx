@@ -73,10 +73,10 @@ const NewsForm = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="min-h-screen">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 shadow-lg rounded-lg max-w-2xl mx-auto"
+        className="bg-white p-8 w-full"
       >
         <h2 className="text-3xl font-semibold text-gray-800 mb-6">
           {id ? 'Sửa' : 'Thêm'} bài viết

@@ -88,8 +88,8 @@ function UserForm() {
   };
 
   return (
-    <section className="p-8 max-w-2xl mx-auto bg-gradient-to-r from-gray-50 to-gray-100 shadow-lg rounded-xl ">
-      <h2 className="text-3xl font-semibold text-center text-indigo-700 mb-8">
+    <section className="w-full min-h-screen mx-auto p-6 ">
+      <h2 className="text-2xl font-semibold text-center text-gray-700 mb-8">
         {userId ? 'Cập nhật người dùng' : 'Thêm người dùng'}
       </h2>
 

@@ -79,130 +79,124 @@ const ProductList = () => {
   }
 
   return (
-    <section className="p-8 min-h-screen">
-      <div>
-        <div className="flex justify-between items-center mb-6">
-          <h5 className="text-xl font-semibold text-gray-700">
-            Danh sách sản phẩm
-          </h5>
-          <Link
-            to="/admin/products/new"
-            className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300 ease-in-out"
-          >
-            <span className="flex items-center space-x-2">
-              <FaEdit /> <span>Thêm Sản Phẩm</span>
-            </span>
-          </Link>
-        </div>
+    <section className="min-h-screen">
+      <div className="flex flex-col justify-start items-start">
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg">
-            <thead className="bg-indigo-600 text-white uppercase text-sm leading-normal">
-              <tr>
-                <th className="p-3">Tên sản phẩm</th>
-                <th className="p-3">Ngày nhập</th>
-                <th className="p-3">Danh mục</th>
-                <th className="p-3">Thương hiệu</th>
-                <th className="p-3">Tồn kho</th>
-                <th className="p-3">Giá</th>
-                <th className="p-3">Trạng thái</th>
-                <th className="p-3">Hiển thị</th>
-                <th className="p-3">Biến thể</th>
-                <th className="p-3">Đánh giá</th>
-                <th className="p-3">Thực thi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr
-                  key={product.id}
-                  className="border-b hover:bg-gray-100 transition duration-300"
-                >
-                  <td className="p-3">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={product.thumb}
-                        alt={product.title}
-                        className="w-10 h-10 object-contain rounded"
-                      />
-                      <span>
-                        <Link
-                          to={`/admin/products/edit/${product.id}`}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          {product.title}
-                        </Link>
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    {new Date(product.createAt).toLocaleDateString()}
-                  </td>
-                  <td className="p-3">
-                    {categories.find((cat) => cat.id === product.cateId)?.name}
-                  </td>
-                  <td className="p-3">
-                    {brands.find((brand) => brand.id === product.brandId)?.name}
-                  </td>
-                  <td className="p-3">{product.quantity || 0}</td>
-                  <td className="p-3">{formatCurrency(product.price)}</td>
-                  <td className="p-3">
-                    <span
-                      className={`${
-                        product.status === 1 ? 'text-green-500' : 'text-red-500'
-                      }`}
-                    >
-                      {product.quantity >= 1 && product.status === 1
-                        ? 'Đang bán'
-                        : 'Dừng bán'}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={product.status === 1}
-                        readOnly
-                      />
-                      <span className="slider"></span>
-                    </label>
-                  </td>
-                  <td className="p-3">
-                    <Link
-                      to={`/admin/product-variants/${product.id}`}
-                      className="text-blue-600 hover:text-blue-800 flex items-center"
-                    >
-                      <FaEye /> <span className="ml-1">Xem</span>
-                    </Link>
-                  </td>
-                  <td className="p-3">
-                    <Link
-                      to={`/admin/rating-product/${product.id}`}
-                      className="text-blue-600 hover:text-blue-800 flex items-center"
-                    >
-                      <FaEye /> <span className="ml-1">Xem</span>
-                    </Link>
-                  </td>
-                  <td className="p-3 flex space-x-3">
-                    <Link
-                      to={`/admin/products/edit/${product.id}`}
-                      className="text-yellow-500 hover:text-yellow-700 flex items-center"
-                    >
-                      <FaEdit /> <span className="ml-1">Sửa</span>
-                    </Link>
-                    <button
-                      onClick={() => openDeleteModal(product)}
-                      className="text-red-500 hover:text-red-700 flex items-center"
-                    >
-                      <FaTrashAlt /> <span className="ml-1">Xóa</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Link
+          to="/admin/products/new"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
+        >
+          Thêm Sản Phẩm
+        </Link>
       </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-6 items-center">
+          <thead className="bg-indigo-600 text-white text-sm leading-normal">
+            <tr>
+              <th className="p-3">Tên sản phẩm</th>
+              <th className="p-3">Ngày nhập</th>
+              <th className="p-3">Danh mục</th>
+              <th className="p-3">Thương hiệu</th>
+              <th className="p-3">Tồn kho</th>
+              <th className="p-3">Giá</th>
+              <th className="p-3">Trạng thái</th>
+              <th className="p-3">Hiển thị</th>
+              <th className="p-3">Biến thể</th>
+              <th className="p-3">Đánh giá</th>
+              <th className="p-3">Thực thi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product.id}
+                className="border-b hover:bg-gray-100 transition duration-300"
+              >
+                <td className="p-3">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={product.thumb}
+                      alt={product.title}
+                      className="w-10 h-10 object-contain rounded"
+                    />
+                    <span>
+                      <Link
+                        to={`/admin/products/edit/${product.id}`}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        {product.title}
+                      </Link>
+                    </span>
+                  </div>
+                </td>
+                <td className="p-3">
+                  {new Date(product.createAt).toLocaleDateString()}
+                </td>
+                <td className="p-3">
+                  {categories.find((cat) => cat.id === product.cateId)?.name}
+                </td>
+                <td className="p-3">
+                  {brands.find((brand) => brand.id === product.brandId)?.name}
+                </td>
+                <td className="p-3">{product.quantity || 0}</td>
+                <td className="p-3">{formatCurrency(product.price)}</td>
+                <td className="p-3">
+                  <span
+                    className={`${product.status === 1 ? 'text-green-500' : 'text-red-500'
+                      }`}
+                  >
+                    {product.quantity >= 1 && product.status === 1
+                      ? 'Đang bán'
+                      : 'Dừng bán'}
+                  </span>
+                </td>
+                <td className="p-3">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={product.status === 1}
+                      readOnly
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </td>
+                <td className="p-3">
+                  <Link
+                    to={`/admin/product-variants/${product.id}`}
+                    className="text-blue-600 hover:text-blue-800 flex items-center"
+                  >
+                    <FaEye /> <span className="ml-1">Xem</span>
+                  </Link>
+                </td>
+                <td className="p-3">
+                  <Link
+                    to={`/admin/rating-product/${product.id}`}
+                    className="text-blue-600 hover:text-blue-800 flex items-center"
+                  >
+                    <FaEye /> <span className="ml-1">Xem</span>
+                  </Link>
+                </td>
+                <td className="p-3 ">
+                  <Link
+                    to={`/admin/products/edit/${product.id}`}
+                    className="text-yellow-500 hover:text-yellow-700 flex items-center"
+                  >
+                    <FaEdit /> <span className="ml-1">Sửa</span>
+                  </Link>
+                  <button
+                    onClick={() => openDeleteModal(product)}
+                    className="text-red-500 hover:text-red-700 flex items-center"
+                  >
+                    <FaTrashAlt /> <span className="ml-1">Xóa</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
 
       {/* Modal xác nhận xóa */}
       <Modal

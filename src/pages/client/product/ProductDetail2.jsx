@@ -10,7 +10,7 @@ import { ADD_TO_CART } from '../../../actions/cartAction';
 import { formatCurrency, renderStars } from '../../../utils/configformat';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import backgroundImage from '../../../assets/others/campaign-bg3.png';
+// import backgroundImage from '../../../assets/others/campaign-bg3.png';
 import Modal from 'react-modal';
 // import { useAuth } from '../../../AuthContext';
 
@@ -24,7 +24,7 @@ const ProductDetail2 = () => {
   const dispatch = useDispatch();
 
   const [product, setProduct] = useState({});
-  const [coupons, setCoupons] = useState([]);
+  // const [coupons, setCoupons] = useState([]);
   const [images, setImages] = useState([]);
   const [variants, setVariants] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -43,7 +43,7 @@ const ProductDetail2 = () => {
       const [
         productRes,
         imagesRes,
-        couponsRes,
+        // couponsRes,
         variantRes,
         relatedRes,
         ratingRes,
@@ -52,7 +52,7 @@ const ProductDetail2 = () => {
         axios.get(
           `http://localhost:8080/api/image-products/product/${productId}`
         ),
-        axios.get('http://localhost:8080/api/coupons'),
+        // axios.get('http://localhost:8080/api/coupons'),
         axios.get(`http://localhost:8080/api/product-variants/${productId}`),
         axios.get('http://localhost:8080/api/products/new'),
         axios.get(`http://localhost:8080/api/ratings/${productId}`),
@@ -60,9 +60,9 @@ const ProductDetail2 = () => {
 
       setProduct(productRes.data);
       setImages(imagesRes.data);
-      setCoupons(couponsRes.data);
+      // setCoupons(couponsRes.data);
       setVariants(variantRes.data);
-
+      console.log('variant:', variantRes.data);
       setRelatedProducts(relatedRes.data);
       setComments(ratingRes.data);
     } catch (error) {
@@ -94,6 +94,8 @@ const ProductDetail2 = () => {
       console.error('Không tìm thấy biến thể!');
     }
   };
+
+
   const handleAddToCart = () => {
     // Kiểm tra đăng nhập
     const user = JSON.parse(localStorage.getItem('userData'));
@@ -207,10 +209,11 @@ const ProductDetail2 = () => {
     }
   };
   const sliderSettings = {
-    dots: false,
+    dots: true,
+    mode: 'fade',
     infinite: true,
     autoplay: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
@@ -218,7 +221,7 @@ const ProductDetail2 = () => {
   return (
     <div>
       {/* Breadcrumb Section */}
-      <section className="py-4 bg-gray-200">
+      <section className="py-4">
         <div className="container mx-auto">
           <nav className="text-blue-500">
             <Link to="/" className="hover:underline">
@@ -234,7 +237,7 @@ const ProductDetail2 = () => {
         </div>
       </section>
       {/* Coupons Section */}
-      <section
+      {/* <section
         style={{ backgroundImage: `url(${backgroundImage})` }}
         className="py-4 text-center"
       >
@@ -250,7 +253,7 @@ const ProductDetail2 = () => {
             </div>
           ))}
         </Slider>
-      </section>
+      </section> */}
       {/* Product Details Section */}
       <section className="container mx-auto py-10 p-6 rounded-lg shadow-lg">
         <div className="container mx-auto flex flex-wrap lg:flex-nowrap gap-8">
@@ -263,7 +266,7 @@ const ProductDetail2 = () => {
                     <img
                       src={image.image}
                       alt={`image ${product.title}`}
-                      className="w-900 h-600 object-cover items-center"
+                      className="w-900 h-600 object-contain items-center"
                     />
                   </div>
                 ))}
@@ -300,11 +303,11 @@ const ProductDetail2 = () => {
                       (selectedVariant
                         ? selectedVariant.price
                         : product.price) +
-                        ((selectedVariant
-                          ? selectedVariant.price
-                          : product.price) *
-                          product.discount) /
-                          100
+                      ((selectedVariant
+                        ? selectedVariant.price
+                        : product.price) *
+                        product.discount) /
+                      100
                     )}
                     <span className="text-red-500 ml-2">
                       -{product.discount}%
@@ -346,11 +349,10 @@ const ProductDetail2 = () => {
                         {variants.map((variant) => (
                           <li
                             key={variant.productVariant.id}
-                            className={`cursor-pointer border p-4 rounded-md shadow-sm ${
-                              selectedVariantId === variant.productVariant.id
-                                ? 'border-blue-400 bg-blue-100'
-                                : 'border-gray-300 hover:border-blue-300'
-                            }`}
+                            className={`cursor-pointer border p-4 rounded-md shadow-sm ${selectedVariantId === variant.productVariant.id
+                              ? 'border-blue-400 bg-blue-100'
+                              : 'border-gray-300 hover:border-blue-300'
+                              }`}
                             onClick={() =>
                               handleSelectVariant(variant.productVariant.id)
                             }
@@ -377,7 +379,7 @@ const ProductDetail2 = () => {
                 <div className="flex flex-row items-center gap-12">
                   <div className="flex flex-row items-center">
                     <button
-                      className="bg-gray-200 py-2 px-5 rounded-lg text-violet-800 text-3xl"
+                      className="bg-violet-800 py-0 px-4 rounded-lg text-white text-3xl "
                       onClick={() =>
                         setQuantity((prev) => Math.max(1, prev - 1))
                       }
@@ -388,7 +390,7 @@ const ProductDetail2 = () => {
                       {quantity}
                     </span>
                     <button
-                      className="bg-gray-200 py-2 px-4 rounded-lg text-violet-800 text-3xl"
+                      className="bg-violet-800 py-1 px-4 rounded-lg text-white text-2xl"
                       onClick={() => setQuantity((prev) => prev + 1)}
                     >
                       +
@@ -404,30 +406,28 @@ const ProductDetail2 = () => {
               </form>
             </div>
           </div>
-        </div>
-      </section>
+        </div >
+      </section >
       {/* User Reviews Section */}
-      <section className="py-8">
+      < section className="py-8" >
         <div className="container mx-auto">
           {/* Tabs */}
           <div className="flex space-x-4 mb-6">
             <button
               onClick={() => handleTabChange('reviews')}
-              className={`p-2 ${
-                activeTab === 'reviews'
-                  ? 'font-semibold border-b-2 border-blue-500'
-                  : ''
-              }`}
+              className={`p-2 ${activeTab === 'reviews'
+                ? 'font-semibold border-b-2 border-blue-500'
+                : ''
+                }`}
             >
               Đánh giá
             </button>
             <button
               onClick={() => handleTabChange('description')}
-              className={`p-2 ${
-                activeTab === 'description'
-                  ? 'font-semibold border-b-2 border-blue-500'
-                  : ''
-              }`}
+              className={`p-2 ${activeTab === 'description'
+                ? 'font-semibold border-b-2 border-blue-500'
+                : ''
+                }`}
             >
               Mô tả sản phẩm
             </button>
@@ -495,11 +495,10 @@ const ProductDetail2 = () => {
                           <button
                             key={star}
                             type="button"
-                            className={`text-3xl ${
-                              star <= selectedRating
-                                ? 'text-yellow-500'
-                                : 'text-gray-300'
-                            }`}
+                            className={`text-3xl ${star <= selectedRating
+                              ? 'text-yellow-500'
+                              : 'text-gray-300'
+                              }`}
                             onClick={() => setSelectedRating(star)}
                           >
                             ★
@@ -554,57 +553,71 @@ const ProductDetail2 = () => {
             </div>
           )}
         </div>
-      </section>{' '}
-      {/*Sản phẩm liên quan Section */}
-      <section className="py-8 bg-gray-100">
-        <div className="container mx-auto">
-          <h2 className="text-2xl font-semibold mb-4">Sản phẩm liên quan</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      </section >
+      < section className="py-10 bg-gray-50" >
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Sản phẩm liên quan
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {relatedProducts.map((relatedProduct) => (
-              <div key={relatedProduct.id} className=" shadow-md rounded p-4">
+              <div
+                key={relatedProduct.id}
+                className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full transition-transform transform hover:scale-105"
+              >
+                {/* Hình ảnh sản phẩm */}
                 <Link
                   to={`/product/${relatedProduct.id}`}
-                  className="block mb-2 hover:underline"
                   onClick={() => window.scrollTo(0, 0)}
+                  className="block"
                 >
                   <img
                     src={relatedProduct.thumb}
                     alt={`image ${relatedProduct.title}`}
-                    className="w-[900] h-600 rounded border"
+                    className="w-full h-96 object-contain"
                   />
                 </Link>
-                <Link
-                  to={`/product/${relatedProduct.id}`}
-                  className="text-lg font-semibold hover:text-orange-500"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  {relatedProduct.title}
-                </Link>
-                <div className="flex items-center mt-1">
-                  {renderStars(relatedProduct.totalRating)}
-                </div>
-                <div className="flex items-center mt-1">
-                  <span className="text-lg text-gray-500 font-bold">
-                    {formatCurrency(relatedProduct.price)}
-                  </span>
-                  {relatedProduct.discount !== 0 && (
-                    <div className="text-base text-gray-500 ml-2 line-through">
-                      {formatCurrency(
-                        relatedProduct.price +
-                          (relatedProduct.price * relatedProduct.discount) / 100
-                      )}
-                      <span className="text-gray-500 font-bold ml-2">
-                        -{relatedProduct.discount}%
-                      </span>
+
+                {/* Nội dung sản phẩm */}
+                <div className="p-4 flex flex-col flex-grow">
+                  <Link
+                    to={`/product/${relatedProduct.id}`}
+                    className="block text-lg font-semibold text-gray-800 hover:text-orange-500 transition-colors"
+                    onClick={() => window.scrollTo(0, 0)}
+                  >
+                    {relatedProduct.title}
+                  </Link>
+
+                  {/* Dùng flex-grow để đẩy giá xuống dưới cùng */}
+
+
+                  {/* Giá sản phẩm */}
+                  <div className="mt-auto">
+                    <div className="flex-grow flex items-center mt-2">
+                      {renderStars(relatedProduct.totalRating)}
                     </div>
-                  )}
+                    <span className="text-xl text-red-500 font-bold">
+                      {formatCurrency(relatedProduct.price)}
+                    </span>
+                    {relatedProduct.discount !== 0 && (
+                      <div className="text-sm text-gray-500 ml-2 line-through">
+                        {formatCurrency(
+                          relatedProduct.price +
+                          (relatedProduct.price * relatedProduct.discount) / 100
+                        )}
+                        <span className="text-red-500 font-semibold ml-2">
+                          -{relatedProduct.discount}%
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-    </div>
+        </div>  </section >
+
+    </div >
   );
 };
 

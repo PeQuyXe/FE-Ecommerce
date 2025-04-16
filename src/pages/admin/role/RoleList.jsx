@@ -26,10 +26,7 @@ function RoleList() {
   };
 
   return (
-    <section className="p-6 min-h-screen">
-      <h5 className="text-3xl font-semibold text-gray-800 mb-5">
-        Danh sách vai trò
-      </h5>
+    <section className="min-h-screen">
       <Link
         to="/admin/roles/new"
         className="px-6 py-3 mb-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"

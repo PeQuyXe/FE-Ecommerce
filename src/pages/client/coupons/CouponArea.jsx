@@ -48,9 +48,8 @@ const CouponArea = () => {
             return (
               <div
                 key={coupon.code}
-                className={`coupon-area-wrap p-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 ${
-                  isExpired ? 'bg-gray-100' : 'bg-white'
-                }`}
+                className={`coupon-area-wrap p-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 ${isExpired ? 'bg-gray-100' : 'bg-white'
+                  }`}
               >
                 <div className="flex">
                   {/* Left Section */}
@@ -82,11 +81,10 @@ const CouponArea = () => {
                         <FiCheckCircle className="text-green-500 mr-2 text-lg" />
                       )}
                       <span
-                        className={`inline-block px-3 py-1 rounded ${
-                          isExpired
+                        className={`inline-block px-3 py-1 rounded ${isExpired
                             ? 'bg-gray-300 text-gray-600'
                             : 'bg-green-500 text-white'
-                        }`}
+                          }`}
                       >
                         {isExpired ? 'Hết hạn' : 'Hoạt động'}
                       </span>

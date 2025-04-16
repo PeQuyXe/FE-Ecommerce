@@ -35,8 +35,7 @@ const Login = () => {
       navigate('/');
     } catch (error) {
       toast.error(
-        `Đăng nhập Google thất bại: ${
-          error.response?.data?.message || error.message
+        `Đăng nhập Google thất bại: ${error.response?.data?.message || error.message
         }`
       );
     }
@@ -80,7 +79,7 @@ const Login = () => {
   return (
     <section
       style={{ backgroundImage: `url(${backgroundImage})` }}
-      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-16 bg-gray-50" // Tăng padding ở màn hình lớn
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-16 bg-gray-50"
     >
       <div className="sm:mx-auto sm:w-full sm:max-w-lg">
         {' '}
@@ -108,7 +107,7 @@ const Login = () => {
           </p>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Email
               </label>
               <input
@@ -122,7 +121,7 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Mật khẩu
               </label>
               <input
@@ -135,10 +134,10 @@ const Login = () => {
               />
             </div>
 
-            <div className="mt-5 flex justify-center">
+            <div className="mt-5 flex justify-center ">
               <button
                 type="submit"
-                className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
+                className="w-full font-bold bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600  space-x-2 transform motion-safe:hover:scale-110"
               >
                 Đăng nhập
               </button>
@@ -160,10 +159,10 @@ const Login = () => {
               onClick={handleGoogleSignIn}
               className="bg-white text-blue-600 px-6 py-3 rounded-lg hover:text-red-500 flex items-center space-x-2 font-serif transform motion-safe:hover:scale-110 shadow-md"
             >
-              <span>
+              <span className="text-xl">
                 <FcGoogle />
               </span>
-              <span className="ml-2">Đăng nhập tài khoản Google</span>
+              <span className="ml-2 align-items-center">Đăng nhập tài khoản Google</span>
             </button>
           </div>
         </div>

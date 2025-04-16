@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaUserEdit, FaSignOutAlt, FaBox } from 'react-icons/fa';
+import { FaTimes, FaUserEdit, FaSignOutAlt, FaBox } from 'react-icons/fa';
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(
@@ -54,10 +54,10 @@ const Profile = () => {
 
     const updatedData = {
       ...formData,
-      password: user.password || '',
-      isBlock: user.isBlock || '0',
-      roleId: user.roleId,
+      isBlock: 0,
+      roleId: 1,
     };
+    delete updatedData.password;
 
     try {
       await axios.put(`http://localhost:8080/users/${user.id}`, updatedData);
@@ -72,17 +72,17 @@ const Profile = () => {
   };
 
   const handleManageOrders = () => {
-    navigate('/admin/order-list'); // Chuyển hướng đến trang quản lý đơn hàng
+    navigate('/admin/order-list');
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-96 relative transform transition-all duration-500 ease-in-out">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
         <button
           onClick={handleClosePopup}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
         >
-          x
+          <FaTimes />
         </button>
         <h2 className="text-2xl mb-6 text-center text-indigo-600 font-semibold">
           Hồ sơ người dùng
@@ -92,7 +92,7 @@ const Profile = () => {
           <img
             src={user.avatar}
             alt={user.fullname}
-            className="w-24 h-24 object-cover rounded-full mx-auto shadow-lg mb-4 transition-transform duration-300 hover:scale-110"
+            className="w-24 h-24 rounded-full mx-auto border-4 border-indigo-500 shadow-lg mb-4 hover:scale-110"
           />
           <h1 className="text-xl font-medium text-gray-800">{user.fullname}</h1>
           <p className="text-gray-600">Email: {user.email}</p>
@@ -130,7 +130,7 @@ const Profile = () => {
               className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
               required
             />
-            <input
+            {/* <input
               type="password"
               name="password"
               value={user.password}
@@ -138,7 +138,7 @@ const Profile = () => {
               onChange={handleInputChange}
               placeholder="Mật khẩu mới"
               className="w-full p-3 border border-gray-300 bg-gray-200 rounded-lg shadow-md cursor-not-allowed"
-            />
+            /> */}
             <input
               type="text"
               name="address"

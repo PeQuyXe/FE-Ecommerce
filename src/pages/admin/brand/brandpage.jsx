@@ -75,23 +75,16 @@ const Brand = () => {
   };
 
   return (
-    <section className="p-8 bg-gray-50 min-h-screen">
+    <section className="min-h-screen">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-5">
-          <h5 className="text-2xl font-semibold text-gray-700">
-            Danh sách thương hiệu
-          </h5>
-        </div>
         <button
           onClick={() => {
             setModalType('add');
             setBrandName('');
           }}
-          className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg shadow-lg hover:from-blue-500 hover:to-purple-500 transition duration-300 ease-in-out"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
         >
-          <span className="flex items-center space-x-2">
-            <FaEdit /> <span>Thêm Thương Hiệu</span>
-          </span>
+          Thêm Thương Hiệu
         </button>
         {loading && (
           <div className="text-center py-4 text-gray-500">
@@ -100,10 +93,10 @@ const Brand = () => {
         )}
         {error && <div className="text-red-500 text-center py-4">{error}</div>}
 
-        <div className="overflow-x-auto mt-5 ">
-          <table className="min-w-full bg-white shadow-md rounded-lg">
+        <div className="overflow-x-auto ">
+          <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-6 items-center">
             <thead>
-              <tr className="bg-indigo-600 text-white uppercase text-sm leading-normal ">
+              <tr className="bg-indigo-600 text-white leading-normal ">
                 <th className="py-3 px-6 text-center">Tên thương hiệu</th>
                 <th className="py-3 px-6 text-center">Thao tác</th>
               </tr>
@@ -137,7 +130,7 @@ const Brand = () => {
 
         {/* Modal for Add/Edit Brand */}
         {modalType && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
               <h5 className="text-xl font-semibold text-gray-700 mb-4">
                 {modalType === 'add'
@@ -169,8 +162,8 @@ const Brand = () => {
                     {loading
                       ? 'Đang lưu...'
                       : modalType === 'add'
-                      ? 'Thêm'
-                      : 'Cập nhật'}
+                        ? 'Thêm'
+                        : 'Cập nhật'}
                   </button>
                 </div>
               </form>

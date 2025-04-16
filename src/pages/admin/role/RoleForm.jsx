@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaPlus, FaEdit } from 'react-icons/fa'; // Import icons from react-icons
 
 const RoleForm = () => {
   const { id } = useParams();
@@ -55,12 +54,12 @@ const RoleForm = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="w-full min-h-screen mx-auto">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 shadow-lg rounded-lg max-w-2xl mx-auto"
+        className="bg-white p-8 w-full"
       >
-        <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           {id ? 'Sửa' : 'Thêm'} vai trò
         </h2>
 
@@ -99,12 +98,10 @@ const RoleForm = () => {
         >
           {id ? (
             <>
-              <FaEdit className="mr-2" />
               Cập nhật vai trò
             </>
           ) : (
             <>
-              <FaPlus className="mr-2" />
               Thêm vai trò
             </>
           )}

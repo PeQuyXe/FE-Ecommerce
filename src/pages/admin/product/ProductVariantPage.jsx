@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { Link } from 'react-router-dom';
 const ProductVariantPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -25,7 +25,7 @@ const ProductVariantPage = () => {
           `http://localhost:8080/api/product-variants/${id}`
         );
         setVariants(variantsResponse.data);
-
+        console.log('Variants 1:', variantsResponse.data);
         // Cập nhật initial state cho updatedVariants từ dữ liệu ban đầu
         setUpdatedVariants(
           variantsResponse.data.map((variant) => ({
@@ -51,8 +51,8 @@ const ProductVariantPage = () => {
       value === '' // kiểm tra trường hợp giá trị rỗng
         ? null // hoặc bạn có thể dùng 0 nếu muốn gán giá trị mặc định
         : field === 'quantity' || field === 'price' || field === 'salePrice'
-        ? parseFloat(value) // convert string to number for quantity, price, and salePrice
-        : value;
+          ? parseFloat(value) // convert string to number for quantity, price, and salePrice
+          : value;
 
     // Cập nhật lại state
     setUpdatedVariants((prevState) =>
@@ -64,7 +64,6 @@ const ProductVariantPage = () => {
 
   // Handle variant update on button click
   const handleUpdateVariant = async () => {
-    console.log('Updated variants:', updatedVariants);
     try {
       for (const variant of updatedVariants) {
         console.log('Updating variant:', variant);
@@ -104,12 +103,12 @@ const ProductVariantPage = () => {
         {product && (
           <div className="mb-10">
             <div className="card">
-              <div className="card-title-top">
+              <div className="mb-4">
                 <h5 className="text-lg font-bold">Thông tin sản phẩm</h5>
               </div>
               <div className="form-input">
                 <div className="mb-5">
-                  <label className="form-label-title block mb-2">
+                  <label className="font-bold text-xl block mb-2">
                     Tên sản phẩm
                   </label>
                   <input
@@ -127,16 +126,14 @@ const ProductVariantPage = () => {
         {/* Product Variants */}
         <div className="mb-10">
           <div className="card">
-            <div className="card-title-top flex justify-between items-center">
+            <div className="flex justify-between items-center mb-4">
               <h5 className="text-lg font-bold">Biến thể sản phẩm</h5>
-              <button
+              <Link
+                to={`/admin/add-product-variants/${id}`}
                 className="btn btn-custom bg-blue-500 text-white py-2 px-4 rounded-md"
-                onClick={() =>
-                  (window.location.href = `/admin/add-product-variants/${id}`)
-                }
               >
                 Thêm biến thể mới
-              </button>
+              </Link>
             </div>
             <div className="form-input">
               {isLoading ? (
@@ -174,8 +171,8 @@ const ProductVariantPage = () => {
                           )?.quantity === null
                             ? '' // Nếu giá trị là null thì hiển thị ô input trống
                             : updatedVariants.find(
-                                (v) => v.id === variant.productVariant.id
-                              )?.quantity || variant.productVariant.quantity
+                              (v) => v.id === variant.productVariant.id
+                            )?.quantity || variant.productVariant.quantity
                         }
                         onChange={(e) =>
                           handleVariantChange(
@@ -198,8 +195,8 @@ const ProductVariantPage = () => {
                           )?.price === null
                             ? '' // Nếu giá trị là null thì hiển thị ô input trống
                             : updatedVariants.find(
-                                (v) => v.id === variant.productVariant.id
-                              )?.price || variant.productVariant.price
+                              (v) => v.id === variant.productVariant.id
+                            )?.price || variant.productVariant.price
                         }
                         onChange={(e) =>
                           handleVariantChange(
@@ -224,8 +221,8 @@ const ProductVariantPage = () => {
                           )?.salePrice === null
                             ? '' // Nếu giá trị là null thì hiển thị ô input trống
                             : updatedVariants.find(
-                                (v) => v.id === variant.productVariant.id
-                              )?.salePrice || variant.salePrice
+                              (v) => v.id === variant.productVariant.id
+                            )?.salePrice || variant.salePrice
                         }
                         onChange={(e) =>
                           handleVariantChange(
@@ -278,10 +275,10 @@ const ProductVariantPage = () => {
             </div>
             <div className="modal-footer flex justify-between mt-4">
               <button
-                className="btn bg-blue-500 text-white py-2 px-4 rounded-md"
+                className="btn bg-gray-400 text-white py-2 px-4 rounded-md"
                 onClick={() => setIsModalOpen(false)}
               >
-                Hủy bỏ
+                Hủy
               </button>
               <button
                 className="btn bg-red-500 text-white py-2 px-4 rounded-md"

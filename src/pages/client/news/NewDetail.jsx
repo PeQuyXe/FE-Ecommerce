@@ -3,13 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const NewDetail = () => {
-  const { id } = useParams(); // Lấy ID từ URL
-
+  const { id } = useParams();
   const [dataNew, setDataNew] = useState({});
   const [dataNews, setDataNews] = useState([]);
-  const [dataProdRecent, setDataProdRecent] = useState([]);
 
-  // Fetch dữ liệu từ API
   useEffect(() => {
     const fetchNew = async () => {
       try {
@@ -29,20 +26,11 @@ const NewDetail = () => {
       }
     };
 
-    const fetchRecentProducts = async () => {
-      try {
-        const prodRecentRes = await axios.get(
-          'http://localhost:8080/api/products-recent'
-        );
-        setDataProdRecent(prodRecentRes.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
+
 
     fetchNew();
     fetchNews();
-    fetchRecentProducts();
+
   }, [id]);
 
   return (
@@ -83,13 +71,13 @@ const NewDetail = () => {
                     <li>
                       {dataNew.createAt
                         ? new Date(dataNew.createAt).toLocaleDateString(
-                            'vi-VN',
-                            {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            }
-                          )
+                          'vi-VN',
+                          {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                          }
+                        )
                         : ''}
                     </li>
                     <li>{dataNew.view || 0} Lượt xem</li>
@@ -140,13 +128,13 @@ const NewDetail = () => {
                           <li>
                             {newsItem.createAt
                               ? new Date(newsItem.createAt).toLocaleDateString(
-                                  'vi-VN',
-                                  {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric',
-                                  }
-                                )
+                                'vi-VN',
+                                {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                }
+                              )
                               : ''}
                           </li>
                           <li>{newsItem.view || 0} Lượt xem</li>
@@ -157,56 +145,7 @@ const NewDetail = () => {
                 ))}
               </div>
 
-              {/* Recently Viewed Products Widget */}
-              <div className="bg-white shadow-md rounded p-4">
-                <h6 className="text-lg font-semibold mb-4">
-                  Sản phẩm đã xem gần đây
-                </h6>
-                <ul>
-                  {dataProdRecent.slice(0, 4).map((item) => (
-                    <li className="flex mb-4" key={item.id}>
-                      <div className="flex-shrink-0 w-24 h-24 mr-4">
-                        <Link to={`/product/${item.slug}-${item.id}`}>
-                          <img
-                            src={item.thumb}
-                            alt={item.title}
-                            className="w-full h-full object-cover rounded"
-                          />
-                        </Link>
-                      </div>
-                      <div className="flex-1">
-                        <h6 className="text-md font-semibold mb-2">
-                          <Link
-                            to={`/product/${item.slug}-${item.id}`}
-                            className="text-blue-600 hover:underline"
-                          >
-                            {item.title}
-                          </Link>
-                        </h6>
-                        <div className="text-gray-600 text-sm">
-                          <span className="block">
-                            {item.discount ? (
-                              <del className="text-red-500 mr-2">
-                                {(
-                                  item.price *
-                                  (1 - item.discount / 100)
-                                ).toLocaleString('vi-VN', {
-                                  style: 'currency',
-                                  currency: 'VND',
-                                })}
-                              </del>
-                            ) : null}
-                            {item.price.toLocaleString('vi-VN', {
-                              style: 'currency',
-                              currency: 'VND',
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+
             </aside>
           </div>
         </div>

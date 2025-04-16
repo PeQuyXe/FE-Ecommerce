@@ -1,29 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaUserEdit, FaSignOutAlt, FaBox } from 'react-icons/fa';
+import { FaUserEdit, FaSignOutAlt, FaBox, FaTimes } from 'react-icons/fa';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('userData'))
-  );
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    fullname: '',
+    email: '',
+    phone: '',
+    address: '',
+    avatar: '',
+  });
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
-      setFormData({ ...user, password: '' });
-    }
-  }, [user, navigate]);
+    const fetchUserData = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('userData'));
+        if (!storedUser || !storedUser.id) {
+          navigate('/login');
+          return;
+        }
+        const response = await axios.get(`http://localhost:8080/users/${storedUser.id}`);
+        setUser(response.data);
+        setFormData(response.data);
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        navigate('/login');
+      }
+    };
+    fetchUserData();
+  }, [navigate]);
 
-  const handleClosePopup = () => {
-    navigate('/');
-  };
+  const handleClosePopup = () => navigate('/');
 
   const handleLogout = () => {
     localStorage.removeItem('userData');
@@ -32,39 +45,25 @@ const Profile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    const isUnchanged =
-      JSON.stringify(user) ===
-      JSON.stringify({
-        ...formData,
-        password: user.password,
-      });
-    if (isUnchanged) {
-      toast.success('Thông tin đã cập nhật thành công!');
-      return;
-    }
-
     const updatedData = {
       ...formData,
-      password: user.password || '',
-      isBlock: user.isBlock || '0',
-      roleId: user.roleId,
+      isBlock: 0,
+      roleId: 3,
     };
+    delete updatedData.password;
 
     try {
       await axios.put(`http://localhost:8080/users/${user.id}`, updatedData);
-      localStorage.setItem('userData', JSON.stringify(updatedData));
       setUser(updatedData);
       setIsEditing(false);
+      console.log('Updated user:', updatedData);
       toast.success('Cập nhật thông tin thành công!');
     } catch (err) {
       console.error('Error updating profile:', err);
@@ -72,101 +71,53 @@ const Profile = () => {
     }
   };
 
-  const handleManageOrders = () => {
-    navigate('/order-list'); // Chuyển hướng đến trang quản lý đơn hàng
-  };
+  if (!user) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-96 relative transform transition-all duration-500 ease-in-out">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
         <button
           onClick={handleClosePopup}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-300"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
         >
-          x
+          <FaTimes />
         </button>
-        <h2 className="text-2xl mb-6 text-center text-indigo-600 font-semibold">
-          Hồ sơ người dùng
-        </h2>
-
-        <div className="mb-6 text-center">
+        <h2 className="text-2xl font-bold text-center text-indigo-600 mb-6">Hồ sơ cá nhân</h2>
+        <div className="text-center relative">
           <img
-            src={user.avatar}
-            alt={user.fullname}
-            className="w-24 h-24 object-cover rounded-full mx-auto shadow-lg mb-4 transition-transform duration-300 hover:scale-110"
+            src={formData.avatar}
+            alt={formData.fullname}
+            className="w-24 h-24 rounded-full mx-auto border-4 border-indigo-500 shadow-lg mb-4 hover:scale-110"
           />
-          <h1 className="text-xl font-medium text-gray-800">{user.fullname}</h1>
-          <p className="text-gray-600">Email: {user.email}</p>
-          <p className="text-gray-600">
-            Ngày Tạo: {new Date(user.createAt).toLocaleDateString()}
-          </p>
+          <h3 className="text-xl font-semibold text-gray-800">{formData.fullname}</h3>
+          <p className="text-gray-600">{formData.email}</p>
+          {user.createAt && <p className="text-gray-500 text-sm">Ngày tạo: {new Date(user.createAt).toLocaleDateString()}</p>}
         </div>
-
         {isEditing ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="fullname"
-              value={formData.fullname}
-              onChange={handleInputChange}
-              placeholder="Họ và tên"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Email"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-              required
-            />
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="Số điện thoại"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              value={user.password}
-              readOnly
-              onChange={handleInputChange}
-              placeholder="Mật khẩu mới"
-              className="w-full p-3 border border-gray-300 bg-gray-200 rounded-lg shadow-md cursor-not-allowed"
-            />
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              placeholder="Địa chỉ"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-            />
-            <input
-              type="url"
-              name="avatar"
-              value={formData.avatar}
-              onChange={handleInputChange}
-              placeholder="Ảnh đại diện (URL)"
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
-            />
-            <div className="flex justify-between mt-4">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            {["fullname", "email", "phone", "address", "avatar"].map((field) => (
+              <input
+                key={field}
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={formData[field] || ''}
+                onChange={handleInputChange}
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+                required
+              />
+            ))}
+            <div className="flex justify-between">
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
               >
-                Trở về
+                Hủy
               </button>
               <button
                 type="submit"
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
               >
                 Cập nhật
               </button>
@@ -174,27 +125,24 @@ const Profile = () => {
             {error && <p className="text-red-500 text-center">{error}</p>}
           </form>
         ) : (
-          <div className="text-center space-y-4">
+          <div className="flex flex-col gap-4 mt-6">
             <button
               onClick={() => setIsEditing(true)}
-              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-indigo-700 transition"
             >
-              <FaUserEdit className="inline mr-2" />
-              Quản lý tài khoản
+              <FaUserEdit /> Quản lý tài khoản
             </button>
             <button
-              onClick={handleManageOrders}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => navigate('/order-list')}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition"
             >
-              <FaBox className="inline mr-2" />
-              Quản lý đơn hàng
+              <FaBox /> Quản lý đơn hàng
             </button>
             <button
               onClick={handleLogout}
-              className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
+              className="w-full bg-red-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-red-600 transition"
             >
-              <FaSignOutAlt className="inline mr-2" />
-              Thoát
+              <FaSignOutAlt /> Thoát
             </button>
           </div>
         )}

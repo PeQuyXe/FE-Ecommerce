@@ -5,12 +5,13 @@ import { MdLanguage } from 'react-icons/md';
 import { CiHeart, CiUser } from 'react-icons/ci';
 import { MagnifyingGlassIcon as SearchIcon } from '@heroicons/react/24/solid';
 import logo from '../../assets/logo/logo.png';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { IoCartOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/bg/bg-image-4.jpg';
 import { useAuth } from '../../AuthContext';
+import { loadFavorites } from '../../reducer/favoritesSlice'
+import { useSelector, useDispatch } from "react-redux";
 
 const menu = [
   { name: 'TRANG CHỦ', path: '' },
@@ -29,10 +30,19 @@ const Header = () => {
   const totalItems = cartItems.length;
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites.items);
+
+  // Load danh sách yêu thích từ localStorage khi trang tải lại
+  useEffect(() => {
+    dispatch(loadFavorites());
+  }, [dispatch]);
+
+
   const handleNavigation = () => {
     const userData = localStorage.getItem('userData');
     if (!userData) {
-      navigate('/login'); // Chuyển hướng đến trang đăng nhập nếu chưa có userData
+      navigate('/login');
     } else {
       navigate('/profile');
     }
@@ -153,10 +163,9 @@ const Header = () => {
                   <NavLink
                     to={`/${item.path}`}
                     className={({ isActive }) =>
-                      `transition-all duration-500 ease-in-out relative ${
-                        isActive
-                          ? 'text-pink-400 '
-                          : 'text-gray-600 hover:text-pink-400'
+                      `transition-all duration-500 ease-in-out relative ${isActive
+                        ? 'text-pink-400 '
+                        : 'text-gray-600 hover:text-pink-400'
                       }`
                     }
                     end
@@ -193,12 +202,17 @@ const Header = () => {
 
             {/* Favorites */}
             <NavLink
-              to="/coming-soon"
-              className="text-gray-700 hover:text-red-500"
-              aria-label="Favorites"
+              to="/favorites"
+              className="relative text-gray-700 hover:text-red-500"
             >
-              <CiHeart className="h-6 w-6" />
+              <CiHeart className="h-6 w-6 text-gray-700 hover:text-red-500" />
+              {favorites.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  {favorites.length}
+                </span>
+              )}
             </NavLink>
+
 
             {/* Shopping Cart */}
             <NavLink
@@ -209,7 +223,6 @@ const Header = () => {
               <IoCartOutline className="h-6 w-6 text-gray-700 hover:text-red-500" />
               {totalItems > 0 && (
                 <span
-                  id="shopping-cart-quantity"
                   className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
                 >
                   {totalItems}
@@ -236,10 +249,9 @@ const Header = () => {
                 <NavLink
                   to={`/${item.path}`}
                   className={({ isActive }) =>
-                    `block w-full text-center py-2 px-4 rounded-md transition-colors ${
-                      isActive
-                        ? 'bg-red-500 text-white'
-                        : 'text-gray-700 hover:bg-red-100 hover:text-red-500'
+                    `block w-full text-center py-2 px-4 rounded-md transition-colors ${isActive
+                      ? 'bg-red-500 text-white'
+                      : 'text-gray-700 hover:bg-red-100 hover:text-red-500'
                     }`
                   }
                   end

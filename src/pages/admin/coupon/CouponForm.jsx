@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaPlus, FaEdit } from 'react-icons/fa'; // Import icons from react-icons
 
 const CouponForm = () => {
   const { id } = useParams();
@@ -65,10 +64,10 @@ const CouponForm = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="w-full mx-auto p-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 shadow-lg rounded-lg max-w-2xl mx-auto"
+        className="bg-white w-full mx-auto"
       >
         <h2 className="text-3xl font-semibold text-gray-800 mb-6">
           {id ? 'Sửa mã giảm giá' : 'Thêm mã giảm giá'}
@@ -76,7 +75,7 @@ const CouponForm = () => {
 
         <div className="mb-4">
           <label className="block text-lg font-medium text-gray-700 mb-2">
-            Tiêu đề mã giảm giá *
+            Tiêu đề mã giảm giá
           </label>
           <input
             type="text"
@@ -188,12 +187,10 @@ const CouponForm = () => {
         >
           {id ? (
             <>
-              <FaEdit className="mr-2" />
               Cập nhật mã giảm giá
             </>
           ) : (
             <>
-              <FaPlus className="mr-2" />
               Thêm mã giảm giá
             </>
           )}

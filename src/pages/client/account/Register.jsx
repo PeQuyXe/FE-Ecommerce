@@ -83,7 +83,7 @@ const Register = () => {
           </p>
           <form className="space-y-6" onSubmit={handleRegister}>
             <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Họ và tên
               </label>
               <input
@@ -97,7 +97,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Email
               </label>
               <input
@@ -111,7 +111,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-bold text-gray-700">
                 Mật khẩu
               </label>
               <input
@@ -126,7 +126,7 @@ const Register = () => {
             <div className="mt-5 flex justify-center">
               <button
                 type="submit"
-                className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 flex items-center space-x-2 transform motion-safe:hover:scale-110"
+                className="w-full bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 space-x-2 transform motion-safe:hover:scale-110"
               >
                 Tạo tài khoản
               </button>

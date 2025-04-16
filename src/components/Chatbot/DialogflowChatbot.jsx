@@ -1,36 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 const DialogflowChatbot = () => {
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+
   useEffect(() => {
-    // Kiểm tra xem custom element đã được đăng ký chưa
-    if (!window.customElements.get('df-messenger')) {
-      const script = document.createElement('script');
-      script.src =
-        'https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1';
+    // Kiểm tra nếu script đã được thêm trước đó
+    if (!document.querySelector('script[src*="bootstrap.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1";
       script.async = true;
 
-      // Đánh dấu rằng script đã được tải
       script.onload = () => {
-        window.dfMessengerLoaded = true;
+        setIsScriptLoaded(true);
       };
 
-      // Thêm script vào body
       document.body.appendChild(script);
-
-      return () => {
-        document.body.removeChild(script);
-        window.dfMessengerLoaded = false;
-      };
+    } else {
+      setIsScriptLoaded(true);
     }
   }, []);
 
   return (
-    <df-messenger
-      intent="WELCOME"
-      chat-title="Chatbot"
-      agent-id="64674736-10fa-4081-9f63-c743ab83843f"
-      language-code="vi"
-    ></df-messenger>
+    <>
+      {isScriptLoaded && (
+        <df-messenger
+          intent="WELCOME"
+          chat-title="Chat Với Chúng Tôi"
+          agent-id="64674736-10fa-4081-9f63-c743ab83843f"
+          language-code="vi"
+        ></df-messenger>
+      )}
+    </>
   );
 };
 

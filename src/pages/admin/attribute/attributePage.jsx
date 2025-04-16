@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEdit, FaTrash, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const AttributePage = () => {
   const [attributes, setAttributes] = useState([]);
@@ -110,10 +110,7 @@ const AttributePage = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-gray-100 rounded-md shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6">
-        Quản lý Thuộc Tính
-      </h2>
+    <div className="w-full min-h-screen mx-auto p-6">
 
       <form onSubmit={handleSaveAttribute} className="mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -137,7 +134,6 @@ const AttributePage = () => {
             type="submit"
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
-            <FaPlus />
             {selectedAttribute ? 'Cập nhật' : 'Thêm mới'}
           </button>
           <button
@@ -145,7 +141,6 @@ const AttributePage = () => {
             onClick={resetForm}
             className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
           >
-            <FaTimes />
             Hủy
           </button>
         </div>

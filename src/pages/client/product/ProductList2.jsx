@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEye, FaHeart } from 'react-icons/fa';
+import { FaEye, FaHeart, FaRedo } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   formatCurrency,
@@ -9,8 +9,11 @@ import {
 } from '../../../utils/configformat';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Slide } from 'react-slideshow-image';
+// import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToFavorites } from '../../../reducer/favoritesSlice';
 
 const priceOptions = [
   { title: 'Dưới 2 triệu', value: '0 - 2000000' },
@@ -22,11 +25,11 @@ const priceOptions = [
   { title: 'Trên 32 triệu', value: '32000000 - 8000000000' },
 ];
 
-const dataBanners = [
-  'src/assets/banner/banner5.jpg',
-  'src/assets/banner/banner6.jpg',
-  'src/assets/banner/banner4.jpg',
-];
+// const dataBanners = [
+//   'src/assets/banner/banner7.jpg',
+//   'src/assets/banner/banner6.jpg',
+
+// ];
 
 const ProductList2 = () => {
   const [products, setProducts] = useState([]);
@@ -43,7 +46,6 @@ const ProductList2 = () => {
   const productsPerPage = 12;
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,6 +147,23 @@ const ProductList2 = () => {
     indexOfLastProduct
   );
 
+  const favorites = useSelector((state) => state.favorites.items);
+  const dispatch = useDispatch();
+  const toggleFavorite = (item) => {
+    const isFavorite = favorites.some((fav) => fav.id === item.id);
+
+    if (isFavorite) {
+      toast.info("Sản phẩm đã có trong danh sách yêu thích", {
+        autoClose: 500,
+      });
+    } else {
+      toast.success("Đã thêm vào yêu thích", { autoClose: 500 });
+      dispatch(addToFavorites(item));
+    }
+  };
+
+
+
   const goToProductDetail = (productId) => {
     navigate(`/product/${productId}`);
   };
@@ -205,7 +224,7 @@ const ProductList2 = () => {
               <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.category
                   ? categories.find((cate) => cate.id === filters.category)
-                      ?.name
+                    ?.name
                   : 'Danh mục'}
                 <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
@@ -258,8 +277,8 @@ const ProductList2 = () => {
               <MenuButton className="inline-flex justify-between w-full lg:w-auto px-4 py-3 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-md ring-1 ring-gray-300 hover:bg-gray-100 transition-all duration-300">
                 {filters.price
                   ? priceOptions.find(
-                      (option) => option.value === filters.price
-                    )?.title
+                    (option) => option.value === filters.price
+                  )?.title
                   : 'Khoảng giá'}
                 <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
@@ -289,10 +308,10 @@ const ProductList2 = () => {
                 {filters.sort === '-create_at'
                   ? 'Mới nhất'
                   : filters.sort === '-sold'
-                  ? 'Bán chạy nhất'
-                  : filters.sort === 'price'
-                  ? 'Giá từ thấp đến cao'
-                  : 'Giá từ cao đến thấp'}
+                    ? 'Bán chạy nhất'
+                    : filters.sort === 'price'
+                      ? 'Giá từ thấp đến cao'
+                      : 'Giá từ cao đến thấp'}
                 <ChevronDownIcon className="w-5 h-5 text-gray-400" />
               </MenuButton>
               <MenuItems className="absolute right-0 z-10 mt-2 w-full lg:w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
@@ -337,22 +356,23 @@ const ProductList2 = () => {
                 type="button"
                 onClick={() =>
                   setFilters({
-                    category: '',
-                    brand: '',
-                    price: '',
-                    sort: '-create_at',
-                    search: '',
+                    category: "",
+                    brand: "",
+                    price: "",
+                    sort: "-create_at",
+                    search: "",
                   })
                 }
-                className="w-full lg:w-auto bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 ease-in-out font-medium"
+                className="w-full lg:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out font-medium"
               >
+                <FaRedo className="text-lg animate-spin-slow" />
                 Làm mới
               </button>
             </div>
           </div>
         </div>
 
-        <section className="relative py-6">
+        {/* <section className="relative py-6">
           <div className="container mx-auto">
             <Slide>
               <div className="flex flex-row overflow-x-auto">
@@ -375,7 +395,7 @@ const ProductList2 = () => {
               </div>
             </Slide>
           </div>
-        </section>
+        </section> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-center">
           {currentProducts.length > 0 ? (
@@ -413,18 +433,21 @@ const ProductList2 = () => {
                     <li>
                       <button
                         onClick={() => addToCart(item)}
-                        className={`text-white p-2 rounded-lg bg-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${
-                          item.quantity === 0
-                            ? 'cursor-not-allowed'
-                            : 'cursor-pointer'
-                        }`}
+                        className={`text-white p-2 rounded-lg bg-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${item.quantity === 0
+                          ? 'cursor-not-allowed'
+                          : 'cursor-pointer'
+                          }`}
                         disabled={item.quantity === 0}
                       >
                         Mua sản phẩm
                       </button>
                     </li>
                     <li>
-                      <button className="text-white p-3 rounded-lg bg-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
+                      <button
+                        onClick={() =>
+                          toggleFavorite(item)
+                        }
+                        className="text-white p-3 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
                         <FaHeart />
                       </button>
                     </li>
@@ -436,7 +459,7 @@ const ProductList2 = () => {
                   <div className="text-gray-500">
                     {renderStars(item.totalRating)}
                   </div>
-                  <div className="text-xl font-bold">
+                  <div className="text-xl font-bold text-red-500">
                     {formatCurrency(item.price)}
                     {item.discount !== 0 && (
                       <span className="text-sm line-through text-gray-500 ml-2">
@@ -465,11 +488,10 @@ const ProductList2 = () => {
                   paginate(index + 1);
                   window.scrollTo(0, 0);
                 }}
-                className={`px-4 py-2 border rounded-md ${
-                  currentPage === index + 1
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-blue-500'
-                } hover:bg-blue-100`}
+                className={`px-4 py-2 border rounded-md ${currentPage === index + 1
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-white text-blue-500'
+                  } hover:bg-blue-100`}
               >
                 {index + 1}
               </button>

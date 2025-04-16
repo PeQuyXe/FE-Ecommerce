@@ -17,6 +17,9 @@ import {
 import { renderStars, formatCurrency } from '../utils/configformat';
 import { useNavigate } from 'react-router-dom';
 import { calculateOriginalPrice } from '../utils/configformat';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToFavorites } from '../reducer/favoritesSlice';
 
 const HomePage = () => {
   useScrollRestoration();
@@ -25,12 +28,11 @@ const HomePage = () => {
   const [dataProdNewDate, setDataProdNewDate] = useState([]);
   const [, setDataProdMostSold] = useState([]);
   const [, setDataProduct] = useState([]);
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const dataBanners = [
     'src/assets/banner/banner5.jpg',
-    'src/assets/banner/banner6.jpg',
-    // 'src/assets/banner/banner3.jpg',
+    'src/assets/banner/banner7.jpg',
+    // 'src/assets/banner/banner7.jpg',
   ];
   const handleProductClick = () => {
     window.scrollTo(0, 0);
@@ -68,6 +70,24 @@ const HomePage = () => {
   const goToProductDetail = (productId) => {
     navigate(`/product/${productId}`);
   };
+
+  const favorites = useSelector((state) => state.favorites.items);
+  const dispatch = useDispatch();
+  const toggleFavorite = (item) => {
+    const isFavorite = favorites.some((fav) => fav.id === item.id);
+
+    if (isFavorite) {
+      toast.info("Sản phẩm đã có trong danh sách yêu thích", {
+        autoClose: 500,
+      });
+    } else {
+      toast.success("Đã thêm vào yêu thích", { autoClose: 500 });
+      dispatch(addToFavorites(item));
+    }
+  };
+
+
+
   const addToCart = (item) => {
     // const productWithQuantity = {
     //   ...item,
@@ -129,7 +149,7 @@ const HomePage = () => {
         </div>
       </section>
       <section className="py-4">
-        <div className="container mx-auto  grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 mb-8">
+        <div className="container mx-auto grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 mb-8">
           {[
             { src: 'src/assets/intro/intro1.jpg', text: 'Miễn phí ship' },
             { src: 'src/assets/intro/intro2.jpg', text: 'Hàng ngàn ưu đãi' },
@@ -335,18 +355,21 @@ const HomePage = () => {
                           onClick={() =>
                             addToCart(item) & window.scrollTo(0, 0)
                           }
-                          className={`text-white p-2 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${
-                            item.quantity === 0
-                              ? 'cursor-not-allowed'
-                              : 'cursor-pointer'
-                          }`}
+                          className={`text-white p-2 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${item.quantity === 0
+                            ? 'cursor-not-allowed'
+                            : 'cursor-pointer'
+                            }`}
                           disabled={item.quantity === 0}
                         >
                           Mua sản phẩm
                         </button>
                       </li>
                       <li>
-                        <button className="text-white p-3 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
+                        <button
+                          onClick={() =>
+                            toggleFavorite(item)
+                          }
+                          className="text-white p-3 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
                           <FaHeart />
                         </button>
                       </li>
@@ -359,7 +382,7 @@ const HomePage = () => {
                       {renderStars(item.totalRating)}
                     </div>
 
-                    <div className="text-xl font-bold">
+                    <div className="text-xl font-bold text-red-500">
                       {formatCurrency(item.price)}
                       {item.discount !== 0 && (
                         <span className="text-sm line-through text-gray-500 ml-2">
@@ -379,7 +402,7 @@ const HomePage = () => {
             )}
           </div>
 
-          {/* Thay đổi vị trí của nút "Xem tất cả" */}
+
           <div className="flex justify-center mt-10 mb-4">
             <Link
               to="/product"
@@ -482,7 +505,7 @@ const HomePage = () => {
                       {product.totalUserRatings} Đánh giá
                     </span>
                   </div>
-                  <h6 className="text-gray-800 text-lg font-semibold truncate">
+                  <h6 className="text-gray-800 text-lg font-semibold truncate  hover:text-orange-500 transition duration-300 ease-in-out">
                     <Link
                       to={`/product/${product.id}`}
                       onClick={handleProductClick}
@@ -514,7 +537,11 @@ const HomePage = () => {
                   >
                     <AiOutlineShoppingCart size={20} />
                   </Link>
-                  <button className="flex items-center text-gray-500 hover:text-red-500 transition-colors duration-200">
+                  <button
+                    onClick={() =>
+                      toggleFavorite(product)
+                    }
+                    className="flex items-center text-gray-500 hover:text-red-500 transition-colors duration-200">
                     <AiOutlineHeart size={20} />
                   </button>
                 </div>

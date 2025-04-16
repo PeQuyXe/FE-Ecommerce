@@ -15,6 +15,9 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { FaEye, FaHeart } from 'react-icons/fa';
 import 'react-slideshow-image/dist/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToFavorites } from '../../../reducer/favoritesSlice';
+import { FaRedo } from "react-icons/fa";
 
 const priceOptions = [
   { title: 'Dưới 2 triệu', value: '0 - 2000000' },
@@ -165,6 +168,22 @@ const CategoryProduct = () => {
   );
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
+  const favorites = useSelector((state) => state.favorites.items);
+  const dispatch = useDispatch();
+  const toggleFavorite = (item) => {
+    const isFavorite = favorites.some((fav) => fav.id === item.id);
+
+    if (isFavorite) {
+      toast.info("Sản phẩm đã có trong danh sách yêu thích", {
+        autoClose: 500,
+      });
+    } else {
+      toast.success("Đã thêm vào yêu thích", { autoClose: 500 });
+      dispatch(addToFavorites(item));
+    }
+  };
+
+
   const goToProductDetail = (productId) => {
     navigate(`/product/${productId}`);
   };
@@ -197,7 +216,6 @@ const CategoryProduct = () => {
             </Link>{' '}
             <span className="mx-2">/</span>
             <span className="text-gray-400"> Danh Mục</span>{' '}
-            <span className="mx-2">/</span>
             <span className="text-gray-400">
               {productByCategory.length > 0
                 ? productByCategory[0].productcol
@@ -207,14 +225,17 @@ const CategoryProduct = () => {
         </div>
         <div className="mb-10 justify-between">
           <div className="flex items-center justify-between px-5">
-            <label className="relative block">
+            <label className="relative block w-full lg:w-auto mb-4 lg:mb-0">
               <input
-                className="placeholder-italic placeholder-gray-400 block bg-white border border-gray-300 rounded-md py-2 pl-4 pr-3 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1 sm:text-sm"
-                placeholder="Tìm tên sản phẩm ..."
+                className="placeholder-italic placeholder-gray-500 block bg-gray-100 border border-gray-300 rounded-lg py-3 pl-5 pr-10 shadow-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 sm:text-sm w-full lg:w-auto transition-all duration-300 ease-in-out transform hover:scale-105"
+                placeholder="Tìm tên sản phẩm..."
                 type="text"
                 value={filters.search}
                 onChange={handleSearchChange}
               />
+              <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-400">
+                🔍
+              </span>
             </label>
 
             <div className="flex-1">
@@ -256,8 +277,8 @@ const CategoryProduct = () => {
                   <MenuButton className="inline-flex justify-between w-full lg:w-auto px-3 py-2 text-sm font-sans text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     {filters.price
                       ? priceOptions.find(
-                          (option) => option.value === filters.price
-                        )?.title
+                        (option) => option.value === filters.price
+                      )?.title
                       : 'Khoảng giá'}
                     <ChevronDownIcon
                       aria-hidden="true"
@@ -289,10 +310,10 @@ const CategoryProduct = () => {
                     {filters.sort === '-create_at'
                       ? 'Mới nhất'
                       : filters.sort === '-sold'
-                      ? 'Bán chạy nhất'
-                      : filters.sort === 'price'
-                      ? 'Giá từ thấp đến cao'
-                      : 'Giá từ cao đến thấp'}
+                        ? 'Bán chạy nhất'
+                        : filters.sort === 'price'
+                          ? 'Giá từ thấp đến cao'
+                          : 'Giá từ cao đến thấp'}
                     <ChevronDownIcon
                       aria-hidden="true"
                       className="w-5 h-5 text-gray-400"
@@ -338,15 +359,16 @@ const CategoryProduct = () => {
                     type="button"
                     onClick={() =>
                       setFilters({
-                        category: '',
-                        brand: '',
-                        price: '',
-                        sort: '-create_at',
-                        search: '',
+                        category: "",
+                        brand: "",
+                        price: "",
+                        sort: "-create_at",
+                        search: "",
                       })
                     }
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    className="w-full lg:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out font-medium"
                   >
+                    <FaRedo className="text-lg animate-spin-slow" />
                     Làm mới
                   </button>
                 </div>
@@ -390,18 +412,21 @@ const CategoryProduct = () => {
                     <li>
                       <button
                         onClick={() => addToCart(item)}
-                        className={`text-white p-2 rounded-lg bg-white  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${
-                          item.quantity === 0
-                            ? 'cursor-not-allowed'
-                            : 'cursor-pointer'
-                        }`}
+                        className={`text-white p-2 rounded-lg bg-white  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ${item.quantity === 0
+                          ? 'cursor-not-allowed'
+                          : 'cursor-pointer'
+                          }`}
                         disabled={item.quantity === 0}
                       >
                         Mua sản phẩm
                       </button>
                     </li>
                     <li>
-                      <button className="text-white p-3 rounded-lg bg-white  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
+                      <button
+                        onClick={() =>
+                          toggleFavorite(item)
+                        }
+                        className="text-white p-3 rounded-lg bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500">
                         <FaHeart />
                       </button>
                     </li>
@@ -414,7 +439,7 @@ const CategoryProduct = () => {
                     {renderStars(item.totalRating)}
                   </div>
 
-                  <div className="text-xl font-bold ">
+                  <div className="text-xl font-bold text-red-500">
                     {formatCurrency(item.price)}
                     {item.discount !== 0 && (
                       <span className="text-sm line-through text-gray-500 ml-2">
@@ -472,11 +497,10 @@ const CategoryProduct = () => {
                 <button
                   key={i}
                   onClick={() => paginate(i + 1)}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
-                    currentPage === i + 1
-                      ? 'text-blue-500 bg-blue-50'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${currentPage === i + 1
+                    ? 'text-blue-500 bg-blue-50'
+                    : 'text-gray-700 hover:bg-gray-50'
+                    }`}
                 >
                   {i + 1}
                 </button>

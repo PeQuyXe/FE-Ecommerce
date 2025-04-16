@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaEye } from 'react-icons/fa'; // Icon từ react-icons
+import { FaEye } from 'react-icons/fa';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -12,11 +12,9 @@ const OrderList = () => {
   const userId = userData?.id;
 
   const goToOrderDetail = (orderId) => {
-    // Dùng navigate để điều hướng đến chi tiết đơn hàng
     navigate(`/order-detail/${orderId}`);
   };
 
-  // Lấy danh sách đơn hàng từ backend theo userId
   useEffect(() => {
     const fetchOrders = async () => {
       if (!userId) {
@@ -26,7 +24,6 @@ const OrderList = () => {
       }
 
       try {
-        // API trả về các đơn hàng của người dùng hiện tại
         const response = await axios.get(
           `http://localhost:8080/api/orders/user/${userId}`
         );
@@ -88,11 +85,10 @@ const OrderList = () => {
                     }).format(order.totalMoney)}
                   </td>
                   <td
-                    className={`p-3 border text-sm font-semibold ${
-                      order.orderStatusId === 5
-                        ? 'text-red-500'
-                        : 'text-green-500'
-                    }`}
+                    className={`p-3 border text-sm font-semibold ${order.orderStatusId === 5
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                      }`}
                   >
                     {order.orderStatus.name}
                   </td>

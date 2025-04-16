@@ -62,14 +62,11 @@ function UserList() {
   };
 
   return (
-    <section className="p-6 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800">
-          Danh sách người dùng
-        </h2>
+    <section className="min-h-screen">
+      <div className="flex justify-between items-center mb-4">
         <Link
           to="/admin/add-user"
-          className="px-6 py-3 mb-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
         >
           Thêm người dùng
         </Link>

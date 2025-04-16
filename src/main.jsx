@@ -50,6 +50,8 @@ import OrderListUser from './pages/client/orders/OrderListUser';
 import OrderDetailUser from './pages/client/orders/OrderDetailUser';
 import AdminLayout from './pages/admin/AdminLayout';
 import ProtectedRoute from './ProtectedRoute';
+import Favorites from './pages/client/favorites/Favorites';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
@@ -83,6 +85,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route
                 path="/order-detail/:orderId"
                 element={<OrderDetailUser />}
+              />
+              <Route
+                path="/favorites"
+                element={<Favorites />}
               />
             </Route>
             {/* Admin Routes */}

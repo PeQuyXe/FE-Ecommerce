@@ -7,17 +7,13 @@ import { MdAccessTime } from 'react-icons/md';
 
 const NewsPage = () => {
   const [dataNews, setDataNews] = useState([]);
-  const [dataProdRecent, setDataProdRecent] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const newsRes = await axios.get('http://localhost:8080/api/news');
-        const prodRecentRes = await axios.get(
-          'http://localhost:8080/api/products-recent'
-        );
         setDataNews(newsRes.data);
-        setDataProdRecent(prodRecentRes.data);
       } catch (error) {
         console.error('Error fetching news data:', error);
       }
@@ -116,9 +112,7 @@ const NewsPage = () => {
                   </div>
                 ))}
               </div>
-
-              {/* Recently Viewed Products Widget */}
-              <div className="bg-white shadow-md rounded p-4">
+              {/* <div className="bg-white shadow-md rounded p-4">
                 <h6 className="text-lg font-semibold mb-4">
                   Sản phẩm đã xem gần đây
                 </h6>
@@ -156,7 +150,7 @@ const NewsPage = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
             </aside>
           </div>
         </div>

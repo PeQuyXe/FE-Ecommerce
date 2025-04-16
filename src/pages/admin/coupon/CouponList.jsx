@@ -36,18 +36,17 @@ const CouponList = () => {
   };
 
   return (
-    <section className=" p-6 min-h-screen">
-      <h5 className="text-xl font-bold mb-4">Danh sách mã giảm giá</h5>
+    <section className="min-h-screen">
       <button
         onClick={handleAdd}
-        className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-lg hover:from-blue-500 hover:to-purple-500 transition duration-300 ease-in-out"
+        className="px-6 py-3  bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
       >
         Thêm mã giảm giá
       </button>
 
-      <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-5">
+      <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-6 items-center">
         <thead>
-          <tr className="bg-indigo-600 text-white uppercase text-sm leading-normal text-center">
+          <tr className="bg-indigo-600 text-white leading-normal text-center">
             <th className="px-4 py-2">Ảnh</th>
             <th className="px-4 py-2">Tiêu đề</th>
             <th className="px-4 py-2">Mã</th>
@@ -72,11 +71,10 @@ const CouponList = () => {
               <td className="px-4 py-2">{coupon.value}</td>
               <td className="px-4 py-2">{coupon.minAmount}</td>
               <td
-                className={`px-4 py-2 rounded ${
-                  new Date(coupon.expired) < new Date()
-                    ? 'text-gray-300 '
-                    : 'text-green-500'
-                }`}
+                className={`px-4 py-2 rounded ${new Date(coupon.expired) < new Date()
+                  ? 'text-gray-300 '
+                  : 'text-green-500'
+                  }`}
               >
                 {new Date(coupon.expired) < new Date()
                   ? 'Hết hạn'

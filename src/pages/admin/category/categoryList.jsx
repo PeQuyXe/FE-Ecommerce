@@ -26,15 +26,12 @@ function CategoryList() {
   };
 
   return (
-    <section className="p-6 min-h-screen">
-      <h5 className="text-3xl font-semibold text-gray-800 mb-5">
-        Danh sách danh mục
-      </h5>
+    <section className="min-h-screen">
       <Link
         to="/admin/add-category"
         className="px-6 py-3 mb-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out"
       >
-        Thêm danh mục
+        Thêm Danh Mục
       </Link>
 
       <table className="min-w-full bg-gray-100 rounded-lg overflow-hidden mt-6 items-center">
