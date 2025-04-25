@@ -30,7 +30,7 @@ const NewsList = () => {
 
   return (
     <section className="min-h-screen">
-      <div className="container mx-auto py-6 px-4">
+      <div>
         <div className="flex justify-between items-center mb-6">
           <Link
             to="/admin/add-news"

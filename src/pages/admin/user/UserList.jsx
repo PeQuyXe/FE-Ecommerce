@@ -39,17 +39,17 @@ function UserList() {
     }
   };
 
-  const handleBlockUser = async (userId) => {
-    const user = users.find((u) => u.id === userId);
-    try {
-      await axios.put(`http://localhost:8080/users/${userId}`, {
-        isBlock: !user.isBlock,
-      });
-      fetchUsers();
-    } catch (error) {
-      console.error('Failed to update user block status:', error);
-    }
-  };
+  // const handleBlockUser = async (userId) => {
+  //   const user = users.find((u) => u.id === userId);
+  //   try {
+  //     await axios.put(`http://localhost:8080/users/${userId}`, {
+  //       isBlock: !user.isBlock,
+  //     });
+  //     fetchUsers();
+  //   } catch (error) {
+  //     console.error('Failed to update user block status:', error);
+  //   }
+  // };
 
   const openModal = (userId) => {
     setDeleteUserId(userId);
@@ -87,7 +87,7 @@ function UserList() {
                 <th className="p-4 text-left">Số điện thoại</th>
                 <th className="p-4 text-left">Email</th>
                 <th className="p-4 text-left">Quyền</th>
-                <th className="p-4 text-left">Chặn</th>
+                {/* <th className="p-4 text-left">Chặn</th> */}
                 <th className="p-4 text-left">Thực thi</th>
               </tr>
             </thead>
@@ -111,14 +111,14 @@ function UserList() {
                   <td className="p-4">{user.phone}</td>
                   <td className="p-4">{user.email}</td>
                   <td className="p-4">{user.roleDescription}</td>
-                  <td className="p-4">
+                  {/* <td className="p-4">
                     <input
                       type="checkbox"
                       checked={user.isBlock === 1}
                       onChange={() => handleBlockUser(user.id)}
                       className="form-checkbox h-5 w-5 text-green-600 transition-all duration-300"
                     />
-                  </td>
+                  </td> */}
                   <td className="p-4 flex gap-4">
                     <Link to={`/admin/update-user/${user.id}`}>
                       <FaEdit className="text-blue-500 hover:text-blue-700 transition-all duration-300" />

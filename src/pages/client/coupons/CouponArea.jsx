@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FiClock, FiTag, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 const CouponArea = () => {
   const [coupons, setCoupons] = useState([]);
@@ -82,8 +83,8 @@ const CouponArea = () => {
                       )}
                       <span
                         className={`inline-block px-3 py-1 rounded ${isExpired
-                            ? 'bg-gray-300 text-gray-600'
-                            : 'bg-green-500 text-white'
+                          ? 'bg-gray-300 text-gray-600'
+                          : 'bg-green-500 text-white'
                           }`}
                       >
                         {isExpired ? 'Hết hạn' : 'Hoạt động'}
@@ -92,9 +93,14 @@ const CouponArea = () => {
                     <button
                       type="button"
                       className="code-coupon bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md transition duration-200 hover:bg-blue-600 focus:outline-none"
+                      onClick={() => {
+                        navigator.clipboard.writeText(coupon.code);
+                        toast.success("Đã sao chép mã: " + coupon.code, { autoClose: 500 });
+                      }}
                     >
                       {coupon.code}
                     </button>
+
                   </div>
                 </div>
 
@@ -117,7 +123,7 @@ const CouponArea = () => {
           })}
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

@@ -81,7 +81,7 @@ const ProductRatings = () => {
                 <th className="px-4 py-2">Tên sản phẩm</th>
                 <th className="px-4 py-2">Xếp hạng</th>
                 <th className="px-4 py-2">Đánh giá</th>
-                <th className="px-4 py-2">Ẩn</th>
+                {/* <th className="px-4 py-2">Ẩn</th> */}
                 <th className="px-4 py-2">Action</th>
               </tr>
             </thead>
@@ -104,14 +104,14 @@ const ProductRatings = () => {
                   <td className="px-4 py-2 max-w-xs truncate">
                     {rating.comment}
                   </td>
-                  <td className="px-4 py-2">
+                  {/* <td className="px-4 py-2">
                     <input
                       type="checkbox"
                       checked={rating.status === 1}
                       readOnly
                       className="form-checkbox h-5 w-5 text-blue-500"
                     />
-                  </td>
+                  </td> */}
                   <td className="px-4 py-2">
                     <button
                       onClick={() => openDeleteModal(rating.id)}

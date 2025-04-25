@@ -83,7 +83,16 @@ const CheckoutPage = () => {
     const coupon = dataCoupon.find(
       (coupon) => coupon.code === couponCode.toUpperCase()
     );
+
     if (coupon) {
+      const now = new Date();
+      const expiryDate = new Date(coupon.expired); // hoặc coupon.expiryDate nếu đó là tên thật
+
+      if (expiryDate < now) {
+        setErrorMessage('Mã giảm giá đã hết hạn và không thể áp dụng');
+        return;
+      }
+
       const cartTotal = calculateTotal();
       if (cartTotal >= coupon.minAmount) {
         setDiscount(coupon.value);
@@ -96,9 +105,10 @@ const CheckoutPage = () => {
         );
       }
     } else {
-      setErrorMessage('Mã giảm giá không hợp lệ hoặc đã hết hạn');
+      setErrorMessage('Mã giảm giá không hợp lệ');
     }
   };
+
   const validateForm = () => {
     const errors = {};
     const fullname = document.getElementById('fullname').value;

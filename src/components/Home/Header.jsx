@@ -3,7 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { GoSun, GoMoon } from 'react-icons/go';
 import { MdLanguage } from 'react-icons/md';
 import { CiHeart, CiUser } from 'react-icons/ci';
-import { MagnifyingGlassIcon as SearchIcon } from '@heroicons/react/24/solid';
+// import { MagnifyingGlassIcon as SearchIcon } from '@heroicons/react/24/solid';
+import SearchOption from './SearchOption';
 import logo from '../../assets/logo/logo.png';
 import { useTranslation } from 'react-i18next';
 import { IoCartOutline } from 'react-icons/io5';
@@ -183,7 +184,7 @@ const Header = () => {
           {/* Icons */}
           <div className="flex items-center space-x-6">
             {/* Search Form */}
-            <form className="relative hidden sm:block">
+            {/* <form className="relative hidden sm:block">
               <input
                 type="text"
                 name="search"
@@ -191,15 +192,18 @@ const Header = () => {
                 placeholder={t('Tìm')}
                 aria-label={t('Search')}
               />
-              <button
-                type="submit"
-                className="absolute right-0 top-0 mt-2 mr-3 text-gray-700 hover:text-blue-500 transition-colors"
-                aria-label="Search"
-              >
-                <SearchIcon className="h-5 w-5" />
-              </button>
-            </form>
-
+              // <button
+              //   type="submit"
+              //   className="absolute right-0 top-0 mt-2 mr-3 text-gray-700 hover:text-blue-500 transition-colors"
+              //   aria-label="Search"
+              // >
+              //   <SearchIcon className="h-5 w-5" />
+              // </button> 
+              <NavLink to="/image-search" aria-label="Search">
+                <SearchIcon className="h-5 w-5 cursor-pointer hover:text-blue-500 transition-colors" />
+              </NavLink>
+            </form> */}
+            <SearchOption />
             {/* Favorites */}
             <NavLink
               to="/favorites"

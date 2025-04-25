@@ -51,6 +51,8 @@ import OrderDetailUser from './pages/client/orders/OrderDetailUser';
 import AdminLayout from './pages/admin/AdminLayout';
 import ProtectedRoute from './ProtectedRoute';
 import Favorites from './pages/client/favorites/Favorites';
+import ImageSearchPage from './pages/client/ImageSearch/ImageSearchPage';
+import ImageSearchResultPage from './pages/client/ImageSearch/ImageSearchResultPage';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -62,6 +64,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/" element={<App />}>
               <Route index element={<HomePage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/image-search" element={<ImageSearchPage />} />
+              <Route path="/image-results" element={<ImageSearchResultPage />} />
               <Route path="/product" element={<ProductList2 />} />
               <Route
                 path="/product/:productId/*"

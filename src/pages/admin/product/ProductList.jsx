@@ -101,7 +101,7 @@ const ProductList = () => {
               <th className="p-3">Tồn kho</th>
               <th className="p-3">Giá</th>
               <th className="p-3">Trạng thái</th>
-              <th className="p-3">Hiển thị</th>
+              {/* <th className="p-3">Hiển thị</th> */}
               <th className="p-3">Biến thể</th>
               <th className="p-3">Đánh giá</th>
               <th className="p-3">Thực thi</th>
@@ -151,7 +151,7 @@ const ProductList = () => {
                       : 'Dừng bán'}
                   </span>
                 </td>
-                <td className="p-3">
+                {/* <td className="p-3">
                   <label className="switch">
                     <input
                       type="checkbox"
@@ -160,7 +160,7 @@ const ProductList = () => {
                     />
                     <span className="slider"></span>
                   </label>
-                </td>
+                </td> */}
                 <td className="p-3">
                   <Link
                     to={`/admin/product-variants/${product.id}`}

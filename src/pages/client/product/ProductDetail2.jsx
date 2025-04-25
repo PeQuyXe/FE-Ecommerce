@@ -54,7 +54,7 @@ const ProductDetail2 = () => {
         ),
         // axios.get('http://localhost:8080/api/coupons'),
         axios.get(`http://localhost:8080/api/product-variants/${productId}`),
-        axios.get('http://localhost:8080/api/products/new'),
+        axios.get('http://localhost:8080/api/stats/top-searched'),
         axios.get(`http://localhost:8080/api/ratings/${productId}`),
       ]);
 
@@ -208,15 +208,36 @@ const ProductDetail2 = () => {
       });
     }
   };
+  const NextArrow = ({ onClick }) => (
+    <div
+      onClick={onClick}
+      className="absolute right-4 top-1/2 z-10 -translate-y-1/2text-gray p-3 rounded-full shadow-slider cursor-pointer hover:bg-opacity-90 transition"
+    >
+      ▶
+    </div>
+  );
+
+  const PrevArrow = ({ onClick }) => (
+    <div
+      onClick={onClick}
+      className="absolute left-4 top-1/2 z-10 -translate-y-1/2  text-gray p-3 rounded-full shadow-slider cursor-pointer hover:bg-opacity-90 transition"
+    >
+      ◀
+    </div>
+  );
+
   const sliderSettings = {
-    dots: true,
-    mode: 'fade',
+    arrows: true,
     infinite: true,
-    autoplay: true,
-    speed: 300,
+    autoplay: 100,
+    speed: 200,
     slidesToShow: 1,
     slidesToScroll: 1,
+    fade: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
+
 
   return (
     <div>
@@ -232,7 +253,7 @@ const ProductDetail2 = () => {
               Sản phẩm
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-400">{product.title}</span>
+            <span className="text-gray-400 ">{product.title}</span>
           </nav>
         </div>
       </section>
@@ -258,7 +279,7 @@ const ProductDetail2 = () => {
       <section className="container mx-auto py-10 p-6 rounded-lg shadow-lg">
         <div className="container mx-auto flex flex-wrap lg:flex-nowrap gap-8">
           {/* Product Images Carousel */}
-          <div className="w-auto lg:w-1/2 flex items-stretch px-4">
+          <div className="w-full lg:w-1/2 flex items-stretch px-4">
             <div className="w-full h-auto">
               <Slider {...sliderSettings}>
                 {images.map((image) => (
@@ -266,7 +287,7 @@ const ProductDetail2 = () => {
                     <img
                       src={image.image}
                       alt={`image ${product.title}`}
-                      className="w-900 h-600 object-contain items-center"
+                      className="w-auto h-auto object-contain items-center"
                     />
                   </div>
                 ))}
@@ -277,7 +298,7 @@ const ProductDetail2 = () => {
           {/* Product Information */}
           <div className="w-full lg:w-1/2 flex items-stretch px-4">
             <div className="bg-white rounded p-6 flex-grow">
-              <h2 className="text-3xl font-bold mb-4">{product.title}</h2>
+              <h2 className="text-3xl font-bold mb-4 line-clamp-2">{product.title}</h2>
               <div className="flex items-center mb-4">
                 <span className="text-lg text-blue-500 mr-4">
                   Số lượng:{' '}
@@ -557,7 +578,7 @@ const ProductDetail2 = () => {
       < section className="py-10 bg-gray-50" >
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Sản phẩm liên quan
+            Sản phẩm nhiều lượt tìm kiếm
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {relatedProducts.map((relatedProduct) => (
@@ -567,26 +588,28 @@ const ProductDetail2 = () => {
               >
                 {/* Hình ảnh sản phẩm */}
                 <Link
-                  to={`/product/${relatedProduct.id}`}
+                  to={`/product/${relatedProduct.prod_id}`}
                   onClick={() => window.scrollTo(0, 0)}
                   className="block"
                 >
                   <img
                     src={relatedProduct.thumb}
                     alt={`image ${relatedProduct.title}`}
-                    className="w-full h-96 object-contain"
+                    className="w-full h-40 object-contain"
                   />
                 </Link>
 
                 {/* Nội dung sản phẩm */}
                 <div className="p-4 flex flex-col flex-grow">
-                  <Link
-                    to={`/product/${relatedProduct.id}`}
-                    className="block text-lg font-semibold text-gray-800 hover:text-orange-500 transition-colors"
-                    onClick={() => window.scrollTo(0, 0)}
-                  >
-                    {relatedProduct.title}
-                  </Link>
+                  <div className="line-clamp-2">
+                    <Link
+                      to={`/product/${relatedProduct.prod_id}`}
+                      className="block text-lg font-semibold text-gray-800 hover:text-orange-500 transition-colors line-clamp-2 w-full max-w-full"
+                      onClick={() => window.scrollTo(0, 0)}
+                    >
+                      {relatedProduct.title}
+                    </Link>
+                  </div>
 
                   {/* Dùng flex-grow để đẩy giá xuống dưới cùng */}
 

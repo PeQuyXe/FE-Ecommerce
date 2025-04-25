@@ -377,7 +377,7 @@ const HomePage = () => {
                   </div>
 
                   <div className="pt-4">
-                    <h3 className="text-lg font-semibold">{item.title}</h3>
+                    <h3 className="text-lg font-semibold line-clamp-2">{item.title}</h3>
                     <div className="text-gray-500">
                       {renderStars(item.totalRating)}
                     </div>

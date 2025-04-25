@@ -53,7 +53,7 @@ const OrderDetail = () => {
   if (!order) return <p>Đang tải thông tin đơn hàng...</p>;
 
   return (
-    <section className="p-4">
+    <section className="min-h-screen">
       <div className="bg-white shadow-lg rounded-lg p-6">
         <h5 className="text-xl font-semibold mb-6">
           Đơn hàng #{order.orderCode}
@@ -99,16 +99,16 @@ const OrderDetail = () => {
                               Phân loại:{' '}
                               {item.variantValues
                                 ? Object.entries(item.variantValues).map(
-                                    ([key, value], i) => (
-                                      <span key={i}>
-                                        {key}: {value}
-                                        {i <
-                                          Object.entries(item.variantValues)
-                                            .length -
-                                            1 && ', '}
-                                      </span>
-                                    )
+                                  ([key, value], i) => (
+                                    <span key={i}>
+                                      {key}: {value}
+                                      {i <
+                                        Object.entries(item.variantValues)
+                                          .length -
+                                        1 && ', '}
+                                    </span>
                                   )
+                                )
                                 : 'Không có phân loại'}
                             </p>
                           </td>
@@ -207,15 +207,14 @@ const OrderDetail = () => {
                 <div className="payment-mode mt-4">
                   <h4 className="font-semibold">Trạng thái đơn hàng</h4>
                   <p
-                    className={`status ${
-                      order.orderStatus === '5'
+                    className={`status ${order.orderStatus === '5'
                         ? 'text-red-500'
                         : 'text-green-500'
-                    }`}
+                      }`}
                   >
                     {orderStatus.find((status) => status.id === order.status)
                       ? orderStatus.find((status) => status.id === order.status)
-                          .name
+                        .name
                       : order.status}
                   </p>
                 </div>

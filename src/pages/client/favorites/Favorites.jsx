@@ -56,7 +56,7 @@ const Favorites = () => {
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.5 }}
-                                    className="relative bg-white dark:bg-gray-500 rounded-2xl shadow-2xl 
+                                    className="relative bg-white dark:bg-orange-100 rounded-2xl shadow-2xl 
                                                hover:shadow-xl transition-all cursor-pointer overflow-hidden flex flex-col"
                                     whileHover={{ scale: 1.03 }}
                                 >
@@ -68,7 +68,7 @@ const Favorites = () => {
                                         />
                                     </div>
                                     <div className="p-5 flex flex-col flex-grow">
-                                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2">
+                                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-900 line-clamp-2">
                                             {item.title}
                                         </h2>
                                         <div className="text-gray-500">{renderStars(item.totalRating)}</div>

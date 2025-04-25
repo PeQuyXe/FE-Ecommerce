@@ -28,6 +28,7 @@ export default {
           primary: '#fff',
           secondary: '#eee',
         },
+        'slider-arrow': '#1f2937', // màu xám đậm hiện đại
       },
       animation: {
         wave1: 'wave 1s ease-in-out infinite',
@@ -39,6 +40,10 @@ export default {
           '0%, 100%': { transform: 'scaleY(1)' },
           '50%': { transform: 'scaleY(0.5)' },
         },
+      },
+
+      boxShadow: {
+        slider: '0 8px 24px rgba(0,0,0,0.2)', // bóng đổ cho slide
       },
     },
   },
